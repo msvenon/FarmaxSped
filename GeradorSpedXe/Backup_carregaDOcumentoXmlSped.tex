@@ -1,0 +1,246 @@
+if (DebugHook = 0) and (not Self.FSemLimite) then
+      iCountLimite := _LIM_DOC
+   else
+      iCountLimite := 0;
+
+  Screen.Cursor := crHourglass;
+ //  https://www.andrecelestino.com/delphi-utilizando-o-mecanismo-de-processamento-paralelo/
+
+   // ** Documentos próprios emitidos pela empresa
+   DecodeDate(Self.FcompSpedPisCofins.DT_INI, Ano, Mes , Dia);
+   sFiltroDocEmitido := IntToStr(Self.CodigIbgeUfEmpresa) + Copy(IntToStr(Ano), 3, 2) + FormatFloat('00', Mes) + Self.CnpjEmpresa ;
+
+   GerarLinhaMemoLog('Carregando arquivos xml NFE: ' + Self.LocalDocXml_NFE);
+  // GerarLinhaMemoLog('Filtro dos arquivos: ' + sFiltroDocEmitido);
+
+   ObterListaAqruivosDiretorio(Self.LocalDocXml_NFE, 'xml', TStringList(FListaArquivos),'*' , True, iCountLimite);
+  // GerarLinhaMemoLog('Total documentos xml NFE emitidas Danfer: ' + IntToStr(FListaArquivos.Count));
+   iAux := FListaArquivos.Count;
+
+   GerarLinhaMemoLog('Carregando arquivos xml NFCE: ' + Self.LocalDocXml_NFCE);
+  // ObterListaAqruivosDiretorio(Self.LocalDocXml_NFCE, 'xml', TStringList(FListaArquivos),'*' , True, iCountLimite); //sFiltroDocEmitido  mauricio  retirei nao importaVA nfce
+
+   GerarLinhaMemoLog('Total documentos xml NFCE emitidas: ' + IntToStr(FListaArquivos.Count - iAux));
+
+
+   AtualizarStatus('Carregando informações dos participantes...');
+
+   IniciaBar(FListaArquivos.Count);
+
+   for iDx := 0 to FListaArquivos.Count - 1 do
+      begin
+         IncBar;
+         GerarLinhaMemoLog('Arquivo: ' + FListaArquivos[iDx]);
+
+
+         //Load XML nfe - nfce Componente ACBrNFe;
+         sChave := SomenteNumeros(ExtractFileName(FListaArquivos[iDx]));
+
+         AtualizarStatus('Carregando informações Participantes NFCe XMLs: ');
+
+         if (Copy(sChave, 21, 2) = '55') or (Copy(sChave, 21, 2) = '65') then
+            begin
+
+               try
+                //  GerarLinhaMemoLog('Lendo informações do documento: ' + sChave);
+                  FacbrNFe.NotasFiscais.Clear;
+                  FacbrNFe.NotasFiscais.LoadFromFile(Trim(FListaArquivos[iDx]));
+
+                  if InformacoesNFeValidasParaEscriturar(FacbrNFe.NotasFiscais) then
+                     begin
+                        // Adicionar dados Participante
+                        AdicionarDadosParticipante(FacbrNFe.NotasFiscais);
+                     end;
+               except
+                  on E: Exception do
+                     GerarLinhaMemoLog('Erro ao processar arquivo saída: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
+               end;
+            end
+         else
+           GerarLinhaMemoLog('A chave não é Nfe(55) ou NFCe(65): ' + sChave);
+      end;
+
+
+
+
+   AtualizarStatus('Carregando dados dos produtos:...');
+
+   IniciaBar(FListaArquivos.Count);
+
+   for iDx := 0 to FListaArquivos.Count - 1 do
+      begin
+         IncBar;
+        // GerarLinhaMemoLog('Arquivo: ' + FListaArquivos[iDx]);
+
+
+         //Load XML nfe - nfce Componente ACBrNFe;
+         sChave := SomenteNumeros(ExtractFileName(FListaArquivos[iDx]));
+
+         AtualizarStatus('Carregando dados dos produtos: ');
+
+         if (Copy(sChave, 21, 2) = '55') or (Copy(sChave, 21, 2) = '65') then
+            begin
+
+               try
+                 // GerarLinhaMemoLog('Lendo informações do documento: ' + sChave);
+                  FacbrNFe.NotasFiscais.Clear;
+                  FacbrNFe.NotasFiscais.LoadFromFile(Trim(FListaArquivos[iDx]));
+
+                  if InformacoesNFeValidasParaEscriturar(FacbrNFe.NotasFiscais) then
+                     begin
+
+                        AdicionarDadosProdutos(FacbrNFe.NotasFiscais);
+
+                     end;
+               except
+                  on E: Exception do
+                     GerarLinhaMemoLog('Erro ao processar arquivo saída: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
+               end;
+            end
+         else
+           GerarLinhaMemoLog('A chave não é Nfe(55) ou NFCe(65): ' + sChave);
+      end;
+
+
+
+   AtualizarStatus('Gerando Registro M400 e M800: ...');
+
+   IniciaBar(FListaArquivos.Count);
+
+   for iDx := 0 to FListaArquivos.Count - 1 do
+      begin
+         IncBar;
+        // GerarLinhaMemoLog('Arquivo: ' + FListaArquivos[iDx]);
+
+
+         //Load XML nfe - nfce Componente ACBrNFe;
+         sChave := SomenteNumeros(ExtractFileName(FListaArquivos[iDx]));
+
+         AtualizarStatus('Gerando Registro M400 e M800: ');
+
+         if (Copy(sChave, 21, 2) = '55') or (Copy(sChave, 21, 2) = '65') then
+            begin
+
+               try
+                //  GerarLinhaMemoLog('Lendo informações do documento: ' + sChave);
+                  FacbrNFe.NotasFiscais.Clear;
+                  FacbrNFe.NotasFiscais.LoadFromFile(Trim(FListaArquivos[iDx]));
+
+                //  if InformacoesNFeValidasParaEscriturar(FacbrNFe.NotasFiscais) then
+                     begin
+//
+                       AdicionarDadosProdutosCSTAliquitaBlocoM400M800(FacbrNFe.NotasFiscais);
+                     end;
+               except
+                  on E: Exception do
+                     GerarLinhaMemoLog('Erro ao processar arquivo saída: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
+               end;
+            end
+         else
+           GerarLinhaMemoLog('A chave não é Nfe(55) ou NFCe(65): ' + sChave);
+      end;
+
+
+   AtualizarStatus('Gerando Registro Analitico dos itens: ...');
+
+   IniciaBar(FListaArquivos.Count);
+
+   for iDx := 0 to FListaArquivos.Count - 1 do
+      begin
+         IncBar;
+         //GerarLinhaMemoLog('Arquivo: ' + FListaArquivos[iDx]);
+
+
+         //Load XML nfe - nfce Componente ACBrNFe;
+         sChave := SomenteNumeros(ExtractFileName(FListaArquivos[iDx]));
+
+         AtualizarStatus('Gerando Registro Analitico dos itens: ');
+
+         if (Copy(sChave, 21, 2) = '55') or (Copy(sChave, 21, 2) = '65') then
+            begin
+
+               try
+                //  GerarLinhaMemoLog('Lendo informações do documento: ' + sChave);
+                  FacbrNFe.NotasFiscais.Clear;
+                  FacbrNFe.NotasFiscais.LoadFromFile(Trim(FListaArquivos[iDx]));
+
+                  if InformacoesNFeValidasParaEscriturar(FacbrNFe.NotasFiscais) then
+                     begin
+
+                        iIDNota := AdicionarDadosNotas(FacbrNFe.NotasFiscais);
+                        if (iIDNota > 0) then;
+                           begin
+                              // Adicionar itens
+
+                              AdicionarDadosItensNotas(iIDNota, FacbrNFe.NotasFiscais);
+
+                           end;
+
+                     end;
+               except
+                  on E: Exception do
+                     GerarLinhaMemoLog('Erro ao processar arquivo saída: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
+               end;
+            end
+         else
+           GerarLinhaMemoLog('A chave não é Nfe(55) ou NFCe(65): ' + sChave);
+      end;
+
+      //****************** Fim NFCe*********************************
+
+
+
+   // ** XML Fornecedores - Documentos de Terceiros - Onde a Empresa é destinatária no documento
+   FListaArquivos.Clear;
+   ObterListaAqruivosDiretorio(Self.LocalDocXml_FORN, 'xml', TStringList(FListaArquivos), '*', True, iCountLimite);
+ //  GerarLinhaMemoLog('Total documentos xml fornecedor: ' + IntToStr(FListaArquivos.Count));
+
+   //Filtra os documentos onde a empresa esteja como destinarária
+   FiltrarDocumentosFornecedores(TStringList(FListaArquivos), iCountLimite);
+
+   GerarLinhaMemoLog('Total documentos NF-e produtos de entrada: ' + IntToStr(FListaArquivos.Count));
+
+
+   IniciaBar(FListaArquivos.Count);
+   for iDx := 0 to FListaArquivos.Count - 1 do
+     begin
+        IncBar;
+       // GerarLinhaMemoLog('Arquivo: ' + FListaArquivos[iDx]);
+
+        // ** Load XML nfe - nfce Componente ACBrNFe;
+        sChave := SomenteNumeros(ExtractFileName(FListaArquivos[iDx]));
+        AtualizarStatus('Carregando informações do doc. NFe XMLs: ');
+
+        try
+          // GerarLinhaMemoLog('Lendo informações do documento: ' + sChave);
+           FacbrNFe.NotasFiscais.Clear;
+           FacbrNFe.NotasFiscais.LoadFromFile(Trim(FListaArquivos[iDx]));
+
+           if InformacoesNFeValidasParaEscriturar(FacbrNFe.NotasFiscais, True) then
+              begin
+                 // Adicionar dados Participante
+                 AdicionarDadosParticipante(FacbrNFe.NotasFiscais, True);
+
+                 // Adicionar dados dos produtos
+                 AdicionarDadosProdutos(FacbrNFe.NotasFiscais, True);
+
+                 // Adicionar dados do cabeçalho dos documentos
+                 iIDNota := AdicionarDadosNotas(FacbrNFe.NotasFiscais, True);
+                 if (iIDNota > 0) then;
+                    begin
+                       // Adicionar itens
+                       AdicionarDadosItensNotas(iIDNota, FacbrNFe.NotasFiscais, True);
+
+                       // Não existe analitico para pis e cofins
+                       //AdicionarDadosAnaliticosNotas(iIDNota, FacbrNFe.NotasFiscais, True);
+                    end;
+              end;
+        except
+           on E: Exception do
+              GerarLinhaMemoLog('Erro ao processar arquivo entrada: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
+        end;
+     end; {for}
+
+
+  Screen.Cursor := crDefault;
+

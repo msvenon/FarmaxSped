@@ -1,0 +1,2 @@
+upx.exe  FarmaxSped.exe
+

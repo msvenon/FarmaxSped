@@ -1,0 +1,76 @@
+  { 30, 40, 41, 50, ou 60, então os valores dos campos VL_BC_ICMS, ALIQ_ICMS e VL_ICMS deverão ser iguais a “0” (zero)}
+                     if (RegistroC170.CST_ICMS = '10') or
+                        (RegistroC170.CST_ICMS = '30') or
+                        (RegistroC170.CST_ICMS = '40') or
+                        (RegistroC170.CST_ICMS = '41') or
+                        (RegistroC170.CST_ICMS = '50') or
+                        (RegistroC170.CST_ICMS = '60') then
+                        begin
+                           RegistroC170.VL_BC_ICMS := 0;
+                           RegistroC170.ALIQ_ICMS  := 0;
+                           RegistroC170.VL_ICMS    := 0;
+                        end
+                     else
+                        begin
+
+                          if Pos(RegistroC170.CFOP, '1403') > 0  then
+                              begin
+                               RegistroC170.VL_BC_ICMS_ST := 0;
+                               RegistroC170.VL_BC_ICMS    := 0;
+                               RegistroC170.VL_ICMS_ST    := 0;
+                               RegistroC170.VL_ICMS       := 0;
+                               RegistroC170.ALIQ_ICMS     := 0;
+                               RegistroC170.ALIQ_ST       := 0;
+                              end
+                           else
+                              begin
+                                   {Diferentes de 30, 40, 41, 50, e 60, então os valores dos campos VL_BC_ICMS, ALIQ_ICMS e VL_ICMS deverão ser maiores que “0” (zero)}
+                               RegistroC170.VL_BC_ICMS := FTabelaRegC170.FieldByName('VL_BC_ICMS').AsFloat;
+                               RegistroC170.ALIQ_ICMS  := FTabelaRegC170.FieldByName('ALIQ_ICMS').AsFloat;
+                               RegistroC170.VL_ICMS    := FTabelaRegC170.FieldByName('VL_ICMS').AsFloat;
+                               RegistroC100.VL_ICMS    := RegistroC100.VL_ICMS + FTabelaRegC170.FieldByName('VL_ICMS').AsFloat;    // mau teste   24072024
+                               RegistroC100.VL_BC_ICMS := RegistroC100.VL_BC_ICMS +FTabelaRegC170.FieldByName('VL_BC_ICMS').AsFloat; // mau teste  24072024
+
+                              end;
+
+                        end;
+
+                     {10, 30 ou 70, os valores dos campos VL_BC_ICMS_ST, ALIQ_ST e VL_ICMS_ST deverão ser maiores ou iguais a “0” (zero).}
+                     if //(RegistroC170.CST_ICMS = '00') or
+                        (RegistroC170.CST_ICMS = '10') or
+                        (RegistroC170.CST_ICMS = '70') or
+                        (RegistroC170.CST_ICMS = '30') then
+                        begin
+
+                          if Pos(RegistroC170.CFOP, '1403,1910') > 0  then
+                             begin
+                               RegistroC170.VL_BC_ICMS_ST := 0;
+                               RegistroC170.VL_BC_ICMS    := 0;
+                               RegistroC170.VL_ICMS_ST    := 0;
+                               RegistroC170.VL_ICMS       := 0;
+                               RegistroC170.ALIQ_ICMS     := 0;
+                               RegistroC170.ALIQ_ST       := 0;
+                             end
+                          else
+                            begin
+                              RegistroC170.VL_BC_ICMS_ST := FTabelaRegC170.FieldByName('VL_BC_ICMS_ST').AsFloat;
+                              RegistroC170.ALIQ_ST       := FTabelaRegC170.FieldByName('ALIQ_ST').AsFloat;
+                              RegistroC170.VL_ICMS_ST    := FTabelaRegC170.FieldByName('VL_ICMS_ST').AsFloat;
+                              RegistroC100.VL_ICMS       := RegistroC100.VL_ICMS + FTabelaRegC170.FieldByName('VL_ICMS').AsFloat; // mau teste /// mau teste 24082024
+                              RegistroC100.VL_BC_ICMS    := RegistroC100.VL_BC_ICMS +FTabelaRegC170.FieldByName('VL_BC_ICMS').AsFloat; // mau teste  24072024
+                            end;
+
+
+                         if (RegistroC100.IND_EMIT = edTerceiros) then
+                            begin
+                              RegistroC100.VL_BC_ICMS_ST := RegistroC100.VL_BC_ICMS_ST + RegistroC170.VL_BC_ICMS_ST;
+                              RegistroC100.VL_ICMS_ST    := RegistroC100.VL_ICMS_ST    + RegistroC170.VL_ICMS_ST;
+                            end;
+                        end
+                       else
+                         begin
+                           {Diferentes de 10, 30 ou 70, os valores dos campos VL_BC_ST, ALIQ_ST e VL_ICMS_ST deverão ser iguais a “0” (zero). }
+                           RegistroC170.VL_BC_ICMS_ST := 0;
+                           RegistroC170.ALIQ_ST       := 0;
+                           RegistroC170.VL_ICMS_ST    := 0;
+                        end;

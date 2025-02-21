@@ -1,0 +1,172 @@
+
+procedure TSpedPisCofins.AdicionarDadosProdutos(Notas: TNotasFiscais; const docEntrada: Boolean);
+var
+   oItemProduto: TDetCollectionItem;
+   Idx,
+   iProxSeqCodNat: Integer;
+   unidade:string;
+   UnidadeDict: TDictionary<string, Boolean>;
+   ProdutoDict: TDictionary<string, Boolean>;
+   CFOPDict: TDictionary<string, Boolean>;
+begin
+
+   // Documentos 65 não escritura itens
+   if (Notas.Items[0].NFe.Ide.modelo = 65) then
+      Exit;
+
+    // Inicializa dicionários
+
+  UnidadeDict := TDictionary<string, Boolean>.Create;
+  ProdutoDict := TDictionary<string, Boolean>.Create;
+  CFOPDict    := TDictionary<string, Boolean>.Create;
+
+  try
+
+     GerarLinhaMemoLog('Carregando dados de produtos/serviços da ' + Notas.Items[0].NFe.infNFe.ID);
+     for Idx := 0 to Notas.Items[ 0 ].NFe.Det.Count -1 do
+        begin
+           oItemProduto := Notas.Items[ 0 ].NFe.Det.Items[ Idx ];
+
+           //** Tabela Unidades de medidas
+           try
+              unidade:=upperCase(COPY(oItemProduto.Prod.uCom,1,2));// 19092024 mauricio / luiz    ,
+
+//            if not UnidadeDict.ContainsKey(unidade) then
+//               begin
+//
+//                   FTabelaReg0190.Append;
+//                   FTabelaReg0190.FieldByName('UNID').AsString := unidade;//oItemProduto.Prod.uCom;
+//                   FTabelaReg0190.FieldByName('DESCR').AsString := 'UNIDADE MEDIDA ' + unidade;//oItemProduto.Prod.uCom;
+//                   FTabelaReg0190.Post;
+//
+//                   UnidadeDict.Add(unidade,true);
+
+
+                FTabelaReg0190.IndexFieldNames:='UNID';
+                FTabelaReg0190.Filtered := False;
+                FTabelaReg0190.Filter := 'UNID = ' + QuotedStr(unidade);
+                FTabelaReg0190.Filtered := True;
+//
+                if (FTabelaReg0190.IsEmpty) then
+                  begin
+
+                      FTabelaReg0190.Append;
+                      FTabelaReg0190.FieldByName('UNID').AsString := oItemProduto.Prod.uCom;
+                      FTabelaReg0190.FieldByName('DESCR').AsString := 'UNIDADE MEDIDA ' + oItemProduto.Prod.uCom;
+                      FTabelaReg0190.Post;
+                   end
+                else
+                   begin
+                    unidade :='UN'
+                   end;
+
+
+             //  end;
+
+           finally
+              FTabelaReg0190.Filtered := False;
+           end;
+
+           //** Tabela de Identificação do Item (Produtos e Serviços)
+           try
+//
+//             if not ProdutoDict.ContainsKey(oItemProduto.Prod.cProd) then
+//               begin
+//
+//                  FTabelaReg0200.Append;
+//
+//                    // S = Serviços e P = Produtos
+//                    if (oItemProduto.Prod.CFOP = '5933') then
+//                       FTabelaReg0200.FieldByName('TIPO_ITEM').AsString := 'S'
+//                    else
+//                       FTabelaReg0200.FieldByName('TIPO_ITEM').AsString := 'P';
+//
+//                    FTabelaReg0200.FieldByName('COD_ITEM').AsString     := oItemProduto.Prod.cProd;
+//                    FTabelaReg0200.FieldByName('DESCR_ITEM').AsString   := oItemProduto.Prod.xProd;
+//                    FTabelaReg0200.FieldByName('COD_BARRA').AsString    := oItemProduto.Prod.cEAN;
+//                    FTabelaReg0200.FieldByName('COD_ANT_ITEM').AsString := '';
+//                    FTabelaReg0200.FieldByName('UNID_INV').AsString     := unidade;//oItemProduto.Prod.uCom;
+//
+//                    if (oItemProduto.Prod.CFOP = '5933') then
+//                        FTabelaReg0200.FieldByName('COD_NCM').AsString := ''
+//                    else
+//                       FTabelaReg0200.FieldByName('COD_NCM').AsString  := oItemProduto.Prod.NCM;
+//
+//                    FTabelaReg0200.FieldByName('ALIQ_ICMS').AsFloat := oItemProduto.Imposto.ICMS.pICMS;
+//                    FTabelaReg0200.Post;
+//
+//                   ProdutoDict.Add(oItemProduto.Prod.cProd,true);
+//               end;
+
+//
+
+              FTabelaReg0200.IndexFieldNames:= 'COD_ITEM';
+              FTabelaReg0200.Filtered := False;
+              FTabelaReg0200.Filter := 'COD_ITEM = ' + QuotedStr(oItemProduto.Prod.cProd);
+              FTabelaReg0200.Filtered := True;
+              if FTabelaReg0200.IsEmpty then
+                 begin
+                    FTabelaReg0200.Append;
+
+                    // S = Serviços e P = Produtos
+                    if (oItemProduto.Prod.CFOP = '5933') then
+                       FTabelaReg0200.FieldByName('TIPO_ITEM').AsString := 'S'
+                    else
+                       FTabelaReg0200.FieldByName('TIPO_ITEM').AsString := 'P';
+
+                    FTabelaReg0200.FieldByName('COD_ITEM').AsString := oItemProduto.Prod.cProd;
+                    FTabelaReg0200.FieldByName('DESCR_ITEM').AsString := oItemProduto.Prod.xProd;
+                    FTabelaReg0200.FieldByName('COD_BARRA').AsString := oItemProduto.Prod.cEAN;
+                    FTabelaReg0200.FieldByName('COD_ANT_ITEM').AsString := '';
+                    FTabelaReg0200.FieldByName('UNID_INV').AsString := oItemProduto.Prod.uCom;
+
+                    if (oItemProduto.Prod.CFOP = '5933') then
+                        FTabelaReg0200.FieldByName('COD_NCM').AsString := ''
+                    else
+                       FTabelaReg0200.FieldByName('COD_NCM').AsString := oItemProduto.Prod.NCM;
+
+                    FTabelaReg0200.FieldByName('ALIQ_ICMS').AsFloat := oItemProduto.Imposto.ICMS.pICMS;
+                    FTabelaReg0200.Post;
+                 end;
+           finally
+              FTabelaReg0200.Filtered := False;
+           end;
+
+           //** Tabela de Natureza da operação
+           try
+
+//             if not CFOPDict.ContainsKey(oItemProduto.Prod.CFOP) then
+//               begin
+//                  FTabelaReg0400.Append;
+//                  FTabelaReg0400.FieldByName('COD_NAT').AsInteger := iProxSeqCodNat;
+//                  FTabelaReg0400.FieldByName('CFOP').AsString := oItemProduto.Prod.CFOP;
+//                  FTabelaReg0400.FieldByName('DESCR_NAT').AsString := 'NATUREZA DA OPERAÇÃO ' + oItemProduto.Prod.CFOP;
+//                  FTabelaReg0400.Post;
+//                  CFOPDict.Add(oItemProduto.Prod.CFOP,true);
+//               end;
+////
+//
+              FTabelaReg0400.IndexFieldNames:='CFOP';
+              FTabelaReg0400.Filtered := False;
+              iProxSeqCodNat := (FTabelaReg0400.RecordCount + 1);
+              FTabelaReg0400.Filter := 'CFOP = ' + QuotedStr(oItemProduto.Prod.CFOP);
+              FTabelaReg0400.Filtered := True;
+
+              if (FTabelaReg0400.IsEmpty) then
+                 begin
+                    FTabelaReg0400.Append;
+                    FTabelaReg0400.FieldByName('COD_NAT').AsInteger := iProxSeqCodNat;
+                    FTabelaReg0400.FieldByName('CFOP').AsString := oItemProduto.Prod.CFOP;
+                    FTabelaReg0400.FieldByName('DESCR_NAT').AsString := 'NATUREZA DA OPERAÇÃO ' + oItemProduto.Prod.CFOP;
+                    FTabelaReg0400.Post;
+                 end;
+           finally
+              FTabelaReg0400.Filtered := False;
+           end;
+        end; // For itens nota
+
+  finally
+    UnidadeDict.Free;
+    CFOPDict.Free;
+    ProdutoDict.Free;
+  end;
