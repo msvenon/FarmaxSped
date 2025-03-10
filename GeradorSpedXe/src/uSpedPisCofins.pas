@@ -652,9 +652,13 @@ begin
 
              dBasePis := 0;
              dAliqPis := 0;
-             dValorPis := 0;
-             dValorBasePisCof := 0;
+             dValorPis:= 0;
 
+             dBaseCof := 0;
+             dAliqCof := 0;
+             dValorCof:= 0;
+
+             dValorBasePisCof := 0;
            end;
 
 
@@ -720,24 +724,115 @@ begin
                if (FcompSpedPisCofins.Bloco_0.Registro0000.IND_ATIV = indAtivIndustrial) then
                   AcumularValoresIPI(sCFOP, CSTIPIToStr(oItemProduto.Imposto.IPI.CST), oItemProduto.Imposto.IPI.vBC, oItemProduto.Imposto.IPI.vIPI);
 
-               // PIS
-               FTabelaRegC170.FieldByName('CST_PIS').AsString      := sCST_PIS_COF;
-               FTabelaRegC170.FieldByName('VL_BC_PIS').AsFloat     := dBasePis;
-               FTabelaRegC170.FieldByName('ALIQ_PIS_PERC').AsFloat := dAliqPis;
-               FTabelaRegC170.FieldByName('QUANT_BC_PIS').AsFloat  := 0;
-               FTabelaRegC170.FieldByName('ALIQ_PIS_R').AsFloat    := 0; //EM REAIS
-               FTabelaRegC170.FieldByName('VL_PIS').AsFloat        := dValorPis;
+                 dmPrincipal.FDMemTBCST50.open;
+               if sCST_PIS_COF ='50' then
+                  begin
 
-               // COFINS
-               FTabelaRegC170.FieldByName('CST_COFINS').AsString      := sCST_PIS_COF;
-               FTabelaRegC170.FieldByName('VL_BC_COFINS').AsFloat     := dBaseCof;
-               FTabelaRegC170.FieldByName('ALIQ_COFINS_PERC').AsFloat := dAliqCof;
-               FTabelaRegC170.FieldByName('QUANT_BC_COFINS').AsFloat  := 0;
-               FTabelaRegC170.FieldByName('ALIQ_COFINS_R').AsFloat    := 0; //EM REAIS
-               FTabelaRegC170.FieldByName('VL_COFINS').AsFloat        := dValorCof;
-               FTabelaRegC170.FieldByName('COD_CTA').AsString         := '';
-               FTabelaRegC170.Post;
-            end;{if <> 65}
+                      dBasePis         := oItemProduto.Imposto.PIS.vBC;
+                      dBaseCof         := oItemProduto.Imposto.COFINS.vBC;
+                      dValorPis        := oItemProduto.Imposto.PIS.vPIS;
+                      dValorCof        := oItemProduto.Imposto.COFINS.vCOFINS;
+
+                      dAliqPis         := oItemProduto.Imposto.PIS.pPIS;
+                     // dValorBasePisCof := oItemProduto.Prod.vProd;
+                      dAliqCof         := oItemProduto.Imposto.COFINS.pCOFINS;
+
+
+                      //===========================bloco de teste
+//                      dmPrincipal.FDMemTBCST50.Edit;
+//                      dmPrincipal.FDMemTBCST50valorBC.Value     := dmPrincipal.FDMemTBCST50valorBC.Value     + dBasePis;
+//                      dmPrincipal.FDMemTBCST50valorPis.Value    := dmPrincipal.FDMemTBCST50valorPis.Value    + dValorPis;
+//                      dmPrincipal.FDMemTBCST50valorCofins.Value := dmPrincipal.FDMemTBCST50valorCofins.Value + dValorCof;
+//                      dmPrincipal.FDMemTBCST50.Post;
+
+
+                    { dmPrincipal.cdsRegC170.close;
+                     dmPrincipal.cdsRegC170.Open;
+                     dmPrincipal.cdsRegC170.Append;
+
+                     dmPrincipal.cdsRegC170NFID.value        := NFID;
+                     dmPrincipal.cdsRegC170NUM_ITEM.value    := IntToStr(Idx + 1);
+                     dmPrincipal.cdsRegC170COD_ITEM.value    := oItemProduto.Prod.cProd;
+                     dmPrincipal.cdsRegC170DESCR_COMPL.value := Copy(oItemProduto.Prod.xProd,1,60);
+                     dmPrincipal.cdsRegC170QTD.AsFloat       := oItemProduto.Prod.qCom;
+                     dmPrincipal.cdsRegC170UNID.AsString     := UniMedida;
+                     dmPrincipal.cdsRegC170VL_ITEM.Asfloat   := oItemProduto.Prod.vProd;
+                     dmPrincipal.cdsRegC170VL_DESC.Asfloat   := oItemProduto.Prod.vDesc;
+
+                     if (Length(oItemProduto.Prod.NCM) = 2) then
+                      dmPrincipal.cdsRegC170IND_MOV.AsInteger := 1 // Movimentação fisica = 0.SIM  1.NÃO
+                     else
+                       dmPrincipal.cdsRegC170IND_MOV.AsInteger  := 0; // Movimentação fisica = 0. SIM 1. NÃO
+
+                     if (Notas.Items[0].NFe.Emit.CRT = crtRegimeNormal) then
+                        dmPrincipal.cdsRegC170CST_ICMS.AsString := CSTICMSToStr(oItemProduto.Imposto.ICMS.CST)
+                     else
+                        dmPrincipal.cdsRegC170CST_ICMS.AsString := CSOSNIcmsToStr(oItemProduto.Imposto.ICMS.CSOSN);
+
+                     if (docEntrada) then
+                        dmPrincipal.cdsRegC170CFOP.AsString := ConverterCFOPEntrada(sCFOP);
+
+                     dmPrincipal.cdsRegC170CST_PIS.value      := sCST_PIS_COF;
+                     dmPrincipal.cdsRegC170VL_BC_PIS.value    := dBasePis;
+                     dmPrincipal.cdsRegC170ALIQ_PIS_PERC.value:= dAliqPis;
+                     dmPrincipal.cdsRegC170QUANT_BC_PIS.value := 0;
+                     dmPrincipal.cdsRegC170ALIQ_PIS_R.value   := 0; //EM REAIS
+                     dmPrincipal.cdsRegC170VL_PIS.value       := dValorPis;
+
+                     // COFINS
+                     dmPrincipal.cdsRegC170CST_COFINS.value       := sCST_PIS_COF;
+                     dmPrincipal.cdsRegC170VL_BC_COFINS.value     := dBaseCof;
+                     dmPrincipal.cdsRegC170ALIQ_COFINS_PERC.value := dAliqCof;
+                     dmPrincipal.cdsRegC170QUANT_BC_COFINS.value  := 0;
+                     dmPrincipal.cdsRegC170ALIQ_COFINS_R.value    := 0; //EM REAIS
+                     dmPrincipal.cdsRegC170VL_COFINS.value        := dValorCof;
+                     dmPrincipal.cdsRegC170COD_CTA.value          := '';
+                     dmPrincipal.cdsRegC170.Post;
+                     dmPrincipal.cdsRegC170.ApplyUpdates(0);   }
+                     //===================== teste acima ======================
+
+
+                        // PIS
+                     FTabelaRegC170.FieldByName('CST_PIS').AsString      := sCST_PIS_COF;
+                     FTabelaRegC170.FieldByName('VL_BC_PIS').AsFloat     := dBasePis;
+                     FTabelaRegC170.FieldByName('ALIQ_PIS_PERC').AsFloat := dAliqPis;
+                     FTabelaRegC170.FieldByName('QUANT_BC_PIS').AsFloat  := 0;
+                     FTabelaRegC170.FieldByName('ALIQ_PIS_R').AsFloat    := 0; //EM REAIS
+                     FTabelaRegC170.FieldByName('VL_PIS').AsFloat        := dValorPis;
+
+                     // COFINS
+                     FTabelaRegC170.FieldByName('CST_COFINS').AsString      := sCST_PIS_COF;
+                     FTabelaRegC170.FieldByName('VL_BC_COFINS').AsFloat     := dBaseCof;
+                     FTabelaRegC170.FieldByName('ALIQ_COFINS_PERC').AsFloat := dAliqCof;
+                     FTabelaRegC170.FieldByName('QUANT_BC_COFINS').AsFloat  := 0;
+                     FTabelaRegC170.FieldByName('ALIQ_COFINS_R').AsFloat    := 0; //EM REAIS
+                     FTabelaRegC170.FieldByName('VL_COFINS').AsFloat        := dValorCof;
+                     FTabelaRegC170.FieldByName('COD_CTA').AsString         := '';
+                     FTabelaRegC170.Post;
+
+                  end
+               else
+                  begin
+
+                   // PIS
+                   FTabelaRegC170.FieldByName('CST_PIS').AsString      := sCST_PIS_COF;
+                   FTabelaRegC170.FieldByName('VL_BC_PIS').AsFloat     := dBasePis;
+                   FTabelaRegC170.FieldByName('ALIQ_PIS_PERC').AsFloat := dAliqPis;
+                   FTabelaRegC170.FieldByName('QUANT_BC_PIS').AsFloat  := 0;
+                   FTabelaRegC170.FieldByName('ALIQ_PIS_R').AsFloat    := 0; //EM REAIS
+                   FTabelaRegC170.FieldByName('VL_PIS').AsFloat        := dValorPis;
+
+                   // COFINS
+                   FTabelaRegC170.FieldByName('CST_COFINS').AsString      := sCST_PIS_COF;
+                   FTabelaRegC170.FieldByName('VL_BC_COFINS').AsFloat     := dBaseCof;
+                   FTabelaRegC170.FieldByName('ALIQ_COFINS_PERC').AsFloat := dAliqCof;
+                   FTabelaRegC170.FieldByName('QUANT_BC_COFINS').AsFloat  := 0;
+                   FTabelaRegC170.FieldByName('ALIQ_COFINS_R').AsFloat    := 0; //EM REAIS
+                   FTabelaRegC170.FieldByName('VL_COFINS').AsFloat        := dValorCof;
+                   FTabelaRegC170.FieldByName('COD_CTA').AsString         := '';
+                   FTabelaRegC170.Post;
+                 end;{if <> 65}
+            end;
 
         if (not docEntrada) then
             begin
@@ -4553,7 +4648,7 @@ var
    fValorTaltalRec07201,fValorTaltalRec07202,
    fValorTaltalRec08201,fValorTaltalRec08202 : Currency;
    sNcm :String;
-   AliqPis,AliqCof:Double;
+   AliqPis,AliqCof,dBasePis,dValorPis,dBaseCof,dValorCof:Double;
 
 
    _SPED_PIS_COF_BLOCO_M:String;
@@ -4561,6 +4656,12 @@ var
    SaldoNaoCumulativoaPagarPIS, SaldoNaoCumulativoaPagarCOFINS : Real;
 
 begin
+
+
+  dBasePis := 0;
+  dValorPis:= 0;
+  dBaseCof := 0;
+  dValorCof:= 0;
 
   dmPrincipal.cdsConsEmpresa.Close;
   dmPrincipal.cdsConsEmpresa.open;
@@ -4599,9 +4700,70 @@ begin
        begin
 
          IND_MOV:= ACBrEPCBlocos.imComDados ;
+         dmPrincipal.FDMemTBCST50.Open;
 
         if dmPrincipal.cdsConsEmpresaPERFIL.AsString='A' then
            begin
+
+              if FrmPrincipal.CbbIncidenciaTributaria.ItemIndex <> 1 then
+                begin
+
+                  FTabelaRegC170.Filtered:=false;
+                  FTabelaRegC170.Filter := 'CST_PIS = 50 AND ALIQ_PIS_PERC <> 0';
+                  FTabelaRegC170.Filtered:= true;
+                  FTabelaRegC170.Open;
+                  FTabelaRegC170.First;
+                  while not FTabelaRegC170.Eof do
+                    begin
+                     dBasePis  := FTabelaRegC170.FieldByName('VL_BC_PIS').AsFloat   + dBasePis ;
+                     dValorPis := FTabelaRegC170.FieldByName('VL_PIS').AsFloat      + dValorPis;
+
+                     dBaseCof  := FTabelaRegC170.FieldByName('VL_BC_COFINS').AsFloat+ dBaseCof;
+                     dValorCof := FTabelaRegC170.FieldByName('VL_COFINS').AsFloat   + dValorCof;
+                     FTabelaRegC170.Next;
+                    end;
+
+
+                 with RegistroM100New do
+                   begin
+                      COD_CRED       := '101';
+                      IND_CRED_ORI   := icoOperProprias;
+                      VL_BC_PIS      := dBasePis;   {valor da bc pis cst 50 entrada}
+                      ALIQ_PIS       := AliqPis;
+                      QUANT_BC_PIS   := 0;
+                     // ALIQ_PIS_QUANT := 0;
+                      VL_CRED        := dValorPis; { VL_BC_PIS* 1,65%}
+                      VL_AJUS_ACRES  := 0;
+                      VL_AJUS_REDUC  := 0;
+                      VL_CRED_DIF    := 0;
+                      VL_CRED_DISP   := dValorPis;
+                      IND_DESC_CRED  := idcTotal;
+                      VL_CRED_DESC   := dValorPis; //Valor do Crédito disponível, descontado da contribuição apurada no próprio período. Se IND_DESC_CRED=0, informar o valor total do Campo 12; Se IND_DESC_CRED=1, informar o valor parcial do Campo 12.
+                      SLD_CRED       := 0;
+                   end; //Bloco M100
+//
+//
+                    GerarLinhaMemoLog(' Sped Pis Cofins - Bloco M: Gerando Registros M105');
+                 with RegistroM105New do
+                    begin
+
+                      NAT_BC_CRED      := bccAqBensRevenda;
+                      CST_PIS          := ACBrEPCBlocos.stpisOperCredExcRecTribMercInt;
+                      VL_BC_PIS_TOT    := dBasePis;
+                      //VL_BC_PIS_CUM    := 0;
+                      VL_BC_PIS_NC     := dBasePis;
+                      VL_BC_PIS        := dBasePis;
+                     // QUANT_BC_PIS_TOT := 0;
+                      QUANT_BC_PIS     := 0;
+                      DESC_CRED        := '';
+                    end; //Bloco M105  }
+
+
+
+                end;
+
+
+
              if FrmPrincipal.CbbIncidenciaTributaria.ItemIndex <> 1 then
                 begin
 
@@ -4660,11 +4822,11 @@ begin
                           if True then
 
                            VL_TOT_CONT_NC_PER := (dmPrincipal.CdsSPEDM200VL_REC_BRT.value * AliqPis  / 100);
-                           VL_TOT_CRED_DESC   := 0;// dmPrincipal.CdsSPEDM100VL_PIS.AsFloat;
+                           VL_TOT_CRED_DESC   := dValorPis;// dmPrincipal.CdsSPEDM100VL_PIS.AsFloat;
 
                            if VL_TOT_CONT_NC_PER - VL_TOT_CRED_DESC >0 then
                              begin
-                              VL_TOT_CONT_NC_DEV          := VL_TOT_CONT_NC_PER - 0;//DmSPEDContribuicoes.CdsSPEDM100VL_PIS.AsFloat;
+                              VL_TOT_CONT_NC_DEV          := VL_TOT_CONT_NC_PER - dValorPis;//DmSPEDContribuicoes.CdsSPEDM100VL_PIS.AsFloat;
                               VL_CONT_NC_REC              := VL_TOT_CONT_NC_DEV;
                               VL_TOT_CONT_REC             := VL_TOT_CONT_NC_DEV;
                               SaldoNaoCumulativoaPagarPIS := VL_TOT_CONT_NC_DEV;
@@ -4796,6 +4958,39 @@ begin
               begin
                 if FrmPrincipal.CbbIncidenciaTributaria.ItemIndex <> 1 then
                    begin
+
+                      with RegistroM500New do
+                       begin
+                         COD_CRED       := '101';
+                         IND_CRED_ORI   := icoOperProprias;
+                         VL_BC_COFINS   := dBaseCof;
+                         ALIQ_COFINS    := AliqCof;
+
+                         VL_CRED        := dValorCof;;       //DmSPEDContribuicoes.CdsSPEDM500VL_COFINS.AsFloat; //OBRIGATORIO
+                         VL_AJUS_ACRES  := 0;
+                         VL_AJUS_REDUC  := 0;
+                         VL_CRED_DIFER  := 0;
+                         VL_CRED_DISP   := dValorCof;;       //DmSPEDContribuicoes.CdsSPEDM500VL_COFINS.AsFloat;
+                         IND_DESC_CRED  := idcTotal;
+                         VL_CRED_DESC   := dValorCof;;      //DmSPEDContribuicoes.CdsSPEDM500VL_COFINS.AsFloat; //Valor do Crédito disponível, descontado da contribuição apurada no próprio período. Se IND_DESC_CRED=0, informar o valor total do Campo 12; Se IND_DESC_CRED=1, informar o valor parcial do Campo 12.
+                         SLD_CRED       := 0;
+                       end;
+
+
+                      with RegistroM505New do
+                        begin
+                            NAT_BC_CRED         := bccAqBensRevenda;
+                            CST_COFINS          := ACBrEPCBlocos.stcofinsOperCredExcRecTribMercInt;
+                            VL_BC_COFINS_TOT    := dBaseCof;
+                           // VL_BC_COFINS_CUM    := 0;
+                            VL_BC_COFINS_NC     := dBaseCof;
+                            VL_BC_COFINS        := dBaseCof;
+                           // QUANT_BC_COFINS_TOT := 0;
+                            QUANT_BC_COFINS     := 0;
+                            DESC_CRED           := '';
+                        end;
+
+
 //
                      with RegistroM500New do
                        begin
@@ -4840,8 +5035,8 @@ begin
                   if FrmPrincipal.CbbIncidenciaTributaria.ItemIndex <> 1 then
                      begin
 
-                       VL_TOT_CONT_NC_PER :=StrtoFloat(FormatFloat('#0.00', (dmPrincipal.CdsSPEDM200VL_REC_BRT.AsFloat * AliqCof ) / 100));;
-                       VL_TOT_CRED_DESC   :=0;        // DmSPEDContribuicoes.CdsSPEDM500VL_COFINS.AsFloat;
+                       VL_TOT_CONT_NC_PER := StrtoFloat(FormatFloat('#0.00', (dmPrincipal.CdsSPEDM200VL_REC_BRT.AsFloat * AliqCof ) / 100));;
+                       VL_TOT_CRED_DESC   := dValorCof;        // DmSPEDContribuicoes.CdsSPEDM500VL_COFINS.AsFloat;
 
                        if VL_TOT_CONT_NC_PER - VL_TOT_CRED_DESC > 0 then
                         begin
@@ -4897,7 +5092,7 @@ begin
                                  NUM_CAMPO := '12';           // Saldo Cumulativo a recolher
 
                               COD_REC   := '184001';         // Anexo VII do Codac - Contribuição para o COFINS
-                              VL_DEBITO := StrtoFloat(FormatFloat('#0.00', (dmPrincipal.CdsSPEDM200VL_REC_BRT.AsFloat * AliqCof ) / 100));
+                              VL_DEBITO := SaldoNaoCumulativoaPagarCOFINS; //StrtoFloat(FormatFloat('#0.00', (dmPrincipal.CdsSPEDM200VL_REC_BRT.AsFloat * AliqCof ) / 100));
 
                              end; // Bloco M605
 

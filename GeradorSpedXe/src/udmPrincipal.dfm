@@ -1480,7 +1480,6 @@ object dmPrincipal: TdmPrincipal
     end
   end
   object FDFTABELAREG_C170: TFDQuery
-    CachedUpdates = True
     Connection = FDConnSped
     SQL.Strings = (
       'SELECT * FROM FTABELAREG_C170')
@@ -1492,133 +1491,170 @@ object dmPrincipal: TdmPrincipal
     Left = 846
     Top = 496
   end
-  object FTabelaRegC170: TClientDataSet
+  object cdsRegC170: TClientDataSet
     Aggregates = <>
     Params = <>
     ProviderName = 'dsPFTABELAREG_C170'
     Left = 846
     Top = 541
-    object FTabelaRegC170NFID: TIntegerField
+    object cdsRegC170NFID: TIntegerField
       FieldName = 'NFID'
+      Origin = 'NFID'
     end
-    object FTabelaRegC170NUM_ITEM: TStringField
+    object cdsRegC170NUM_ITEM: TStringField
       FieldName = 'NUM_ITEM'
+      Origin = 'NUM_ITEM'
       Size = 3
     end
-    object FTabelaRegC170COD_ITEM: TStringField
+    object cdsRegC170COD_ITEM: TStringField
       FieldName = 'COD_ITEM'
+      Origin = 'COD_ITEM'
       Size = 60
     end
-    object FTabelaRegC170DESCR_COMPL: TStringField
+    object cdsRegC170DESCR_COMPL: TStringField
       FieldName = 'DESCR_COMPL'
+      Origin = 'DESCR_COMPL'
       Size = 60
     end
-    object FTabelaRegC170QTD: TFloatField
+    object cdsRegC170QTD: TFloatField
       FieldName = 'QTD'
+      Origin = 'QTD'
     end
-    object FTabelaRegC170UNID: TStringField
+    object cdsRegC170UNID: TStringField
       FieldName = 'UNID'
+      Origin = 'UNID'
       Size = 6
     end
-    object FTabelaRegC170VL_ITEM: TFloatField
+    object cdsRegC170VL_ITEM: TFloatField
       FieldName = 'VL_ITEM'
+      Origin = 'VL_ITEM'
     end
-    object FTabelaRegC170VL_DESC: TFloatField
+    object cdsRegC170VL_DESC: TFloatField
       FieldName = 'VL_DESC'
+      Origin = 'VL_DESC'
     end
-    object FTabelaRegC170IND_MOV: TIntegerField
+    object cdsRegC170IND_MOV: TIntegerField
       FieldName = 'IND_MOV'
+      Origin = 'IND_MOV'
     end
-    object FTabelaRegC170CST_ICMS: TStringField
+    object cdsRegC170CST_ICMS: TStringField
       FieldName = 'CST_ICMS'
+      Origin = 'CST_ICMS'
       Size = 3
     end
-    object FTabelaRegC170CFOP: TStringField
+    object cdsRegC170CFOP: TStringField
       FieldName = 'CFOP'
+      Origin = 'CFOP'
       Size = 4
     end
-    object FTabelaRegC170COD_NAT: TStringField
+    object cdsRegC170COD_NAT: TStringField
       FieldName = 'COD_NAT'
+      Origin = 'COD_NAT'
       Size = 10
     end
-    object FTabelaRegC170VL_BC_ICMS: TFloatField
+    object cdsRegC170VL_BC_ICMS: TFloatField
       FieldName = 'VL_BC_ICMS'
+      Origin = 'VL_BC_ICMS'
     end
-    object FTabelaRegC170ALIQ_ICMS: TFloatField
+    object cdsRegC170ALIQ_ICMS: TFloatField
       FieldName = 'ALIQ_ICMS'
+      Origin = 'ALIQ_ICMS'
     end
-    object FTabelaRegC170VL_ICMS: TFloatField
+    object cdsRegC170VL_ICMS: TFloatField
       FieldName = 'VL_ICMS'
+      Origin = 'VL_ICMS'
     end
-    object FTabelaRegC170VL_BC_ICMS_ST: TFloatField
+    object cdsRegC170VL_BC_ICMS_ST: TFloatField
       FieldName = 'VL_BC_ICMS_ST'
+      Origin = 'VL_BC_ICMS_ST'
     end
-    object FTabelaRegC170ALIQ_ST: TFloatField
+    object cdsRegC170ALIQ_ST: TFloatField
       FieldName = 'ALIQ_ST'
+      Origin = 'ALIQ_ST'
     end
-    object FTabelaRegC170VL_ICMS_ST: TFloatField
+    object cdsRegC170VL_ICMS_ST: TFloatField
       FieldName = 'VL_ICMS_ST'
+      Origin = 'VL_ICMS_ST'
     end
-    object FTabelaRegC170IND_APUR: TIntegerField
+    object cdsRegC170IND_APUR: TIntegerField
       FieldName = 'IND_APUR'
+      Origin = 'IND_APUR'
     end
-    object FTabelaRegC170CST_IPI: TStringField
+    object cdsRegC170CST_IPI: TStringField
       FieldName = 'CST_IPI'
+      Origin = 'CST_IPI'
       Size = 2
     end
-    object FTabelaRegC170COD_ENQ: TStringField
+    object cdsRegC170COD_ENQ: TStringField
       FieldName = 'COD_ENQ'
+      Origin = 'COD_ENQ'
       Size = 3
     end
-    object FTabelaRegC170VL_BC_IPI: TFloatField
+    object cdsRegC170VL_BC_IPI: TFloatField
       FieldName = 'VL_BC_IPI'
+      Origin = 'VL_BC_IPI'
     end
-    object FTabelaRegC170ALIQ_IPI: TFloatField
+    object cdsRegC170ALIQ_IPI: TFloatField
       FieldName = 'ALIQ_IPI'
+      Origin = 'ALIQ_IPI'
     end
-    object FTabelaRegC170VL_IPI: TFloatField
+    object cdsRegC170VL_IPI: TFloatField
       FieldName = 'VL_IPI'
+      Origin = 'VL_IPI'
     end
-    object FTabelaRegC170CST_PIS: TStringField
+    object cdsRegC170CST_PIS: TStringField
       FieldName = 'CST_PIS'
+      Origin = 'CST_PIS'
       Size = 2
     end
-    object FTabelaRegC170VL_BC_PIS: TFloatField
+    object cdsRegC170VL_BC_PIS: TFloatField
       FieldName = 'VL_BC_PIS'
+      Origin = 'VL_BC_PIS'
     end
-    object FTabelaRegC170ALIQ_PIS_PERC: TFloatField
+    object cdsRegC170ALIQ_PIS_PERC: TFloatField
       FieldName = 'ALIQ_PIS_PERC'
+      Origin = 'ALIQ_PIS_PERC'
     end
-    object FTabelaRegC170QUANT_BC_PIS: TFloatField
+    object cdsRegC170QUANT_BC_PIS: TFloatField
       FieldName = 'QUANT_BC_PIS'
+      Origin = 'QUANT_BC_PIS'
     end
-    object FTabelaRegC170ALIQ_PIS_R: TFloatField
+    object cdsRegC170ALIQ_PIS_R: TFloatField
       FieldName = 'ALIQ_PIS_R'
+      Origin = 'ALIQ_PIS_R'
     end
-    object FTabelaRegC170VL_PIS: TFloatField
+    object cdsRegC170VL_PIS: TFloatField
       FieldName = 'VL_PIS'
+      Origin = 'VL_PIS'
     end
-    object FTabelaRegC170CST_COFINS: TStringField
+    object cdsRegC170CST_COFINS: TStringField
       FieldName = 'CST_COFINS'
+      Origin = 'CST_COFINS'
       Size = 2
     end
-    object FTabelaRegC170VL_BC_COFINS: TFloatField
+    object cdsRegC170VL_BC_COFINS: TFloatField
       FieldName = 'VL_BC_COFINS'
+      Origin = 'VL_BC_COFINS'
     end
-    object FTabelaRegC170ALIQ_COFINS_PERC: TFloatField
+    object cdsRegC170ALIQ_COFINS_PERC: TFloatField
       FieldName = 'ALIQ_COFINS_PERC'
+      Origin = 'ALIQ_COFINS_PERC'
     end
-    object FTabelaRegC170QUANT_BC_COFINS: TFloatField
+    object cdsRegC170QUANT_BC_COFINS: TFloatField
       FieldName = 'QUANT_BC_COFINS'
+      Origin = 'QUANT_BC_COFINS'
     end
-    object FTabelaRegC170ALIQ_COFINS_R: TFloatField
+    object cdsRegC170ALIQ_COFINS_R: TFloatField
       FieldName = 'ALIQ_COFINS_R'
+      Origin = 'ALIQ_COFINS_R'
     end
-    object FTabelaRegC170VL_COFINS: TFloatField
+    object cdsRegC170VL_COFINS: TFloatField
       FieldName = 'VL_COFINS'
+      Origin = 'VL_COFINS'
     end
-    object FTabelaRegC170COD_CTA: TStringField
+    object cdsRegC170COD_CTA: TStringField
       FieldName = 'COD_CTA'
+      Origin = 'COD_CTA'
       Size = 10
     end
   end
@@ -1748,7 +1784,8 @@ object dmPrincipal: TdmPrincipal
   end
   object FDSQL: TFDQuery
     Connection = FDConnSped
-    Left = 280
+    Left = 320
+    Top = 8
   end
   object RESTClientTestaUrl: TRESTClient
     Accept = 'application/json, text/plain; q=0.9, text/html;q=0.8,'
@@ -1872,7 +1909,7 @@ object dmPrincipal: TdmPrincipal
   end
   object FDQuery: TFDQuery
     Connection = FDConnFarmax
-    Left = 352
+    Left = 392
     Top = 16
   end
   object FDConBlocoH: TFDQuery
@@ -1930,6 +1967,49 @@ object dmPrincipal: TdmPrincipal
     object cdsConsBlocoHNCM: TStringField
       FieldName = 'NCM'
       Size = 10
+    end
+  end
+  object FDMemTBCST50: TFDMemTable
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    Left = 704
+    Top = 360
+    object FDMemTBCST50valorBC: TFloatField
+      FieldName = 'valorBC'
+    end
+    object FDMemTBCST50valorPis: TFloatField
+      FieldName = 'valorPis'
+    end
+    object FDMemTBCST50valorCofins: TFloatField
+      FieldName = 'valorCofins'
+    end
+  end
+  object FDConsTemReg0200: TFDQuery
+    Connection = FDConnSped
+    SQL.Strings = (
+      'SELECT * FROM TEMP_REG0200')
+    Left = 40
+    Top = 616
+  end
+  object dspConsReg0200: TDataSetProvider
+    DataSet = FDConsTemReg0200
+    Left = 40
+    Top = 656
+  end
+  object cdsConsTempReg0200: TClientDataSet
+    Aggregates = <>
+    Params = <>
+    ProviderName = 'dspConsReg0200'
+    Left = 40
+    Top = 696
+    object cdsConsTempReg0200CODIGO_ITEM: TFloatField
+      FieldName = 'CODIGO_ITEM'
+      Required = True
     end
   end
 end

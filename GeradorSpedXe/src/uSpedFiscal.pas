@@ -183,7 +183,7 @@ implementation
 { TSpedFiscal }
 
 uses udmPrincipal, uMenuPrincipal, System.UITypes, ACBrNFe.Classes,
-  System.DateUtils;
+  System.DateUtils, Vcl.Dialogs;
 
 procedure TSpedFiscal.GravaLog(Msg: String);
 var
@@ -269,10 +269,80 @@ end;
 
 procedure TSpedFiscal.AcumularSaldoEstoque(const bEntrada: Boolean; const CodItem, Unid: String; const Qtde, VlUnit: Double;
      const DescrProd, EAN, UnidM, NCM: String; const pIcms: Double);
+     var
+      codigo:String;
 begin
 
-   if (Self.FGerarBlocoH) then   // mexer aqui
+   if (Self.FGerarBlocoH) then
       begin
+
+       { comentei em 06032025 porqu estava recebendo codigo de item com letras
+
+          codigo := StringReplace(CodItem,'-','',[rfReplaceAll, rfIgnoreCase]) ;
+          codigo := StringReplace(codigo,',','',[rfReplaceAll, rfIgnoreCase]) ;
+          codigo := StringReplace(codigo,'.','',[rfReplaceAll, rfIgnoreCase]) ;
+
+
+          dmPrincipal.FDSQL.SQL.Clear;
+          dmPrincipal.FDSQL.sql.add(' SELECT COUNT(*)');
+          dmPrincipal.FDSQL.sql.add(' FROM  RDB$RELATIONS');
+          dmPrincipal.FDSQL.sql.add(' WHERE RDB$FLAGS=1 and RDB$RELATION_NAME=''TEMP_REG0200'' ');
+          dmPrincipal.FDSQL.Open();
+
+
+          if dmPrincipal.FDSQL.fields[0].value=0 then
+              begin
+
+                dmPrincipal.FDSQL.SQL.Clear;
+                dmPrincipal.FDSQL.sql.add(' CREATE TABLE ');
+                dmPrincipal.FDSQL.sql.add(' TEMP_REG0200 ');
+                dmPrincipal.FDSQL.sql.add('   (CODIGO_ITEM DOUBLE PRECISION) ');
+                dmPrincipal.FDSQL.ExecSQL;
+
+                dmPrincipal.FDSQL.SQL.Clear;
+                dmPrincipal.FDSQL.sql.add('CREATE INDEX ');
+                dmPrincipal.FDSQL.sql.add(' TEMP_REG0200_IDX1');
+                dmPrincipal.FDSQL.sql.add('   ON TEMP_REG0200 (CODIGO_ITEM)');
+                dmPrincipal.FDSQL.ExecSQL;
+
+                try
+
+                 dmPrincipal.cdsConsTempReg0200.Close;
+                 dmPrincipal.cdsConsTempReg0200.Open ;
+                 dmPrincipal.cdsConsTempReg0200.Append;
+                 dmPrincipal.cdsConsTempReg0200CODIGO_ITEM.Value:= codigo.ToDouble;
+                 dmPrincipal.cdsConsTempReg0200.ApplyUpdates(0);
+
+                except on E:Exception do
+
+                  showmessage('erro aon incluir codigo tempreg0200:'+e.Message)
+                end;
+
+
+              end
+           else
+              begin
+                try
+
+                 dmPrincipal.cdsConsTempReg0200.Close;
+                 dmPrincipal.cdsConsTempReg0200.Open ;
+                 dmPrincipal.cdsConsTempReg0200.Append;
+                 dmPrincipal.cdsConsTempReg0200CODIGO_ITEM.Value:= codigo.ToDouble;
+                 dmPrincipal.cdsConsTempReg0200.ApplyUpdates(0);
+
+                 except on E:Exception do
+
+                  showmessage('erro aon incluir codigo tempreg0200:'+e.Message)
+                end;
+
+
+
+              end;  }
+
+
+
+
+
          FTabelaRegH010.Filtered := False;
          FTabelaRegH010.Filter := 'COD_ITEM = ' + QuotedStr(Trim(CodItem));
          FTabelaRegH010.Filtered := True;
@@ -3953,10 +4023,14 @@ var
    RegistroH010: TRegistroH010;
    Registro0200: TRegistro0200;
    Registro0220: TRegistro0220;
-   dTotalSaldoEstoque, Novo_id: Double;
-   Mes,Ano,vEan:String;
+   dTotalSaldoEstoque
+  // , Novo_id
+   : Double;
+   Mes,Ano,vEan,parametros:String;
    AnoInvent,DataInvetario:TDate;
-   MaxCodIten: Integer;
+  // MaxCodIten: Integer;
+    MaxCodIten: Int64;  // Use Int64 para suportar números maiores
+  Novo_id: Int64;
 
 begin
 
@@ -4001,12 +4075,23 @@ begin
                if DataInvetario =0 then
                  begin
 
-                   AtualizarStatus('Aguarde gerando Inventário Item');
+                   AtualizarStatus('Aguarde executanto SP_SUPORTE_POSICAOESTOQUEDATA');
 
                    try
-                   dmPrincipal.FDStoredProc.StoredProcName:='EXECUTE PROCEDURE SP_SUPORTE_POSICAOESTOQUEDATA ('+IntToStr(dmprincipal.cdsConsEmpresaCD_FILIAL.Value) +','+DateToStr(AnoInvent)+')';
-                   dmPrincipal.FDStoredProc.Prepare;
-                   dmPrincipal.FDStoredProc.ExecProc;
+
+
+                     dmPrincipal.FDQuery.SQL.Text := 'EXECUTE PROCEDURE SP_SUPORTE_POSICAOESTOQUEDATA(:CD_FILIAL, :DATA)';
+                     dmPrincipal.FDQuery.ParamByName('CD_FILIAL').AsFloat := dmPrincipal.cdsConsEmpresaCD_FILIAL.Value;
+                     dmPrincipal.FDQuery.ParamByName('DATA').AsDate := AnoInvent;
+                     dmPrincipal.FDQuery.ExecSQL;
+
+
+
+//                    dmPrincipal.FDStoredProc.StoredProcName:='EXECUTE PROCEDURE SP_SUPORTE_POSICAOESTOQUEDATA ('+parametros+')';
+////                   dmPrincipal.FDStoredProc.ParamByName('CD_FILIAL').AsFloat   := dmPrincipal.cdsConsEmpresaCD_FILIAL.AsFloat;
+////                   dmPrincipal.FDStoredProc.ParamByName('DATA').AsDate         := AnoInvent;
+//                    dmPrincipal.FDStoredProc.Prepare;
+//                    dmPrincipal.FDStoredProc.ExecProc;
                    except on e:exception do
 
                     GeraLog2( 'Erro ao executar PROCEDURE SP_SUPORTE_POSICAOESTOQUEDATA:'+e.Message );
@@ -4020,7 +4105,7 @@ begin
 
                 if DataInvetario <> 0 then
                   begin
-
+                   AtualizarStatus('Aguarde gerando registro 0200 bloco H');
                    dmprincipal.cdsConsInventario.Close;
                    dmprincipal.cdsConsInventario.ParamByName('DATA').value :=DataInvetario;
                    dmprincipal.cdsConsInventario.open;
@@ -4056,28 +4141,47 @@ begin
                      end;
 
                     AtualizarStatus('Aguarde salvando as informações.');
-                    dmprincipal.cdsConsBlocoH.ApplyUpdates(0);
+                    try
+                      dmprincipal.cdsConsBlocoH.ApplyUpdates(0);
+                    except on E: Exception do
+                         begin
+                           showmessage(e.Message);
+                           GerarLinhaMemoLog('Erro ao salvar sped:'+e.Message);
+                         end;
+                    end;
+
 
                     dmprincipal.cdsConsBlocoH.close;
                     dmprincipal.cdsConsBlocoH.Open;
 
                     IniciaBar(dmprincipal.cdsConsBlocoH.RecordCount);
 
-
-                    MaxCodIten := 0; // Inicializa com o menor valor possível para um inteiro
-
-                    FTabelaReg0200.first;
-                    while not FTabelaReg0200.Eof do
-                      begin
-                         if FTabelaReg0200.FieldByName('COD_ITEM').AsInteger > MaxCodIten then
-                            MaxCodIten := FTabelaReg0200.FieldByName('COD_ITEM').AsInteger;
-
-                            FTabelaReg0200.Next;
-                       end;
+                    { comentei em 06032025 porqu estava recebendo codigo de item com letras
+                       dmPrincipal.FDSQL.SQL.Clear;
+                       dmPrincipal.FDSQL.sql.add(' SELECT MAX(CODIGO_ITEM) FROM TEMP_REG0200');
+                       dmPrincipal.FDSQL.Open();
 
 
-                    Novo_id := 0;
-                    Novo_id := MaxCodIten;
+                       if dmPrincipal.FDSQL.RecordCount > 0 then
+                          begin
+                             MaxCodIten := dmPrincipal.FDSQL.Fields[0].Value;;
+                          end; }
+
+
+                 //   MaxCodIten := 0; // Inicializa com o menor valor possível para um inteiro
+////
+//                    FTabelaReg0200.first;
+//                    while not FTabelaReg0200.Eof do
+//                      begin
+//                         if FTabelaReg0200.FieldByName('COD_ITEM').AsInteger > MaxCodIten then
+//                            MaxCodIten := FTabelaReg0200.FieldByName('COD_ITEM').AsInteger;
+//
+//                            FTabelaReg0200.Next;
+//                       end;  /
+//
+//
+                    Novo_id := 1;
+                   // Novo_id := MaxCodIten;
 
                     dmprincipal.cdsConsBlocoH.First;
                     while not dmprincipal.cdsConsBlocoH.eof do
@@ -4099,7 +4203,7 @@ begin
                                  Novo_id:=  Novo_id + 1;
 
                                  Registro0200               := FcompSpedFiscal.Bloco_0.Registro0200New;
-                                 Registro0200.COD_ITEM      := FloatToStr(Novo_id) ;//FloatToStr(dmprincipal.cdsConsBlocoHID_PRODUTO.Value);
+                                 Registro0200.COD_ITEM      := 'F-'+FloatToStr(Novo_id) ;//FloatToStr(dmprincipal.cdsConsBlocoHID_PRODUTO.Value);
                                  Registro0200.DESCR_ITEM    := Trim(dmprincipal.cdsConsBlocoHDESCRICAO.Value);
                                  Registro0200.COD_BARRA     := Trim(dmprincipal.cdsConsBlocoHEAN.Value);
                                  Registro0200.COD_ANT_ITEM  := '';
@@ -4128,7 +4232,7 @@ begin
                                  end;}
 
                                 dmprincipal.cdsConsBlocoH.Edit;
-                                dmprincipal.cdsConsBlocoHID_PRODUTO.Value :=FloatTostr(Novo_id);
+                                dmprincipal.cdsConsBlocoHID_PRODUTO.Value :='F-'+FloatTostr(Novo_id);
                                 dmprincipal.cdsConsBlocoH.Post;
 
 
@@ -4579,6 +4683,27 @@ begin
    dmPrincipal.FdQueryAuxiliar.sql.Clear;
    dmPrincipal.FdQueryAuxiliar.SQL.Text:='DELETE FROM BLOCO_H';
    dmPrincipal.FdQueryAuxiliar.ExecSQL;
+
+
+
+    dmPrincipal.FDSQL.SQL.Clear;
+    dmPrincipal.FDSQL.sql.add(' SELECT COUNT(*)');
+    dmPrincipal.FDSQL.sql.add(' FROM  RDB$RELATIONS');
+    dmPrincipal.FDSQL.sql.add(' WHERE RDB$FLAGS=1 and RDB$RELATION_NAME=''TEMP_REG0200'' ');
+    dmPrincipal.FDSQL.Open();
+
+
+
+   if  not dmPrincipal.FDSQL.fields[0].value=0 then
+      begin
+        dmPrincipal.FDSQL.SQL.Clear;
+        dmPrincipal.FDSQL.sql.add(' DELETE FROM TEMP_REG0200');
+        dmPrincipal.FDSQL.ExecSQL;
+      end;
+
+
+
+
 end;
 
 function TSpedFiscal.NotaCancelada(const Chave: String): Boolean;
