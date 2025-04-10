@@ -671,7 +671,7 @@ begin
    GerarLinhaMemoLog('Carregando dados para movimento de estoque - inventário: ' + Notas.Items[0].NFe.infNFe.ID);
    for Idx := 0 to Notas.Items[ 0 ].NFe.Det.Count -1 do
       begin
-         oItemProduto := Notas.Items[ 0 ].NFe.Det.Items[ Idx ];    //mezer aqui
+         oItemProduto := Notas.Items[ 0 ].NFe.Det.Items[ Idx ];
          AcumularSaldoEstoque( docEntrada,
                               oItemProduto.Prod.cProd,
                               'UN',//oItemProduto.Prod.uCom, // mauricio 14022024
@@ -754,7 +754,7 @@ begin
                sCNPJCPF := Notas.Items[0].NFe.Emit.CNPJCPF;
 
           //  if Notas.Items[0].NFe.Ide.dEmi  DataInicial then
-               Notas.Items[0].NFe.Ide.dEmi := DataInicial;
+            //   Notas.Items[0].NFe.Ide.dEmi := DataInicial;
 
             FTabelaRegC100.FieldByName('COD_PART').AsString := GetCodPartByCnpjCpf(sCNPJCPF); //Nfce não informa COD_PART
             FTabelaRegC100.FieldByName('DT_DOC').AsDateTime := Notas.Items[0].NFe.Ide.dEmi;
@@ -2715,7 +2715,7 @@ begin
         if  RegistroC100.NUM_DOC='1812'then
            VTeste:='ok';
 
-        if ((RegistroC100.IND_EMIT = edEmissaoPropria) and (RegistroC100.COD_MOD = '55')) or (RegistroC100.IND_EMIT = edTerceiros) then
+        if ((RegistroC100.IND_EMIT = edEmissaoPropria) or (RegistroC100.IND_EMIT = edTerceiros)) and (RegistroC100.COD_MOD = '55')  then
           begin
 
               // ******************* gatilho para pegar cfop  6411 ,5411 *******************
@@ -2761,39 +2761,6 @@ begin
                    RegistroC100.VL_ICMS_ST    := 0;
 
                end;
-//            else
-//               begin
-//
-//                  if (RegistroC100.IND_EMIT = edEmissaoPropria) and (RegistroC100.COD_MOD = '65')  then
-//                      begin
-//
-//                          if ((FTabelaRegC170.FieldByName('CST_ICMS').AsString= '00') or
-//                             (FTabelaRegC170.FieldByName('CST_ICMS').AsString= '20')) then
-//                              begin
-//
-//                                 RegistroC100.VL_BC_ICMS    := FTabelaRegC170.FieldByName('VL_BC_ICMS').AsCurrency;
-//                                 RegistroC100.VL_ICMS       := FTabelaRegC170.FieldByName('VL_ICMS').AsCurrency;
-//                                 RegistroC100.VL_BC_ICMS_ST := FTabelaRegC100.FieldByName('VL_BC_ICMS_ST').AsCurrency;
-//                                 RegistroC100.VL_ICMS_ST    := FTabelaRegC100.FieldByName('VL_ICMS_ST').AsCurrency;
-//
-//
-//                              end
-//                          else
-//                              begin
-//
-//
-//                                 RegistroC100.VL_BC_ICMS    := 0;
-//                                 RegistroC100.VL_ICMS       := 0;
-//                                 RegistroC100.VL_BC_ICMS_ST := FTabelaRegC100.FieldByName('VL_BC_ICMS_ST').AsCurrency;
-//                                 RegistroC100.VL_ICMS_ST    := FTabelaRegC100.FieldByName('VL_ICMS_ST').AsCurrency;
-//
-//                              end;
-//
-//
-//                      end;
-//
-//
-//               end;
 
 
 

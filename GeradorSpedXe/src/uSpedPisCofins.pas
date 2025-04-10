@@ -267,11 +267,11 @@ end;
 procedure TSpedPisCofins.AcumularValoreAnaliticoRegC175(const NFID: Integer; const CFOP, CST_PIS_COF: String; const ValorBase,
    AliqPis, AliqCof, ValorPis, ValorCof, ValorDesc: Double);
 
-   function ExisteCombinacaoCST_PIS_COF: Boolean;
+  function ExisteCombinacaoCST_PIS_COF: Boolean;
    begin
 
         dmPrincipal.FTabelaRegC175.Close;
-        dmPrincipal.FTabelaRegC175.CommandText:='SELECT * FROM FTABELAREGC175  WHERE  NFID ='+IntToStr(NFID)+ ' AND CFOP='+QuotedStr(cfop)+'  AND CST_PIS ='+ QuotedStr(CST_PIS_COF);
+        dmPrincipal.FTabelaRegC175.CommandText:='SELECT * FROM FTABELAREGC175  WHERE  NFID ='+IntToStr(NFID)+ ' AND CFOP ='+QuotedStr(cfop)+'  AND CST_PIS ='+ QuotedStr(CST_PIS_COF);
         dmPrincipal.FTabelaRegC175.Open;
 
       Result := (dmPrincipal.FTabelaRegC175.RecordCount > 0);
@@ -279,11 +279,11 @@ procedure TSpedPisCofins.AcumularValoreAnaliticoRegC175(const NFID: Integer; con
 
 begin
 
-//   if (ValorBase <= 0) then
-//       Exit;
+   if (ValorBase <= 0) then
+       Exit;
 
 
-   if (ExisteCombinacaoCST_PIS_COF()) then
+   if (ExisteCombinacaoCST_PIS_COF) then
        dmPrincipal.FTabelaRegC175.Edit
    else
        dmPrincipal.FTabelaRegC175.Append;
@@ -299,23 +299,32 @@ begin
          dmPrincipal.FTabelaRegC175ALIQ_PIS.AsFloat    := AliqPis;
          dmPrincipal.FTabelaRegC175ALIQ_COFINS.AsFloat := AliqCof;
 
+         dmPrincipal.FTabelaRegC175VL_OPR.AsFloat  :=  ValorBase;
+         dmPrincipal.FTabelaRegC175VL_DESC.AsFloat :=  ValorDesc;
+
          dmPrincipal.FTabelaRegC175COD_CTA.AsString    := '';
          dmPrincipal.FTabelaRegC175INFO_COMPL.AsString := '';
-      end;
+      end
+   else
+     begin
 
+
+       dmPrincipal.FTabelaRegC175VL_OPR.AsFloat  := dmPrincipal.FTabelaRegC175VL_OPR.AsFloat + ValorBase;
+       dmPrincipal.FTabelaRegC175VL_DESC.AsFloat := dmPrincipal.FTabelaRegC175VL_DESC.AsFloat + ValorDesc;
+
+     end;
    // Valor Receita
-   dmPrincipal.FTabelaRegC175VL_OPR.AsFloat  := dmPrincipal.FTabelaRegC175VL_OPR.AsFloat + ValorBase;
-   dmPrincipal.FTabelaRegC175VL_DESC.AsFloat := dmPrincipal.FTabelaRegC175VL_DESC.AsFloat + ValorDesc;
 
    if (AliqPis > 0) then
       begin
          dmPrincipal.FTabelaRegC175VL_PIS.AsFloat    := dmPrincipal.FTabelaRegC175VL_PIS.AsFloat + ValorPis;
          dmPrincipal.FTabelaRegC175VL_BC_PIS.AsFloat := dmPrincipal.FTabelaRegC175VL_BC_PIS.AsFloat + ValorBase;
-      end
+     end
    else
-     begin
-         dmPrincipal.FTabelaRegC175VL_PIS.AsFloat    := dmPrincipal.FTabelaRegC175VL_PIS.AsFloat + 0 ;
-         dmPrincipal.FTabelaRegC175VL_BC_PIS.AsFloat := dmPrincipal.FTabelaRegC175VL_BC_PIS.AsFloat + 0;
+    begin
+        dmPrincipal.FTabelaRegC175VL_PIS.AsFloat    := dmPrincipal.FTabelaRegC175VL_PIS.AsFloat + 0 ;
+        dmPrincipal.FTabelaRegC175VL_BC_PIS.AsFloat := dmPrincipal.FTabelaRegC175VL_BC_PIS.AsFloat + 0;
+
      end;
 
 
@@ -533,7 +542,7 @@ var
    oItemProduto: TDetCollectionItem;
    Idx: Integer;
    sCST_PIS_COF,
-   sCFOP,UniMedida,sNCM,vCstpis: String;
+   sCFOP,UniMedida,sNCM,vCstpis,vTeste: String;
    dBasePis,
    dAliqPis,
    dValorPis,
@@ -543,18 +552,25 @@ var
    dValorBasePisCof,
    AliqPis,AliqCofins: Double;
    EnquandramentoTributario :String;
+   vOperacao :Currency;
 
 begin
 
-   dBasePis:= 0;
-   dAliqPis:= 0;
-   dValorPis:= 0;
-   dBaseCof:= 0;
-   dAliqCof:= 0;
-   dValorCof:= 0;
+
+   UniMedida       :='';
+   sNCM            :='';
+   vCstpis         :='';
+   sCST_PIS_COF    :='';
+   dBasePis        := 0;
+   dAliqPis        := 0;
+   dValorPis       := 0;
+   dBaseCof        := 0;
+   dAliqCof        := 0;
+   dValorCof       := 0;
    dValorBasePisCof:= 0;
-   AliqPis:= 0;
-   AliqCofins:= 0;
+   AliqPis         := 0;
+   AliqCofins      := 0;
+   vOperacao       := 0;
 
 
   sCFOP    :='';
@@ -570,11 +586,29 @@ begin
    for Idx := 0 to Notas.Items[ 0 ].NFe.Det.Count -1 do
       begin
 
+         if Notas.Items[0].NFe.procNFe.chNFe ='33250237950146000108550010000120881000061585' then
+          begin
+            vTeste:='ok';
+          end;
+
 
          oItemProduto := Notas.Items[ 0 ].NFe.Det.Items[ Idx ];
 
         if (Notas.Items[0].NFe.Ide.modelo = 65) then  {notas de saida nfce}
            begin
+
+
+              vOperacao :=(oItemProduto.Prod.vProd +
+                           oItemProduto.Prod.vFrete +
+                           oItemProduto.Prod.vSeg +
+                           oItemProduto.Prod.vOutro +
+                           oItemProduto.Imposto.IPI.vIPI +
+                           oItemProduto.Imposto.ICMS.vICMSST +
+                           oItemProduto.Imposto.ICMS.vFCPST) -
+                           oItemProduto.Prod.vDesc;  {add esse codigo para corrigir o vl da operacao na diferenca de um sped pro outro 04042025 mauricio}
+
+
+
 
              sCFOP := oItemProduto.Prod.CFOP;
 
@@ -588,7 +622,7 @@ begin
                      dBasePis         := oItemProduto.Imposto.PIS.vBC;
                      dAliqPis         := oItemProduto.Imposto.PIS.pPIS;
                      dValorPis        := oItemProduto.Imposto.PIS.vPIS;
-                     dValorBasePisCof := oItemProduto.Prod.vProd;
+                     dValorBasePisCof := vOperacao;//oItemProduto.Prod.vProd;
                      dBaseCof         := oItemProduto.Imposto.COFINS.vBC;
                      dAliqCof         := oItemProduto.Imposto.COFINS.pCOFINS;
                      dValorCof        := oItemProduto.Imposto.COFINS.vCOFINS;
@@ -620,7 +654,7 @@ begin
                        dBasePis         := 0;
                        dAliqPis         := 0;
                        dValorPis        := 0;
-                       dValorBasePisCof := oItemProduto.Prod.vProd;
+                       dValorBasePisCof := vOperacao;//oItemProduto.Prod.vProd;
                        dBaseCof         := 0;
                        dAliqCof         := 0;
                        dValorCof        := 0;
@@ -634,7 +668,7 @@ begin
                       dBasePis         := 0;
                       dAliqPis         := 0;
                       dValorPis        := 0;
-                      dValorBasePisCof := oItemProduto.Prod.vProd;;
+                      dValorBasePisCof := vOperacao;//oItemProduto.Prod.vProd;;
                       dBaseCof         := 0;
                       dAliqCof         := 0;
                       dValorCof        := 0;
@@ -644,7 +678,7 @@ begin
                end;
 
            end
-        else {notas de entrada}
+           else
            begin
 
              sCFOP := oItemProduto.Prod.CFOP;
@@ -662,13 +696,22 @@ begin
            end;
 
 
-
          if ((docEntrada) or (Notas.Items[0].NFe.Ide.tpNF = tnEntrada)) then
              sCST_PIS_COF := ConverterCST_PIS_COF_SaiToEnt( sCST_PIS_COF );
 
-
-         if (Notas.Items[0].NFe.Ide.modelo <> 65) then
+         if (Notas.Items[0].NFe.Ide.modelo <> 65)  then
             begin
+
+
+              vOperacao :=(oItemProduto.Prod.vProd +
+                           oItemProduto.Prod.vFrete +
+                           oItemProduto.Prod.vSeg +
+                           oItemProduto.Prod.vOutro +
+                           oItemProduto.Imposto.IPI.vIPI +
+                           oItemProduto.Imposto.ICMS.vICMSST +
+                           oItemProduto.Imposto.ICMS.vFCPST) -
+                           oItemProduto.Prod.vDesc;  {08042025 mauricio teste pra igualar valor de sped icms com contribuicao nfe entrada}
+
 
                UniMedida := 'UN';
 
@@ -678,8 +721,8 @@ begin
                FTabelaRegC170.FieldByName('COD_ITEM').AsString    := oItemProduto.Prod.cProd;
                FTabelaRegC170.FieldByName('DESCR_COMPL').AsString := Copy(oItemProduto.Prod.xProd,1,60);
                FTabelaRegC170.FieldByName('QTD').AsFloat          := oItemProduto.Prod.qCom;
+               FTabelaRegC170.FieldByName('VL_ITEM').Asfloat      := vOperacao;//oItemProduto.Prod.vProd ;
                FTabelaRegC170.FieldByName('UNID').AsString        := UniMedida;
-               FTabelaRegC170.FieldByName('VL_ITEM').Asfloat      := oItemProduto.Prod.vProd;
                FTabelaRegC170.FieldByName('VL_DESC').Asfloat      := oItemProduto.Prod.vDesc;
 
                if (Length(oItemProduto.Prod.NCM) = 2) then
@@ -712,7 +755,7 @@ begin
                   FTabelaRegC170.FieldByName('IND_APUR').AsInteger := 0;
 
                if (docEntrada) then
-                  FTabelaRegC170.FieldByName('CST_IPI').AsString := ''// ConverteCstIPI_Entrada(CSTIPIToStr(oItemProduto.Imposto.IPI.CST))// '49' // Outras entradas  mexer aqui
+                  FTabelaRegC170.FieldByName('CST_IPI').AsString := '49'// ConverteCstIPI_Entrada(CSTIPIToStr(oItemProduto.Imposto.IPI.CST))// '49' // Outras entradas  mexer aqui
                else
                   FTabelaRegC170.FieldByName('CST_IPI').AsString := CSTIPIToStr(oItemProduto.Imposto.IPI.CST);
 
@@ -724,8 +767,8 @@ begin
                if (FcompSpedPisCofins.Bloco_0.Registro0000.IND_ATIV = indAtivIndustrial) then
                   AcumularValoresIPI(sCFOP, CSTIPIToStr(oItemProduto.Imposto.IPI.CST), oItemProduto.Imposto.IPI.vBC, oItemProduto.Imposto.IPI.vIPI);
 
-                 dmPrincipal.FDMemTBCST50.open;
-               if sCST_PIS_COF ='50' then
+                // dmPrincipal.FDMemTBCST50.open;
+               if (sCST_PIS_COF ='50')   then
                   begin
 
                       dBasePis         := oItemProduto.Imposto.PIS.vBC;
@@ -734,63 +777,8 @@ begin
                       dValorCof        := oItemProduto.Imposto.COFINS.vCOFINS;
 
                       dAliqPis         := oItemProduto.Imposto.PIS.pPIS;
-                     // dValorBasePisCof := oItemProduto.Prod.vProd;
+                     // dValorBasePisCof := vOperacao;  /// mauricio 08042025 teste
                       dAliqCof         := oItemProduto.Imposto.COFINS.pCOFINS;
-
-
-                      //===========================bloco de teste
-//                      dmPrincipal.FDMemTBCST50.Edit;
-//                      dmPrincipal.FDMemTBCST50valorBC.Value     := dmPrincipal.FDMemTBCST50valorBC.Value     + dBasePis;
-//                      dmPrincipal.FDMemTBCST50valorPis.Value    := dmPrincipal.FDMemTBCST50valorPis.Value    + dValorPis;
-//                      dmPrincipal.FDMemTBCST50valorCofins.Value := dmPrincipal.FDMemTBCST50valorCofins.Value + dValorCof;
-//                      dmPrincipal.FDMemTBCST50.Post;
-
-
-                    { dmPrincipal.cdsRegC170.close;
-                     dmPrincipal.cdsRegC170.Open;
-                     dmPrincipal.cdsRegC170.Append;
-
-                     dmPrincipal.cdsRegC170NFID.value        := NFID;
-                     dmPrincipal.cdsRegC170NUM_ITEM.value    := IntToStr(Idx + 1);
-                     dmPrincipal.cdsRegC170COD_ITEM.value    := oItemProduto.Prod.cProd;
-                     dmPrincipal.cdsRegC170DESCR_COMPL.value := Copy(oItemProduto.Prod.xProd,1,60);
-                     dmPrincipal.cdsRegC170QTD.AsFloat       := oItemProduto.Prod.qCom;
-                     dmPrincipal.cdsRegC170UNID.AsString     := UniMedida;
-                     dmPrincipal.cdsRegC170VL_ITEM.Asfloat   := oItemProduto.Prod.vProd;
-                     dmPrincipal.cdsRegC170VL_DESC.Asfloat   := oItemProduto.Prod.vDesc;
-
-                     if (Length(oItemProduto.Prod.NCM) = 2) then
-                      dmPrincipal.cdsRegC170IND_MOV.AsInteger := 1 // Movimentação fisica = 0.SIM  1.NÃO
-                     else
-                       dmPrincipal.cdsRegC170IND_MOV.AsInteger  := 0; // Movimentação fisica = 0. SIM 1. NÃO
-
-                     if (Notas.Items[0].NFe.Emit.CRT = crtRegimeNormal) then
-                        dmPrincipal.cdsRegC170CST_ICMS.AsString := CSTICMSToStr(oItemProduto.Imposto.ICMS.CST)
-                     else
-                        dmPrincipal.cdsRegC170CST_ICMS.AsString := CSOSNIcmsToStr(oItemProduto.Imposto.ICMS.CSOSN);
-
-                     if (docEntrada) then
-                        dmPrincipal.cdsRegC170CFOP.AsString := ConverterCFOPEntrada(sCFOP);
-
-                     dmPrincipal.cdsRegC170CST_PIS.value      := sCST_PIS_COF;
-                     dmPrincipal.cdsRegC170VL_BC_PIS.value    := dBasePis;
-                     dmPrincipal.cdsRegC170ALIQ_PIS_PERC.value:= dAliqPis;
-                     dmPrincipal.cdsRegC170QUANT_BC_PIS.value := 0;
-                     dmPrincipal.cdsRegC170ALIQ_PIS_R.value   := 0; //EM REAIS
-                     dmPrincipal.cdsRegC170VL_PIS.value       := dValorPis;
-
-                     // COFINS
-                     dmPrincipal.cdsRegC170CST_COFINS.value       := sCST_PIS_COF;
-                     dmPrincipal.cdsRegC170VL_BC_COFINS.value     := dBaseCof;
-                     dmPrincipal.cdsRegC170ALIQ_COFINS_PERC.value := dAliqCof;
-                     dmPrincipal.cdsRegC170QUANT_BC_COFINS.value  := 0;
-                     dmPrincipal.cdsRegC170ALIQ_COFINS_R.value    := 0; //EM REAIS
-                     dmPrincipal.cdsRegC170VL_COFINS.value        := dValorCof;
-                     dmPrincipal.cdsRegC170COD_CTA.value          := '';
-                     dmPrincipal.cdsRegC170.Post;
-                     dmPrincipal.cdsRegC170.ApplyUpdates(0);   }
-                     //===================== teste acima ======================
-
 
                         // PIS
                      FTabelaRegC170.FieldByName('CST_PIS').AsString      := sCST_PIS_COF;
@@ -834,18 +822,19 @@ begin
                  end;{if <> 65}
             end;
 
+
         if (not docEntrada) then
             begin
 
 
                AcumularValoresReceitaReg1900(sCFOP,
-                                                 sCST_PIS_COF,
-                                                 IntToStr(Notas.Items[0].NFe.Ide.modelo),
-                                                 IntToStr(Notas.Items[0].NFe.Ide.serie),
-                                                 '0', // Subserie
-                                                 oItemProduto.Prod.vProd,
-                                                 dAliqPis,
-                                                 dAliqCof);
+                                             sCST_PIS_COF,
+                                             IntToStr(Notas.Items[0].NFe.Ide.modelo),
+                                             IntToStr(Notas.Items[0].NFe.Ide.serie),
+                                             '0', // Subserie
+                                             vOperacao,
+                                             dAliqPis,
+                                             dAliqCof);
 
 
 
@@ -854,7 +843,7 @@ begin
                 AcumularValoreAnaliticoRegC175(NFID,
                                               sCFOP,
                                               sCST_PIS_COF,
-                                              dValorBasePisCof,
+                                              vOperacao,
                                               dAliqPis,
                                               dAliqCof,
                                               dValorPis,
@@ -881,6 +870,7 @@ var
   dAliqCof,
   dValorCof,
   dValorBasePisCof: Double;
+  vOperacao:Currency;
 begin
 //   GerarLinhaMemoLog('Carregando ' + IntToStr(Notas.Items[ 0 ].NFe.Det.Count) + ' itens de serviço');
 
@@ -888,16 +878,25 @@ begin
       begin
          oItemServico := Notas.Items[ 0 ].NFe.Det.Items[ Idx ];
 
+         vOperacao :=(oItemServico.Prod.vProd +
+                      oItemServico.Prod.vFrete +
+                      oItemServico.Prod.vSeg +
+                      oItemServico.Prod.vOutro +
+                      oItemServico.Imposto.IPI.vIPI +
+                      oItemServico.Imposto.ICMS.vICMSST +
+                      oItemServico.Imposto.ICMS.vFCPST) -
+                      oItemServico.Prod.vDesc;
+
 //         sCFOP := oItemServico.Prod.CFOP;
 
          // ** Trata Pis
          if (oItemServico.Imposto.PIS.pPIS > 0) then
             begin
-               sCST_PIS_COF := CSTPISToStr(oItemServico.Imposto.PIS.CST);
-               dBasePis := oItemServico.Imposto.PIS.vBC;
-               dAliqPis := oItemServico.Imposto.PIS.pPIS;
-               dValorPis := oItemServico.Imposto.PIS.vPIS;
-               dValorBasePisCof := oItemServico.Prod.vProd;
+               sCST_PIS_COF     := CSTPISToStr(oItemServico.Imposto.PIS.CST);
+               dBasePis         := oItemServico.Imposto.PIS.vBC;
+               dAliqPis         := oItemServico.Imposto.PIS.pPIS;
+               dValorPis        := oItemServico.Imposto.PIS.vPIS;
+               dValorBasePisCof := vOperacao;
             end
          else
             begin
@@ -926,24 +925,24 @@ begin
             end;
 
          FTabelaRegA170.Append;
-         FTabelaRegA170.FieldByName('NFID').AsInteger := NFID;
-         FTabelaRegA170.FieldByName('NUM_ITEM').AsInteger := (Idx + 1);
-         FTabelaRegA170.FieldByName('COD_ITEM').AsString := oItemServico.Prod.cProd;
-         FTabelaRegA170.FieldByName('DESCR_COMPL').AsString := Copy(oItemServico.Prod.xProd,1,60);
-         FTabelaRegA170.FieldByName('VL_ITEM').Asfloat := oItemServico.Prod.vProd;
-         FTabelaRegA170.FieldByName('VL_DESC').Asfloat := oItemServico.Prod.vDesc;
-         FTabelaRegA170.FieldByName('NAT_BC_CRED').AsString := '13';// Aquisição de bens para revenda; {Código da Base de Cálculo do Crédito - Tabela indicada no item 4.3.7}
+         FTabelaRegA170.FieldByName('NFID').AsInteger          := NFID;
+         FTabelaRegA170.FieldByName('NUM_ITEM').AsInteger      := (Idx + 1);
+         FTabelaRegA170.FieldByName('COD_ITEM').AsString       := oItemServico.Prod.cProd;
+         FTabelaRegA170.FieldByName('DESCR_COMPL').AsString    := Copy(oItemServico.Prod.xProd,1,60);
+         FTabelaRegA170.FieldByName('VL_ITEM').Asfloat         := oItemServico.Prod.vProd;
+         FTabelaRegA170.FieldByName('VL_DESC').Asfloat         := oItemServico.Prod.vDesc;
+         FTabelaRegA170.FieldByName('NAT_BC_CRED').AsString    := '13';// Aquisição de bens para revenda; {Código da Base de Cálculo do Crédito - Tabela indicada no item 4.3.7}
          FTabelaRegA170.FieldByName('IND_ORIG_CRED').AsInteger := 0; {0 - Oper. Mercado. Interno, 1 - Oper. Importação}
-         FTabelaRegA170.FieldByName('CST_PIS').AsString := sCST_PIS_COF;
-         FTabelaRegA170.FieldByName('VL_BC_PIS').AsFloat := dBasePis;
-         FTabelaRegA170.FieldByName('ALIQ_PIS').AsFloat := dAliqPis;
-         FTabelaRegA170.FieldByName('VL_PIS').AsFloat := dValorPis;
-         FTabelaRegA170.FieldByName('CST_COFINS').AsString := sCST_PIS_COF;
-         FTabelaRegA170.FieldByName('VL_BC_COFINS').AsFloat := dBaseCof;
-         FTabelaRegA170.FieldByName('ALIQ_COFINS').AsFloat := dAliqCof;
-         FTabelaRegA170.FieldByName('VL_COFINS').AsFloat := dValorCof;
-         FTabelaRegA170.FieldByName('COD_CTA').AsString := '';
-         FTabelaRegA170.FieldByName('COD_CCUS').AsString := '';
+         FTabelaRegA170.FieldByName('CST_PIS').AsString        := sCST_PIS_COF;
+         FTabelaRegA170.FieldByName('VL_BC_PIS').AsFloat       := dBasePis;
+         FTabelaRegA170.FieldByName('ALIQ_PIS').AsFloat        := dAliqPis;
+         FTabelaRegA170.FieldByName('VL_PIS').AsFloat          := dValorPis;
+         FTabelaRegA170.FieldByName('CST_COFINS').AsString     := sCST_PIS_COF;
+         FTabelaRegA170.FieldByName('VL_BC_COFINS').AsFloat    := dBaseCof;
+         FTabelaRegA170.FieldByName('ALIQ_COFINS').AsFloat     := dAliqCof;
+         FTabelaRegA170.FieldByName('VL_COFINS').AsFloat       := dValorCof;
+         FTabelaRegA170.FieldByName('COD_CTA').AsString        := '';
+         FTabelaRegA170.FieldByName('COD_CCUS').AsString       := '';
          FTabelaRegA170.Post;
       end;
 end;
@@ -967,10 +966,6 @@ begin
       FTabelaRegC100.Filtered := True;
 
 
-//      Result := (FTabelaRegC100.RecordCount + 1);
-//      sChave := StringReplace(Notas.Items[0].NFe.infNFe.ID,'NFe',EmptyStr,[rfIgnoreCase]);
-//   //   FTabelaRegC100.Locate('CHV_NFE',QuotedStr(sChave),[loCaseInsensitive, loPartialKey]);
-
       if (FTabelaRegC100.IsEmpty) then
          begin
 
@@ -991,10 +986,10 @@ begin
             else
                FTabelaRegC100.FieldByName('IND_OPER').AsInteger := 1;
 
-            FTabelaRegC100.FieldByName('COD_MOD').AsString := IntToStr(Notas.Items[0].NFe.Ide.modelo);
-            FTabelaRegC100.FieldByName('SER').AsString := FormatFloat('000', Notas.Items[0].NFe.Ide.serie);
+            FTabelaRegC100.FieldByName('COD_MOD').AsString  := IntToStr(Notas.Items[0].NFe.Ide.modelo);
+            FTabelaRegC100.FieldByName('SER').AsString      := FormatFloat('000', Notas.Items[0].NFe.Ide.serie);
             FTabelaRegC100.FieldByName('NUM_DOC').AsInteger := Notas.Items[0].NFe.Ide.nNF;
-            FTabelaRegC100.FieldByName('CHV_NFE').AsString := sChave;
+            FTabelaRegC100.FieldByName('CHV_NFE').AsString  := sChave;
 
             {
               COD_SIT
@@ -1022,13 +1017,13 @@ begin
                end;
 
             sCNPJCPF := Notas.Items[0].NFe.Dest.CNPJCPF;
-            if docEntrada then
-               sCNPJCPF := Notas.Items[0].NFe.Emit.CNPJCPF;
+          if docEntrada then
+             sCNPJCPF := Notas.Items[0].NFe.Emit.CNPJCPF;
 
             FTabelaRegC100.FieldByName('COD_PART').AsString := GetCodPartByCnpjCpf(sCNPJCPF);
             FTabelaRegC100.FieldByName('DT_DOC').AsDateTime := Notas.Items[0].NFe.Ide.dEmi;
             FTabelaRegC100.FieldByName('DT_E_S').AsDateTime := Notas.Items[0].NFe.Ide.dEmi;
-            FTabelaRegC100.FieldByName('VL_DOC').AsFloat := Notas.Items[0].NFe.Total.ICMSTot.vNF;
+            FTabelaRegC100.FieldByName('VL_DOC').AsFloat    := Notas.Items[0].NFe.Total.ICMSTot.vNF;
 
             case Notas.Items[0].NFe.Ide.indPag of
                ipVista : FTabelaRegC100.FieldByName('IND_PGTO').AsInteger := 0;
@@ -1069,6 +1064,7 @@ begin
             FTabelaRegC100.FieldByName('VL_PIS_ST').AsFloat     := 0;
             FTabelaRegC100.FieldByName('VL_COFINS_ST').AsFloat  := 0;
             FTabelaRegC100.Post;
+
 
          end
       else
@@ -1403,8 +1399,8 @@ begin
                  if unidade =  'UN' then
                    begin
                     FTabelaReg0190.Append;
-                    FTabelaReg0190.FieldByName('UNID').AsString := unidade;                      //oItemProduto.Prod.uCom;
-                    FTabelaReg0190.FieldByName('DESCR').AsString := 'UNIDADE MEDIDA ' + unidade; //oItemProduto.Prod.uCom;
+                    FTabelaReg0190.FieldByName('UNID').AsString := unidade;
+                    FTabelaReg0190.FieldByName('DESCR').AsString := 'UNIDADE MEDIDA ' + unidade;
                     FTabelaReg0190.Post;
                    end
                    else
@@ -1439,7 +1435,7 @@ begin
                   FTabelaReg0200.FieldByName('DESCR_ITEM').AsString   := oItemProduto.Prod.xProd;
                   FTabelaReg0200.FieldByName('COD_BARRA').AsString    := oItemProduto.Prod.cEAN;
                   FTabelaReg0200.FieldByName('COD_ANT_ITEM').AsString := '';
-                  FTabelaReg0200.FieldByName('UNID_INV').AsString     := unidade;//oItemProduto.Prod.uCom;
+                  FTabelaReg0200.FieldByName('UNID_INV').AsString     := unidade;
 
                   if (oItemProduto.Prod.CFOP = '5933') then
                       FTabelaReg0200.FieldByName('COD_NCM').AsString := ''
@@ -1486,14 +1482,14 @@ var
    unidade,sCST_PIS_COF,sTeste:string;
    AliqPis,AliqCofins:Double;
    CST_PIS,ENQUADRAMENTO_TRIBUTARIO: string;
+   vOperacao:Currency;
 
 begin
 
-  if (Notas.Items[0].NFe.Ide.modelo = 55) then
+  if (Notas.Items[0].NFe.Ide.modelo = 55) then//and (Notas.Items[0].NFe.Emit.CNPJCPF <> RemoveMascaraStr(Self.CnpjEmpresa)) then  //10042025 mauricio
       Exit;
 
-//   dmPrincipal.cdsTemCstPIsCof.Close;
-//   dmPrincipal.cdsTemCstPIsCof.Open;
+
 
     ENQUADRAMENTO_TRIBUTARIO := dmPrincipal.cdsConsEmpresaENQUADRAMENTO_TRIBUTARIO.value;
 
@@ -1514,11 +1510,22 @@ begin
 
            oItemProduto := Notas.Items[ 0 ].NFe.Det.Items[ Idx ];
 
+
+           vOperacao:= (oItemProduto.Prod.vProd +
+                        oItemProduto.Prod.vFrete +
+                        oItemProduto.Prod.vSeg +
+                        oItemProduto.Prod.vOutro +
+                        oItemProduto.Imposto.IPI.vIPI +
+                        oItemProduto.Imposto.ICMS.vICMSST +
+                        oItemProduto.Imposto.ICMS.vFCPST) -
+                        oItemProduto.Prod.vDesc;
+
+
            dmPrincipal.cdsTemCstPIsCof.Append;
            dmPrincipal.cdsTemCstPIsCofCFOP.Value            := oItemProduto.Prod.CFOP;
            dmPrincipal.cdsTemCstPIsCofNCM.Value             := oItemProduto.Prod.NCM;
            dmPrincipal.cdsTemCstPIsCofVALOR_PROD.Value      := oItemProduto.Prod.vProd;
-           dmPrincipal.cdsTemCstPIsCofVALORBASEPISCOF.Value := oItemProduto.Prod.vProd;
+           dmPrincipal.cdsTemCstPIsCofVALORBASEPISCOF.Value := vOperacao;//oItemProduto.Prod.vProd; 07042025 mauriicio erro anterior diferenca valor icm / contribuicao
            dmPrincipal.cdsTemCstPIsCofEAN.Value             := oItemProduto.Prod.cEAN;
            dmPrincipal.cdsTemCstPIsCofBASEPIS.Value         := oItemProduto.Imposto.PIS.vBC;
            dmPrincipal.cdsTemCstPIsCofALIQPIS.Value         := oItemProduto.Imposto.PIS.pPIS;
@@ -1736,7 +1743,12 @@ begin
 
 
 
-   ObterListaAqruivosDiretorio(Self.LocalDocXml_NFE, 'xml', TStringList(FListaArquivos),'*' , True, iCountLimite);
+//   ObterListaAqruivosDiretorio(Self.LocalDocXml_NFE, 'xml', TStringList(FListaArquivos),'*' , True, iCountLimite);
+//   GerarLinhaMemoLog('Total documentos xml NFE emitidas Danfer: ' + IntToStr(FListaArquivos.Count));
+//   iAux := FListaArquivos.Count;
+
+   //ObterListaAqruivosDiretorio(Self.LocalDocXml_NFE, 'xml', TStringList(FListaArquivos), sFiltroDocEmitido, True, iCountLimite);
+   ObterListaAqruivosDiretorio(Self.LocalDocXml_NFE, 'xml', TStringList(FListaArquivos), '*', True, iCountLimite);
    GerarLinhaMemoLog('Total documentos xml NFE emitidas Danfer: ' + IntToStr(FListaArquivos.Count));
    iAux := FListaArquivos.Count;
 
@@ -1796,14 +1808,10 @@ begin
    // dmPrincipal.cdsTemCstPIsCof.Post;
     dmPrincipal.cdsTemCstPIsCof.ApplyUpdates(0);
 
-
-
-
-
-
-   FListaArquivos.Clear;
-   ObterListaAqruivosDiretorio(Self.LocalDocXml_NFCE, 'xml', TStringList(FListaArquivos),'*' , True, iCountLimite);
-   iDx := FListaArquivos.Count;
+//
+//   FListaArquivos.Clear;
+//   ObterListaAqruivosDiretorio(Self.LocalDocXml_NFCE, 'xml', TStringList(FListaArquivos),'*' , True, iCountLimite);
+//   iDx := FListaArquivos.Count;
 
    AtualizarStatus('Carregando informações de NFE e NFCE...');
 
@@ -1951,9 +1959,7 @@ begin
         // ** Load XML nfe - nfce Componente ACBrNFe;
         sChave := SomenteNumeros(ExtractFileName(FListaArquivos[iDx]));
 
-
         try
-
 
            FacbrNFe.NotasFiscais.Clear;
            FacbrNFe.NotasFiscais.LoadFromFile(Trim(FListaArquivos[iDx]));
@@ -3993,6 +3999,16 @@ begin
             RegistroC100.COD_SIT := ACBrEPCBlocos.sdRegimeEspecNEsp;
 
 
+//
+//            if (RegistroC100.IND_OPER = ACBrEPCBlocos.tpSaidaPrestacao )and
+//               (RegistroC100.COD_MOD = '55')  then
+//             begin
+//
+//               if FTabelaRegC100.FieldByName('CHV_NFE').AsString ='33250316906041000181550010000022121754772915' then
+//                   vteste:='ok';
+//             end;
+
+
 
          if (RegistroC100.COD_SIT = ACBrEPCBlocos.sdRegular) then
             begin
@@ -4019,9 +4035,22 @@ F               }
                    RegistroC100.IND_PGTO := ACBrEPCBlocos.tpVista;
 
 
-                RegistroC100.VL_DESC    := 0;
-                RegistroC100.VL_ABAT_NT := 0;
-                RegistroC100.VL_MERC    := FTabelaRegC100.FieldByName('VL_MERC').AsCurrency;
+                if registroC100.COD_MOD = '65' then
+                  begin
+
+                    RegistroC100.VL_DESC    := FTabelaRegC100.FieldByName('VL_DESC').AsCurrency;
+                    RegistroC100.VL_ABAT_NT := 0;
+                    RegistroC100.VL_MERC    := FTabelaRegC100.FieldByName('VL_MERC').AsCurrency;//    mauricio teste 0804/2025
+
+                  end
+                else
+                  begin
+
+                   RegistroC100.VL_DESC    := FTabelaRegC100.FieldByName('VL_DESC').AsCurrency;
+                   RegistroC100.VL_ABAT_NT := 0;
+                   RegistroC100.VL_MERC    := FTabelaRegC100.FieldByName('VL_DOC').AsCurrency; //FTabelaRegC100.FieldByName('VL_MERC').AsCurrency    mauricio teste 0804/2025
+
+                  end;
 
 
                 if (RegistroC100.COD_MOD = '65') then
@@ -4070,12 +4099,13 @@ F               }
 
                      RegistroC170.NUM_ITEM := IntToStr(iSequencialItem);
 
+
                      RegistroC170.COD_ITEM       := Trim(FTabelaRegC170.FieldByName('COD_ITEM').AsString);
                      RegistroC170.DESCR_COMPL    := Trim(FTabelaRegC170.FieldByName('DESCR_COMPL').AsString);
                      RegistroC170.QTD            := FTabelaRegC170.FieldByName('QTD').AsFloat;
                      RegistroC170.UNID           := Trim(FTabelaRegC170.FieldByName('UNID').AsString);
                      RegistroC170.VL_ITEM        := FTabelaRegC170.FieldByName('VL_ITEM').AsFloat;
-                     RegistroC170.VL_DESC        := 0;
+                     RegistroC170.VL_DESC        := FTabelaRegC170.FieldByName('VL_DESC').Asfloat ;//0 antes
                      RegistroC170.IND_MOV        := ACBrEPCBlocos.mfSim;
                      RegistroC170.CST_ICMS       := ACBrEPCBlocos.StrToCstIcms(Trim(FTabelaRegC170.FieldByName('CST_ICMS').AsString));
                      RegistroC170.CFOP           := Trim(FTabelaRegC170.FieldByName('CFOP').AsString);
@@ -4101,7 +4131,7 @@ F               }
                            RegistroC170.VL_ICMS    := FTabelaRegC170.FieldByName('VL_ICMS').AsFloat;
                         end;
 
-                     {10, 30 ou 70, os valores dos campos VL_BC_ICMS_ST, ALIQ_ST e VL_ICMS_ST deverão ser maiores ou iguais a “0” (zero).}
+                        {10, 30 ou 70, os valores dos campos VL_BC_ICMS_ST, ALIQ_ST e VL_ICMS_ST deverão ser maiores ou iguais a “0” (zero).}
                      if (RegistroC170.CST_ICMS = ACBrEPCBlocos.sticmsTributadaComCobracaPorST) or
                         (RegistroC170.CST_ICMS = ACBrEPCBlocos.sticmsIsentaComCobracaPorST) or
                         (RegistroC170.CST_ICMS = ACBrEPCBlocos.sticmsComReducaoPorST) then
@@ -4656,8 +4686,6 @@ var
    SaldoNaoCumulativoaPagarPIS, SaldoNaoCumulativoaPagarCOFINS : Real;
 
 begin
-
-
   dBasePis := 0;
   dValorPis:= 0;
   dBaseCof := 0;
@@ -4672,10 +4700,10 @@ begin
         AliqCof:= 3.0;
       end
    else
-     begin
+      begin
         AliqPis:= 1.65;
         AliqCof:= 7.60;
-     end;
+      end;
 
 
   Screen.Cursor := crHourglass;
@@ -4715,24 +4743,28 @@ begin
                   FTabelaRegC170.First;
                   while not FTabelaRegC170.Eof do
                     begin
-                     dBasePis  := FTabelaRegC170.FieldByName('VL_BC_PIS').AsFloat   + dBasePis ;
-                     dValorPis := FTabelaRegC170.FieldByName('VL_PIS').AsFloat      + dValorPis;
 
-                     dBaseCof  := FTabelaRegC170.FieldByName('VL_BC_COFINS').AsFloat+ dBaseCof;
-                     dValorCof := FTabelaRegC170.FieldByName('VL_COFINS').AsFloat   + dValorCof;
+                       dBasePis  := FTabelaRegC170.FieldByName('VL_BC_PIS').AsFloat   + dBasePis ;
+                       dValorPis := FTabelaRegC170.FieldByName('VL_PIS').AsFloat      + dValorPis;
+
+                       dBaseCof  := FTabelaRegC170.FieldByName('VL_BC_COFINS').AsFloat+ dBaseCof;
+                       dValorCof := FTabelaRegC170.FieldByName('VL_COFINS').AsFloat   + dValorCof;
+
                      FTabelaRegC170.Next;
                     end;
 
 
                  with RegistroM100New do
                    begin
+
+
                       COD_CRED       := '101';
                       IND_CRED_ORI   := icoOperProprias;
                       VL_BC_PIS      := dBasePis;   {valor da bc pis cst 50 entrada}
                       ALIQ_PIS       := AliqPis;
                       QUANT_BC_PIS   := 0;
                      // ALIQ_PIS_QUANT := 0;
-                      VL_CRED        := dValorPis; { VL_BC_PIS* 1,65%}
+                      VL_CRED        := dValorPis ; { VL_BC_PIS* 1,65%}
                       VL_AJUS_ACRES  := 0;
                       VL_AJUS_REDUC  := 0;
                       VL_CRED_DIF    := 0;
@@ -4740,6 +4772,27 @@ begin
                       IND_DESC_CRED  := idcTotal;
                       VL_CRED_DESC   := dValorPis; //Valor do Crédito disponível, descontado da contribuição apurada no próprio período. Se IND_DESC_CRED=0, informar o valor total do Campo 12; Se IND_DESC_CRED=1, informar o valor parcial do Campo 12.
                       SLD_CRED       := 0;
+
+
+//                      COD_CRED       := '101';
+//                      IND_CRED_ORI   := icoOperProprias;
+//                      VL_BC_PIS      := dBasePis;   {valor da bc pis cst 50 entrada}
+//                      ALIQ_PIS       := 0.65;
+//                      QUANT_BC_PIS   := 0;
+//                     // ALIQ_PIS_QUANT := 0;
+//                      VL_CRED        := dValorPis; { VL_BC_PIS* 1,65%}
+//                      VL_AJUS_ACRES  := 0;
+//                      VL_AJUS_REDUC  := 0;
+//                      VL_CRED_DIF    := 0;
+//                      VL_CRED_DISP   := dValorPis;
+//                      IND_DESC_CRED  := idcTotal;
+//                      VL_CRED_DESC   := dValorPis; //Valor do Crédito disponível, descontado da contribuição apurada no próprio período. Se IND_DESC_CRED=0, informar o valor total do Campo 12; Se IND_DESC_CRED=1, informar o valor parcial do Campo 12.
+//                      SLD_CRED       := 0;
+////
+//
+
+
+
                    end; //Bloco M100
 //
 //
@@ -5711,13 +5764,13 @@ begin
                           dmPrincipal.cdsTEMP_SPEDC_M410.Append;
                           dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('CST').Value    := '04';
                           dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('NAT_REC').Value:= '201';
-                          dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value := dmPrincipal.cdsTemCstPIsCofVALOR_PROD.Value;
+                          dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value := dmPrincipal.cdsTemCstPIsCofVALORBASEPISCOF.Value;
                           dmPrincipal.cdsTEMP_SPEDC_M410.ApplyUpdates(0);
                         end
                      else
                        begin
                           dmPrincipal.cdsTEMP_SPEDC_M410.Edit;
-                          dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value := dmPrincipal.cdsTemCstPIsCofVALOR_PROD.Value + dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value ;
+                          dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value := dmPrincipal.cdsTemCstPIsCofVALORBASEPISCOF.Value + dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value ;
                           dmPrincipal.cdsTEMP_SPEDC_M410.ApplyUpdates(0);
                        end;
 
@@ -5737,13 +5790,13 @@ begin
                           dmPrincipal.cdsTEMP_SPEDC_M410.Append;
                           dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('CST').Value    := '04';
                           dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('NAT_REC').Value:= '202';
-                          dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value :=  dmPrincipal.cdsTemCstPIsCofVALOR_PROD.Value;
+                          dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value :=  dmPrincipal.cdsTemCstPIsCofVALORBASEPISCOF.Value;
                           dmPrincipal.cdsTEMP_SPEDC_M410.ApplyUpdates(0);
                         end
                      else
                         begin
                           dmPrincipal.cdsTEMP_SPEDC_M410.Edit;
-                          dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value := dmPrincipal.cdsTemCstPIsCofVALOR_PROD.Value + dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value ;
+                          dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value := dmPrincipal.cdsTemCstPIsCofVALORBASEPISCOF.Value + dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value ;
                           dmPrincipal.cdsTEMP_SPEDC_M410.ApplyUpdates(0);
                         end;
 
@@ -5813,13 +5866,13 @@ begin
                             dmPrincipal.cdsTEMP_SPEDC_M410.Append;
                             dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('CST').Value    := '06';
                             dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('NAT_REC').Value:= '201';
-                            dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value := dmPrincipal.cdsTemCstPIsCofVALOR_PROD.Value;
+                            dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value := dmPrincipal.cdsTemCstPIsCofVALORBASEPISCOF.Value;
                             dmPrincipal.cdsTEMP_SPEDC_M410.ApplyUpdates(0);
                           end
                        else
                          begin
                             dmPrincipal.cdsTEMP_SPEDC_M410.Edit;
-                            dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value := dmPrincipal.cdsTemCstPIsCofVALOR_PROD.Value + dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value;
+                            dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value := dmPrincipal.cdsTemCstPIsCofVALORBASEPISCOF.Value + dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value;
                             dmPrincipal.cdsTEMP_SPEDC_M410.ApplyUpdates(0);
                          end;
 
@@ -5839,13 +5892,13 @@ begin
                             dmPrincipal.cdsTEMP_SPEDC_M410.Append;
                             dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('CST').Value    := '06';
                             dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('NAT_REC').Value:= '202';
-                            dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value := dmPrincipal.cdsTemCstPIsCofVALOR_PROD.Value;
+                            dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value := dmPrincipal.cdsTemCstPIsCofVALORBASEPISCOF.Value;
                             dmPrincipal.cdsTEMP_SPEDC_M410.ApplyUpdates(0);
                           end
                        else
                           begin
                             dmPrincipal.cdsTEMP_SPEDC_M410.Edit;
-                            dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value := dmPrincipal.cdsTemCstPIsCofVALOR_PROD.Value + dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value ;
+                            dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value := dmPrincipal.cdsTemCstPIsCofVALORBASEPISCOF.Value + dmPrincipal.cdsTEMP_SPEDC_M410.FieldByName('VL_REC').Value ;
                             dmPrincipal.cdsTEMP_SPEDC_M410.ApplyUpdates(0);
                           end;
                       end;

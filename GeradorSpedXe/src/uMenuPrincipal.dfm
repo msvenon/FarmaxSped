@@ -920,7 +920,6 @@ object FrmPrincipal: TFrmPrincipal
                 Width = 276
                 Height = 49
                 Caption = 'Nr. Recibo Anterior - Sped Contrib. (Pis Cofins)'
-                Enabled = False
                 Font.Charset = DEFAULT_CHARSET
                 Font.Color = clWindowText
                 Font.Height = -12

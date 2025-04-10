@@ -1101,7 +1101,7 @@ begin
 
 
 
-
+     {gerar o bloco H em março }
      DecodeDate(edtDataFinal.DateTime, Ano, Mes, Dia);
      if Mes = 3  then
       chkGerarBlocoH.Checked:=true;
@@ -1162,6 +1162,7 @@ begin
                 FrmGerarSpedPisCofins.CnpjEmpresa        := RemoveMascaraStr(txtCNPJ.Caption);
                 FrmGerarSpedPisCofins.ArquivoMFDSPEDLocal:= chkArqMFDCuponsLocal.Checked;
                 FrmGerarSpedPisCofins.LocalArquivoMFDSPED:= edtLocalMFDSPED.Text;
+                FrmGerarSpedPisCofins.
                 FrmGerarSpedPisCofins.SemLimite          := FSemLimAux;
 
                 FrmGerarSpedPisCofins.ShowModal;

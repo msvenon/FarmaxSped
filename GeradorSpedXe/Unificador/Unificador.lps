@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="9"/>
+    <BuildModes Active="Default"/>
+    <Units Count="6">
+      <Unit0>
+        <Filename Value="Unificador.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="Unificador"/>
+        <UsageCount Value="27"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="unit_unificador.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmUnificador"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="unit_unificador"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="194"/>
+        <CursorPos X="7" Y="209"/>
+        <UsageCount Value="27"/>
+        <Loaded Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="..\LivePlus\unt_sped_pis_cofins.pas"/>
+        <UnitName Value="unt_sped_pis_cofins"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1807"/>
+        <CursorPos X="1" Y="1509"/>
+        <UsageCount Value="11"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="P:\Delphi\LivePlusForm\untSpedPisCofins.pas"/>
+        <UnitName Value="untSpedPisCofins"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1724"/>
+        <CursorPos X="1" Y="1576"/>
+        <UsageCount Value="10"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="P:\Delphi\LivePlusForm\untSped.pas"/>
+        <UnitName Value="untSped"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="892"/>
+        <CursorPos X="39" Y="536"/>
+        <UsageCount Value="13"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="..\LivePDV\fontes\unt_funcoes.pas"/>
+        <UnitName Value="unt_funcoes"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="2293"/>
+        <CursorPos X="37" Y="2414"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit5>
+    </Units>
+    <General>
+      <ActiveWindowIndexAtStart Value="0"/>
+    </General>
+    <JumpHistory Count="0" HistoryIndex="-1"/>
+  </ProjectSession>
+  <EditorMacros Count="0"/>
+</CONFIG>
