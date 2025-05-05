@@ -1162,7 +1162,6 @@ begin
                 FrmGerarSpedPisCofins.CnpjEmpresa        := RemoveMascaraStr(txtCNPJ.Caption);
                 FrmGerarSpedPisCofins.ArquivoMFDSPEDLocal:= chkArqMFDCuponsLocal.Checked;
                 FrmGerarSpedPisCofins.LocalArquivoMFDSPED:= edtLocalMFDSPED.Text;
-                FrmGerarSpedPisCofins.
                 FrmGerarSpedPisCofins.SemLimite          := FSemLimAux;
 
                 FrmGerarSpedPisCofins.ShowModal;

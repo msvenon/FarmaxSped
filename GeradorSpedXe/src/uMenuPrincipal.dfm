@@ -221,6 +221,10 @@ object FrmPrincipal: TFrmPrincipal
           OnChange = pgcPrincipalChange
           object tabOpcoes: TTabSheet
             Caption = 'Opc'#245'es'
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object grbEmpresa: TGroupBox
               Left = 0
               Top = 0
@@ -1299,6 +1303,10 @@ object FrmPrincipal: TFrmPrincipal
           object tabLog: TTabSheet
             Caption = 'Log'
             ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object mmLogSped: TMemo
               Left = 0
               Top = 0
@@ -1313,6 +1321,10 @@ object FrmPrincipal: TFrmPrincipal
           object tabCadastro: TTabSheet
             Caption = 'Cadastro'
             ImageIndex = 3
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object PcEmpresa: TPageControl
               Left = 0
               Top = 0
@@ -1324,6 +1336,10 @@ object FrmPrincipal: TFrmPrincipal
               object tabEmpresa: TTabSheet
                 Caption = 'Empresa'
                 ImageIndex = 2
+                ExplicitLeft = 0
+                ExplicitTop = 0
+                ExplicitWidth = 0
+                ExplicitHeight = 0
                 object GroupBox1: TGroupBox
                   Left = -2
                   Top = 7
@@ -1742,6 +1758,10 @@ object FrmPrincipal: TFrmPrincipal
               object tabContador: TTabSheet
                 Caption = 'Contador'
                 ImageIndex = 2
+                ExplicitLeft = 0
+                ExplicitTop = 0
+                ExplicitWidth = 0
+                ExplicitHeight = 0
                 object GroupBox2: TGroupBox
                   Left = 3
                   Top = 3
@@ -2043,6 +2063,10 @@ object FrmPrincipal: TFrmPrincipal
           object tabHome: TTabSheet
             Caption = 'Home'
             ImageIndex = 3
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object pnHome: TPanel
               Left = 0
               Top = 0
@@ -7669,6 +7693,10 @@ object FrmPrincipal: TFrmPrincipal
           object TabConfiguracao: TTabSheet
             Caption = 'Configura'#231#227'o Server'
             ImageIndex = 4
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object Panel2: TPanel
               Left = 0
               Top = 0

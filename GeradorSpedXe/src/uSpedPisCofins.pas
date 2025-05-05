@@ -586,7 +586,7 @@ begin
    for Idx := 0 to Notas.Items[ 0 ].NFe.Det.Count -1 do
       begin
 
-         if Notas.Items[0].NFe.procNFe.chNFe ='33250237950146000108550010000120881000061585' then
+         if Notas.Items[0].NFe.procNFe.chNFe ='33250210766923000102550020000000201015982704' then
           begin
             vTeste:='ok';
           end;
@@ -748,6 +748,8 @@ begin
                FTabelaRegC170.FieldByName('ALIQ_ST').AsFloat       := oItemProduto.Imposto.ICMS.pICMSST;
                FTabelaRegC170.FieldByName('VL_ICMS_ST').AsFloat    := oItemProduto.Imposto.ICMS.vICMSST;
 
+
+
                // IPI
                if (FParamIndApurIPI = dmprincipal.cdsConsEmpresaPERIODO_IPI.Value) then // 0 - Mensal; 1 - Decendial
                   FTabelaRegC170.FieldByName('IND_APUR').AsInteger := 1
@@ -755,7 +757,12 @@ begin
                   FTabelaRegC170.FieldByName('IND_APUR').AsInteger := 0;
 
                if (docEntrada) then
-                  FTabelaRegC170.FieldByName('CST_IPI').AsString := '49'// ConverteCstIPI_Entrada(CSTIPIToStr(oItemProduto.Imposto.IPI.CST))// '49' // Outras entradas  mexer aqui
+                  FTabelaRegC170.FieldByName('CST_IPI').AsString := '49'
+               else  if (sCFOP ='5411') and (( sCST_PIS_COF ='01') or (sCST_PIS_COF ='04')or (sCST_PIS_COF='06')or (sCST_PIS_COF='70') ) then
+                   begin
+                     FTabelaRegC170.FieldByName('CST_IPI').AsString := '49';
+                     sCST_PIS_COF:='49';
+                   end
                else
                   FTabelaRegC170.FieldByName('CST_IPI').AsString := CSTIPIToStr(oItemProduto.Imposto.IPI.CST);
 
@@ -1805,13 +1812,10 @@ begin
            GerarLinhaMemoLog('A chave não é Nfe(55) ou NFCe(65): ' + sChave);
       end;
 
-   // dmPrincipal.cdsTemCstPIsCof.Post;
+
     dmPrincipal.cdsTemCstPIsCof.ApplyUpdates(0);
 
-//
-//   FListaArquivos.Clear;
-//   ObterListaAqruivosDiretorio(Self.LocalDocXml_NFCE, 'xml', TStringList(FListaArquivos),'*' , True, iCountLimite);
-//   iDx := FListaArquivos.Count;
+
 
    AtualizarStatus('Carregando informações de NFE e NFCE...');
 
