@@ -214,17 +214,13 @@ object FrmPrincipal: TFrmPrincipal
           Top = 0
           Width = 1005
           Height = 594
-          ActivePage = tabOpcoes
+          ActivePage = TabConfiguracao
           Align = alClient
           Style = tsFlatButtons
           TabOrder = 0
           OnChange = pgcPrincipalChange
           object tabOpcoes: TTabSheet
             Caption = 'Opc'#245'es'
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object grbEmpresa: TGroupBox
               Left = 0
               Top = 0
@@ -1285,46 +1281,84 @@ object FrmPrincipal: TFrmPrincipal
               end
               object CheckBGerarArquivoFarmax: TCheckBox
                 Left = 396
-                Top = 196
+                Top = 164
                 Width = 229
                 Height = 17
                 Caption = 'Importa xml direto do Farmax'
                 Font.Charset = DEFAULT_CHARSET
                 Font.Color = clWindowText
                 Font.Height = -12
-                Font.Name = 'Segoe UI Light'
+                Font.Name = 'Segoe UI'
                 Font.Style = [fsBold]
                 ParentFont = False
                 TabOrder = 14
                 OnClick = CheckBGerarArquivoFarmaxClick
+              end
+              object cbbUsarDadosFiscal: TCheckBox
+                Left = 139
+                Top = 164
+                Width = 220
+                Height = 17
+                Caption = 'Usar tabela Fiscal Loja na gera'#231#227'o sped'
+                Enabled = False
+                Font.Charset = DEFAULT_CHARSET
+                Font.Color = clWindowText
+                Font.Height = -12
+                Font.Name = 'Segoe UI'
+                Font.Style = [fsBold]
+                ParentFont = False
+                TabOrder = 15
               end
             end
           end
           object tabLog: TTabSheet
             Caption = 'Log'
             ImageIndex = 1
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
-            object mmLogSped: TMemo
+            object PnLogArquivo: TPanel
               Left = 0
               Top = 0
               Width = 997
-              Height = 563
-              Align = alClient
-              ReadOnly = True
-              ScrollBars = ssVertical
+              Height = 361
+              Align = alTop
+              BevelOuter = bvNone
+              Caption = 'PnLogArquivo'
               TabOrder = 0
+              object mmLogSped: TMemo
+                Left = 0
+                Top = 0
+                Width = 997
+                Height = 361
+                Align = alClient
+                ScrollBars = ssVertical
+                TabOrder = 0
+              end
+            end
+            object PnLogErro: TPanel
+              Left = 0
+              Top = 361
+              Width = 997
+              Height = 202
+              Align = alClient
+              BevelOuter = bvNone
+              Caption = 'PnLogErro'
+              TabOrder = 1
+              object MemoLogErro: TMemo
+                Left = 0
+                Top = 0
+                Width = 997
+                Height = 202
+                Align = alClient
+                BevelInner = bvNone
+                BevelOuter = bvNone
+                Color = clHighlightText
+                ScrollBars = ssVertical
+                TabOrder = 0
+              end
             end
           end
           object tabCadastro: TTabSheet
             Caption = 'Cadastro'
             ImageIndex = 3
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object PcEmpresa: TPageControl
               Left = 0
               Top = 0
@@ -1336,10 +1370,6 @@ object FrmPrincipal: TFrmPrincipal
               object tabEmpresa: TTabSheet
                 Caption = 'Empresa'
                 ImageIndex = 2
-                ExplicitLeft = 0
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 0
                 object GroupBox1: TGroupBox
                   Left = -2
                   Top = 7
@@ -1758,10 +1788,6 @@ object FrmPrincipal: TFrmPrincipal
               object tabContador: TTabSheet
                 Caption = 'Contador'
                 ImageIndex = 2
-                ExplicitLeft = 0
-                ExplicitTop = 0
-                ExplicitWidth = 0
-                ExplicitHeight = 0
                 object GroupBox2: TGroupBox
                   Left = 3
                   Top = 3
@@ -2063,10 +2089,6 @@ object FrmPrincipal: TFrmPrincipal
           object tabHome: TTabSheet
             Caption = 'Home'
             ImageIndex = 3
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object pnHome: TPanel
               Left = 0
               Top = 0
@@ -7693,10 +7715,6 @@ object FrmPrincipal: TFrmPrincipal
           object TabConfiguracao: TTabSheet
             Caption = 'Configura'#231#227'o Server'
             ImageIndex = 4
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object Panel2: TPanel
               Left = 0
               Top = 0
@@ -7935,6 +7953,15 @@ object FrmPrincipal: TFrmPrincipal
                   Alignment = taCenter
                   TabOrder = 3
                   Text = '3050'
+                end
+                object CbbImportarFisco: TCheckBox
+                  Left = 176
+                  Top = 152
+                  Width = 137
+                  Height = 17
+                  Caption = 'Importar Tabela Fiscal'
+                  Enabled = False
+                  TabOrder = 4
                 end
               end
             end

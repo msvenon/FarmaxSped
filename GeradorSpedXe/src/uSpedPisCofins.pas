@@ -1,4 +1,4 @@
-unit uSpedPisCofins;
+Ôªøunit uSpedPisCofins;
 
 interface
 
@@ -207,7 +207,7 @@ uses udmPrincipal, uMenuPrincipal, Vcl.Controls,
      ACBrEPCBloco_C_Class, ACBrSped,
      ACBrEPCBloco_A_Class, ACBrEPCBloco_0_Class, ACBrEPCBloco_M_Class,
   uSpedFiscal, Vcl.Dialogs, UFrmConsistencia, System.Variants,
-  System.Generics.Collections, Winapi.Windows, ACBrNFe.Classes;
+  System.Generics.Collections, Winapi.Windows, ACBrNFe.Classes, UXmlCompras;
 
 
 procedure TSpedPisCofins.ACBrECFAguardandoRespostaChange(Sender: TObject);
@@ -462,7 +462,7 @@ begin
 
    if (StrToIntDef(Trim(CFOP), 0) > 5000) then
       begin
-         // Total SaÌdas
+         // Total Sa√≠das
          FTabelaRegE510.FieldByName('TIPO').AsString := 'S';
          FTabelaRegE510.FieldByName('VL_BC_IPI_S').AsFloat := FTabelaRegE510.FieldByName('VL_BC_IPI_S').AsFloat + ValorBaseIPI;
          FTabelaRegE510.FieldByName('VL_IPI_S').AsFloat := FTabelaRegE510.FieldByName('VL_IPI_S').AsFloat + ValorIPI;
@@ -531,8 +531,8 @@ begin
 
    (*
       PIS e COFINS
-     REGISTRO C190: CONSOLIDA«√O DE NOTAS FISCAIS ELETR‘NICAS (C”DIGO 55) ñ
-                    OPERA«’ES DE AQUISI«√O COM DIREITO A CR…DITO, E OPERA«’ES DE  DEVOLU«√O DE COMPRAS E VENDAS.
+     REGISTRO C190: CONSOLIDA√á√ÉO DE NOTAS FISCAIS ELETR√îNICAS (C√ìDIGO 55) ‚Äì
+                    OPERA√á√ïES DE AQUISI√á√ÉO COM DIREITO A CR√âDITO, E OPERA√á√ïES DE  DEVOLU√á√ÉO DE COMPRAS E VENDAS.
    *)
 
 end;
@@ -726,9 +726,9 @@ begin
                FTabelaRegC170.FieldByName('VL_DESC').Asfloat      := oItemProduto.Prod.vDesc;
 
                if (Length(oItemProduto.Prod.NCM) = 2) then
-                  FTabelaRegC170.FieldByName('IND_MOV').AsInteger := 1 // MovimentaÁ„o fisica = 0.SIM  1.N√O
+                  FTabelaRegC170.FieldByName('IND_MOV').AsInteger := 1 // Movimenta√ß√£o fisica = 0.SIM  1.N√ÉO
                else
-                 FTabelaRegC170.FieldByName('IND_MOV').AsInteger  := 0; // MovimentaÁ„o fisica = 0. SIM 1. N√O
+                 FTabelaRegC170.FieldByName('IND_MOV').AsInteger  := 0; // Movimenta√ß√£o fisica = 0. SIM 1. N√ÉO
 
                if (Notas.Items[0].NFe.Emit.CRT = crtRegimeNormal) then
                   FTabelaRegC170.FieldByName('CST_ICMS').AsString := CSTICMSToStr(oItemProduto.Imposto.ICMS.CST)
@@ -766,7 +766,7 @@ begin
                else
                   FTabelaRegC170.FieldByName('CST_IPI').AsString := CSTIPIToStr(oItemProduto.Imposto.IPI.CST);
 
-               FTabelaRegC170.FieldByName('COD_ENQ').AsString := ''; //N„o preencher - segundo o manual;
+               FTabelaRegC170.FieldByName('COD_ENQ').AsString := ''; //N√£o preencher - segundo o manual;
                FTabelaRegC170.FieldByName('VL_BC_IPI').AsFloat:= oItemProduto.Imposto.IPI.vBC;
                FTabelaRegC170.FieldByName('ALIQ_IPI').AsFloat := oItemProduto.Imposto.IPI.pIPI;
                FTabelaRegC170.FieldByName('VL_IPI').AsFloat   := oItemProduto.Imposto.IPI.vIPI;
@@ -879,7 +879,7 @@ var
   dValorBasePisCof: Double;
   vOperacao:Currency;
 begin
-//   GerarLinhaMemoLog('Carregando ' + IntToStr(Notas.Items[ 0 ].NFe.Det.Count) + ' itens de serviÁo');
+//   GerarLinhaMemoLog('Carregando ' + IntToStr(Notas.Items[ 0 ].NFe.Det.Count) + ' itens de servi√ßo');
 
    for Idx := 0 to Notas.Items[ 0 ].NFe.Det.Count -1 do
       begin
@@ -938,8 +938,8 @@ begin
          FTabelaRegA170.FieldByName('DESCR_COMPL').AsString    := Copy(oItemServico.Prod.xProd,1,60);
          FTabelaRegA170.FieldByName('VL_ITEM').Asfloat         := oItemServico.Prod.vProd;
          FTabelaRegA170.FieldByName('VL_DESC').Asfloat         := oItemServico.Prod.vDesc;
-         FTabelaRegA170.FieldByName('NAT_BC_CRED').AsString    := '13';// AquisiÁ„o de bens para revenda; {CÛdigo da Base de C·lculo do CrÈdito - Tabela indicada no item 4.3.7}
-         FTabelaRegA170.FieldByName('IND_ORIG_CRED').AsInteger := 0; {0 - Oper. Mercado. Interno, 1 - Oper. ImportaÁ„o}
+         FTabelaRegA170.FieldByName('NAT_BC_CRED').AsString    := '13';// Aquisi√ß√£o de bens para revenda; {C√≥digo da Base de C√°lculo do Cr√©dito - Tabela indicada no item 4.3.7}
+         FTabelaRegA170.FieldByName('IND_ORIG_CRED').AsInteger := 0; {0 - Oper. Mercado. Interno, 1 - Oper. Importa√ß√£o}
          FTabelaRegA170.FieldByName('CST_PIS').AsString        := sCST_PIS_COF;
          FTabelaRegA170.FieldByName('VL_BC_PIS').AsFloat       := dBasePis;
          FTabelaRegA170.FieldByName('ALIQ_PIS').AsFloat        := dAliqPis;
@@ -979,7 +979,7 @@ begin
           if (docEntrada) then
                GerarLinhaMemoLog('Carregando dados (C100) da nota entrada' + sChave)
             else
-               GerarLinhaMemoLog('Carregando dados (C100) da nota saÌda' + sChave);
+               GerarLinhaMemoLog('Carregando dados (C100) da nota sa√≠da' + sChave);
 
             FTabelaRegC100.Append;
             FTabelaRegC100.FieldByName('ID').AsInteger := Result;
@@ -987,7 +987,7 @@ begin
             if (docEntrada) then
                FTabelaRegC100.FieldByName('IND_OPER').AsInteger := 0
             else
-            {0-Entrada; 1-SaÌda}
+            {0-Entrada; 1-Sa√≠da}
             if (Notas.Items[0].NFe.Ide.tpNF = tnEntrada) then
                FTabelaRegC100.FieldByName('IND_OPER').AsInteger := 0
             else
@@ -1002,14 +1002,14 @@ begin
               COD_SIT
 
               sdRegular             0 - Documento regular
-              sdExtempRegular       1 - EscrituraÁ„o extempor‚nea de documento regular
+              sdExtempRegular       1 - Escritura√ß√£o extempor√¢nea de documento regular
               sdCancelado           2 - Documento cancelado
-              sdCanceladoExtemp     3 - EscrituraÁ„o extempor‚nea de documento cancelado
+              sdCanceladoExtemp     3 - Escritura√ß√£o extempor√¢nea de documento cancelado
               sdDoctoDenegado       4 - NF-e ou CT-e - denegado
-              sdDoctoNumInutilizada 5 - NF-e ou CT-e - NumeraÁ„o inutilizada
+              sdDoctoNumInutilizada 5 - NF-e ou CT-e - Numera√ß√£o inutilizada
               sdFiscalCompl         6 - Documento Fiscal Complementar
-              sdExtempCompl         7 - EscrituraÁ„o extempor‚nea de documento complementar
-              sdRegimeEspecNEsp     8 - Documento Fiscal emitido com base em Regime Especial ou Norma EspecÌfica
+              sdExtempCompl         7 - Escritura√ß√£o extempor√¢nea de documento complementar
+              sdRegimeEspecNEsp     8 - Documento Fiscal emitido com base em Regime Especial ou Norma Espec√≠fica
             }
             FTabelaRegC100.FieldByName('COD_SIT').AsInteger := 0; {Documento regular}
 
@@ -1027,9 +1027,14 @@ begin
           if docEntrada then
              sCNPJCPF := Notas.Items[0].NFe.Emit.CNPJCPF;
 
+             if Notas.Items[0].NFe.Ide.dEmi < DataInicial then
+                FTabelaRegC100.FieldByName('DT_E_S').AsDateTime := DataInicial             // 30052025
+             else
+               FTabelaRegC100.FieldByName('DT_E_S').AsDateTime := Notas.Items[0].NFe.Ide.dEmi; //30052025
+
+
             FTabelaRegC100.FieldByName('COD_PART').AsString := GetCodPartByCnpjCpf(sCNPJCPF);
             FTabelaRegC100.FieldByName('DT_DOC').AsDateTime := Notas.Items[0].NFe.Ide.dEmi;
-            FTabelaRegC100.FieldByName('DT_E_S').AsDateTime := Notas.Items[0].NFe.Ide.dEmi;
             FTabelaRegC100.FieldByName('VL_DOC').AsFloat    := Notas.Items[0].NFe.Total.ICMSTot.vNF;
 
             case Notas.Items[0].NFe.Ide.indPag of
@@ -1045,9 +1050,9 @@ begin
             FTabelaRegC100.FieldByName('VL_MERC').AsFloat    := Notas.Items[0].NFe.Total.ICMSTot.vProd;
             {
              0 - Por conta do emitente
-             1 - Por conta do destinat·rio/remetente
+             1 - Por conta do destinat√°rio/remetente
              2 - Por conta de terceiros
-             9 - Sem cobranÁa de frete
+             9 - Sem cobran√ßa de frete
             }
             case Notas.Items[0].NFe.Transp.ModFrete of
                mfContaEmitente    : FTabelaRegC100.FieldByName('IND_FRT').AsInteger := 0;
@@ -1107,7 +1112,7 @@ begin
 //            if (docEntrada) then
 //               GerarLinhaMemoLog('Carregando dados (C100) da nota entrada' + sChave)
 //            else
-//              GerarLinhaMemoLog('Carregando dados (C100) da nota saÌda' + sChave);
+//              GerarLinhaMemoLog('Carregando dados (C100) da nota sa√≠da' + sChave);
 
             FTabelaRegC100.Append;
             FTabelaRegC100.FieldByName('ID').AsInteger :=FTabelaRegC100.RecordCount + 1;//  Result;
@@ -1115,7 +1120,7 @@ begin
             if (docEntrada) then
                FTabelaRegC100.FieldByName('IND_OPER').AsInteger := 0
             else
-            {0-Entrada; 1-SaÌda}
+            {0-Entrada; 1-Sa√≠da}
             if (Notas.Items[0].NFe.Ide.tpNF = tnEntrada) then
                FTabelaRegC100.FieldByName('IND_OPER').AsInteger := 0
             else
@@ -1130,14 +1135,14 @@ begin
               COD_SIT
 
               sdRegular             0 - Documento regular
-              sdExtempRegular       1 - EscrituraÁ„o extempor‚nea de documento regular
+              sdExtempRegular       1 - Escritura√ß√£o extempor√¢nea de documento regular
               sdCancelado           2 - Documento cancelado
-              sdCanceladoExtemp     3 - EscrituraÁ„o extempor‚nea de documento cancelado
+              sdCanceladoExtemp     3 - Escritura√ß√£o extempor√¢nea de documento cancelado
               sdDoctoDenegado       4 - NF-e ou CT-e - denegado
-              sdDoctoNumInutilizada 5 - NF-e ou CT-e - NumeraÁ„o inutilizada
+              sdDoctoNumInutilizada 5 - NF-e ou CT-e - Numera√ß√£o inutilizada
               sdFiscalCompl         6 - Documento Fiscal Complementar
-              sdExtempCompl         7 - EscrituraÁ„o extempor‚nea de documento complementar
-              sdRegimeEspecNEsp     8 - Documento Fiscal emitido com base em Regime Especial ou Norma EspecÌfica
+              sdExtempCompl         7 - Escritura√ß√£o extempor√¢nea de documento complementar
+              sdRegimeEspecNEsp     8 - Documento Fiscal emitido com base em Regime Especial ou Norma Espec√≠fica
             }
             FTabelaRegC100.FieldByName('COD_SIT').AsInteger := 0; {Documento regular}
 
@@ -1173,9 +1178,9 @@ begin
             FTabelaRegC100.FieldByName('VL_MERC').AsFloat := Notas.Items[0].NFe.Total.ICMSTot.vProd;
             {
              0 - Por conta do emitente
-             1 - Por conta do destinat·rio/remetente
+             1 - Por conta do destinat√°rio/remetente
              2 - Por conta de terceiros
-             9 - Sem cobranÁa de frete
+             9 - Sem cobran√ßa de frete
             }
             case Notas.Items[0].NFe.Transp.ModFrete of
                mfContaEmitente    : FTabelaRegC100.FieldByName('IND_FRT').AsInteger := 0;
@@ -1222,7 +1227,7 @@ begin
 
       if (FTabelaRegA100.IsEmpty) then
          begin
-            GerarLinhaMemoLog('Carregando dados (A100) da nota de serviÁos prestados: ' + sChave);
+            GerarLinhaMemoLog('Carregando dados (A100) da nota de servi√ßos prestados: ' + sChave);
 
             FTabelaRegA100.Append;
             FTabelaRegA100.FieldByName('ID').AsInteger := Result;
@@ -1252,10 +1257,10 @@ begin
             if (NotaServicoCancelada(sChave)) then
                begin
                   FTabelaRegA100.FieldByName('COD_SIT').AsInteger := 2; {00 - Regular, 02 Cancelado}
-                  GerarLinhaMemoLog('Documento cancelado: NF-e de ServiÁos Nr. ' + IntToStr(FTabelaRegA100.FieldByName('NUM_DOC').AsInteger));
+                  GerarLinhaMemoLog('Documento cancelado: NF-e de Servi√ßos Nr. ' + IntToStr(FTabelaRegA100.FieldByName('NUM_DOC').AsInteger));
                end;
             FTabelaRegA100.FieldByName('DT_DOC').AsDateTime := Notas.Items[0].NFe.Ide.dEmi;
-            FTabelaRegA100.FieldByName('DT_EXE_SERV').AsDateTime := Notas.Items[0].NFe.Ide.dEmi; { Data conclus„o serviÁo }
+            FTabelaRegA100.FieldByName('DT_EXE_SERV').AsDateTime := Notas.Items[0].NFe.Ide.dEmi; { Data conclus√£o servi√ßo }
 
             FTabelaRegA100.FieldByName('VL_DOC').AsFloat := Notas.Items[0].NFe.Total.ICMSTot.vNF;
 
@@ -1299,7 +1304,7 @@ var
    icPais: Integer;
    icMun: Integer;
 begin
-   // Para documentos de saida NFCe - 65 n„o adicionar nos participantes
+   // Para documentos de saida NFCe - 65 n√£o adicionar nos participantes
    if (Notas.Items[0].NFe.Ide.modelo = 65) then
       Exit;
 
@@ -1356,7 +1361,7 @@ begin
             FTabelaReg0150.FieldByName('COD_MUN').AsInteger   := icMun;
 
             if Trim(sxLgr) = '' then
-               FTabelaReg0150.FieldByName('ENDERECO').AsString := 'LOGRADOURO N√O CADASTRADO'
+               FTabelaReg0150.FieldByName('ENDERECO').AsString := 'LOGRADOURO N√ÉO CADASTRADO'
             else
                FTabelaReg0150.FieldByName('ENDERECO').AsString := sxLgr;
             FTabelaReg0150.FieldByName('NUM').AsString         := snro;
@@ -1379,11 +1384,11 @@ var
    unidade:string;
 begin
 
-   // Documentos 65 n„o escritura itens
+   // Documentos 65 n√£o escritura itens
    if (Notas.Items[0].NFe.Ide.modelo = 65) then
       Exit;
 
-   GerarLinhaMemoLog('Carregando dados de produtos/serviÁos da ' + Notas.Items[0].NFe.infNFe.ID);
+   GerarLinhaMemoLog('Carregando dados de produtos/servi√ßos da ' + Notas.Items[0].NFe.infNFe.ID);
 
    for Idx := 0 to Notas.Items[ 0 ].NFe.Det.Count -1 do
       begin
@@ -1419,7 +1424,7 @@ begin
             FTabelaReg0190.Filtered := False;
          end;
 
-         //** Tabela de IdentificaÁ„o do Item (Produtos e ServiÁos)
+         //** Tabela de Identifica√ß√£o do Item (Produtos e Servi√ßos)
          try
 
             FTabelaReg0200.AddIndex('COD_ITEMIndex', 'COD_ITEM', [ixUnique]);
@@ -1432,7 +1437,7 @@ begin
                begin
                   FTabelaReg0200.Append;
 
-                  // S = ServiÁos e P = Produtos
+                  // S = Servi√ßos e P = Produtos
                   if (oItemProduto.Prod.CFOP = '5933') then
                      FTabelaReg0200.FieldByName('TIPO_ITEM').AsString := 'S'
                   else
@@ -1456,7 +1461,7 @@ begin
             FTabelaReg0200.Filtered := False;
          end;
 
-         //** Tabela de Natureza da operaÁ„o
+         //** Tabela de Natureza da opera√ß√£o
          try
 
 
@@ -1472,7 +1477,7 @@ begin
                   FTabelaReg0400.Append;
                   FTabelaReg0400.FieldByName('COD_NAT').AsInteger := iProxSeqCodNat;
                   FTabelaReg0400.FieldByName('CFOP').AsString     := oItemProduto.Prod.CFOP;
-                  FTabelaReg0400.FieldByName('DESCR_NAT').AsString:= 'NATUREZA DA OPERA«√O ' + oItemProduto.Prod.CFOP;
+                  FTabelaReg0400.FieldByName('DESCR_NAT').AsString:= 'NATUREZA DA OPERA√á√ÉO ' + oItemProduto.Prod.CFOP;
                   FTabelaReg0400.Post;
                end;
          finally
@@ -1590,10 +1595,10 @@ var
 begin
    Registro0200List := FACBrSPEDECF.Bloco_0.Registro0001.Registro0200;
    if (Registro0200List.Count = 0) then
-      GerarLinhaMemoLog('N„o h· dados de produtos dos cupons no registro 0200')
+      GerarLinhaMemoLog('N√£o h√° dados de produtos dos cupons no registro 0200')
    else
       begin
-         GerarLinhaMemoLog('Carregando informaÁıes de ' + IntToStr(Registro0200List.Count) + ' produto(s) de cupom fiscal');
+         GerarLinhaMemoLog('Carregando informa√ß√µes de ' + IntToStr(Registro0200List.Count) + ' produto(s) de cupom fiscal');
 
          for indxProd := 0 to Registro0200List.Count - 1 do
             begin
@@ -1641,7 +1646,7 @@ begin
                   FTabelaReg0190.Filtered := False;
                end;
 
-               //** Tabela de IdentificaÁ„o do Item (Produtos e ServiÁos)
+               //** Tabela de Identifica√ß√£o do Item (Produtos e Servi√ßos)
                try
                   FTabelaReg0200.IndexFieldNames:='COD_ITEM';
                   FTabelaReg0200.Filtered := False;
@@ -1671,7 +1676,7 @@ begin
                           END;
 
                         FTabelaReg0200.Append;
-                        FTabelaReg0200.FieldByName('TIPO_ITEM').AsString    := 'P'; // S = ServiÁos e P = Produtos
+                        FTabelaReg0200.FieldByName('TIPO_ITEM').AsString    := 'P'; // S = Servi√ßos e P = Produtos
                         FTabelaReg0200.FieldByName('COD_ITEM').AsString     := Registro0200List.Items[indxProd].COD_ITEM;
                         FTabelaReg0200.FieldByName('DESCR_ITEM').AsString   := Registro0200List.Items[indxProd].DESCR_ITEM;
                         FTabelaReg0200.FieldByName('COD_BARRA').AsString    := Registro0200List.Items[indxProd].COD_BARRA;
@@ -1728,7 +1733,7 @@ var
    lThread : TThread;
    TaskList: TList;
    Task: ITask;
-   MaxThreadsSimultaneas: Integer;
+   MaxThreadsSimultaneas,J: Integer;
 
 
 begin
@@ -1740,7 +1745,7 @@ begin
 
   Screen.Cursor := crHourglass;
 
-   // ** Documentos prÛprios emitidos pela empresa
+   // ** Documentos pr√≥prios emitidos pela empresa
    DecodeDate(Self.FcompSpedPisCofins.DT_INI, Ano, Mes , Dia);
    sFiltroDocEmitido := IntToStr(Self.CodigIbgeUfEmpresa) + Copy(IntToStr(Ano), 3, 2) + FormatFloat('00', Mes) + Self.CnpjEmpresa ;
 
@@ -1788,7 +1793,7 @@ begin
             begin
 
                try
-                //  GerarLinhaMemoLog('Lendo informaÁıes do documento: ' + sChave);
+                //  GerarLinhaMemoLog('Lendo informa√ß√µes do documento: ' + sChave);
 
 
                   FacbrNFe.NotasFiscais.LoadFromFile(Trim(FListaArquivos[iDx]));
@@ -1805,11 +1810,11 @@ begin
                  FacbrNFe.NotasFiscais.Clear;
                except
                   on E: Exception do
-                     GerarLinhaMemoLog('Erro ao processar arquivo saÌda: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
+                     GerarLinhaMemoLog('Erro ao processar arquivo sa√≠da: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
                end;
             end
          else
-           GerarLinhaMemoLog('A chave n„o È Nfe(55) ou NFCe(65): ' + sChave);
+           GerarLinhaMemoLog('A chave n√£o √© Nfe(55) ou NFCe(65): ' + sChave);
       end;
 
 
@@ -1817,7 +1822,7 @@ begin
 
 
 
-   AtualizarStatus('Carregando informaÁıes de NFE e NFCE...');
+   AtualizarStatus('Carregando informa√ß√µes de NFE e NFCE...');
 
    IniciaBar(FListaArquivos.Count);
 
@@ -1838,7 +1843,7 @@ begin
             begin
                try
 
-                 // GerarLinhaMemoLog('Lendo informaÁıes do documento: ' + sChave);
+                 // GerarLinhaMemoLog('Lendo informa√ß√µes do documento: ' + sChave);
 
                   FacbrNFe.NotasFiscais.Clear;
                   FacbrNFe.NotasFiscais.LoadFromFile(Trim(FListaArquivos[iDx]));
@@ -1869,12 +1874,12 @@ begin
 
                except
                   on E: Exception do
-                     GerarLinhaMemoLog('Erro ao processar arquivo saÌda Carregando informaÁoes NFCe: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
+                     GerarLinhaMemoLog('Erro ao processar arquivo sa√≠da Carregando informa√ßoes NFCe: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
                end;
 
             end
          else
-           GerarLinhaMemoLog('A chave n„o È Nfe(55) ou NFCe(65): ' + sChave);
+           GerarLinhaMemoLog('A chave n√£o √© Nfe(55) ou NFCe(65): ' + sChave);
 
       end;
 
@@ -1894,7 +1899,7 @@ begin
          IncBar;
 
 
-         // CriaÁ„o da tarefa assÌncrona (funÁ„o anÙnima)
+         // Cria√ß√£o da tarefa ass√≠ncrona (fun√ß√£o an√¥nima)
 
 
 
@@ -1929,11 +1934,11 @@ begin
 
                except
                   on E: Exception do
-                     GerarLinhaMemoLog('Erro ao processar arquivo saÌda: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
+                     GerarLinhaMemoLog('Erro ao processar arquivo sa√≠da: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
                end;
             end
          else
-           GerarLinhaMemoLog('A chave n„o È Nfe(55) ou NFCe(65): ' + sChave);
+           GerarLinhaMemoLog('A chave n√£o √© Nfe(55) ou NFCe(65): ' + sChave);
       end;
             }
 
@@ -1943,17 +1948,24 @@ begin
 
 
 
-   // ** XML Fornecedores - Documentos de Terceiros - Onde a Empresa È destinat·ria no documento
+   // ** XML Fornecedores - Documentos de Terceiros - Onde a Empresa √© destinat√°ria no documento
    FListaArquivos.Clear;
    ObterListaAqruivosDiretorio(Self.LocalDocXml_FORN, 'xml', TStringList(FListaArquivos), '*', True, iCountLimite);
    GerarLinhaMemoLog('Total documentos xml fornecedor: ' + IntToStr(FListaArquivos.Count));
 
-   //Filtra os documentos onde a empresa esteja como destinar·ria
+   for j :=0  to FListaArquivos.Count -1 do
+     begin
+        // ‚úÖ CORRIGIR XML ANTES DE CARREGAR NO ACBrNFe
+       CorrigirXML(FListaArquivos[j]);
+     end;
+
+
+   //Filtra os documentos onde a empresa esteja como destinar√°ria
    FiltrarDocumentosFornecedores(TStringList(FListaArquivos), iCountLimite);
 
    GerarLinhaMemoLog('Total documentos NF-e produtos de entrada: ' + IntToStr(FListaArquivos.Count));
 
-   AtualizarStatus('Carregando informaÁıes do doc. NFe XMLs: ');
+   AtualizarStatus('Carregando informa√ß√µes do doc. NFe XMLs: ');
 
    IniciaBar(FListaArquivos.Count);
    for iDx := 0 to FListaArquivos.Count - 1 do
@@ -1981,7 +1993,7 @@ begin
                  AdicionarDadosProdutos(FacbrNFe.NotasFiscais, True);
 
 
-                 // Adicionar dados do cabeÁalho dos documentos
+                 // Adicionar dados do cabe√ßalho dos documentos
                  iIDNota := AdicionarDadosNotas(FacbrNFe.NotasFiscais, True);
                  if (iIDNota > 0) then;
                     begin
@@ -2003,16 +2015,16 @@ begin
 
 
 
-   // Gerar Pis Cofins de Notas de serviÁos
+   // Gerar Pis Cofins de Notas de servi√ßos
    if (Self.LocalDocXml_NFSE <> '') and (DirectoryExists(Self.LocalDocXml_NFSE))then
       begin
 
-         GerarLinhaMemoLog('Carregando arquivos xml NFSE (ServiÁos): ' + Self.LocalDocXml_NFSE);
+         GerarLinhaMemoLog('Carregando arquivos xml NFSE (Servi√ßos): ' + Self.LocalDocXml_NFSE);
 
          FListaArquivos.Clear;
          ObterListaAqruivosDiretorio(Self.LocalDocXml_NFSE, 'xml', TStringList(FListaArquivos), sFiltroDocEmitido, True, iCountLimite);
 
-         GerarLinhaMemoLog('Total documentos serviÁos - xml NFSE emitidas: ' + IntToStr(FListaArquivos.Count));
+         GerarLinhaMemoLog('Total documentos servi√ßos - xml NFSE emitidas: ' + IntToStr(FListaArquivos.Count));
 
 
          IniciaBar(FListaArquivos.Count);
@@ -2023,32 +2035,32 @@ begin
                IncBar;
 
 
-               //Load XML ServiÁos
+               //Load XML Servi√ßos
                sChave := SomenteNumeros(ExtractFileName(FListaArquivos[iDx]));
-               AtualizarStatus('Carregando informaÁıes do documento de serviÁos: ');
+               AtualizarStatus('Carregando informa√ß√µes do documento de servi√ßos: ');
 
                if (Copy(sChave, 21, 2) = '55') then
                   begin
-                     GerarLinhaMemoLog('Carregando XML de serviÁos (Load): ' + sChave);
+                     GerarLinhaMemoLog('Carregando XML de servi√ßos (Load): ' + sChave);
                      try
                         FacbrNFe.NotasFiscais.Clear;
                         FacbrNFe.NotasFiscais.LoadFromFile(Trim(FListaArquivos[iDx]));
                      except
                         on E: Exception do
                            begin
-                              GerarLinhaMemoLog('Erro no xml de serviÁos: ' + FListaArquivos[iDx] + ' Erro: ' + E.Message);
+                              GerarLinhaMemoLog('Erro no xml de servi√ßos: ' + FListaArquivos[iDx] + ' Erro: ' + E.Message);
                            end;
                      end;
 
                      if TemServicosNaNFe(FacbrNFe.NotasFiscais) then
                         begin
-                           // Adicionar dados Participante de serviÁo
+                           // Adicionar dados Participante de servi√ßo
                            AdicionarDadosParticipante(FacbrNFe.NotasFiscais);
 
-                           // Adicionar dados dos serviÁos
+                           // Adicionar dados dos servi√ßos
                            AdicionarDadosProdutos(FacbrNFe.NotasFiscais);
 
-                           // Adicionar dados do cabeÁalho dos documentos
+                           // Adicionar dados do cabe√ßalho dos documentos
                            iIDNota := AdicionarDadosNotasServicos(FacbrNFe.NotasFiscais);
                            if (iIDNota > 0) then;
                               begin
@@ -2059,20 +2071,20 @@ begin
                   end;
             end;{for}
 
-         {Notas de entradas - serviÁos como despesas}
+         {Notas de entradas - servi√ßos como despesas}
          FListaArquivos.Clear;
          ObterListaAqruivosDiretorio(Self.LocalDocXml_NFSE, 'xml', TStringList(FListaArquivos), '*', True, iCountLimite);
          GerarLinhaMemoLog('Total documentos xml fornecedor: ' + IntToStr(FListaArquivos.Count));
 
 
-         // ** Filtra os documentos onde a empresa esteja como destinar·ria
+         // ** Filtra os documentos onde a empresa esteja como destinar√°ria
          FiltrarDocumentosFornecedores(TStringList(FListaArquivos), iCountLimite);
 
 
-         GerarLinhaMemoLog('Total documentos NF-e serviÁos de entrada: ' + IntToStr(FListaArquivos.Count));
+         GerarLinhaMemoLog('Total documentos NF-e servi√ßos de entrada: ' + IntToStr(FListaArquivos.Count));
 
 
-         AtualizarStatus('Carregando informaÁıes do documento NF-e serviÁos de entrada  : ');
+         AtualizarStatus('Carregando informa√ß√µes do documento NF-e servi√ßos de entrada  : ');
 
          IniciaBar(FListaArquivos.Count);
          for iDx := 0 to FListaArquivos.Count - 1 do
@@ -2081,13 +2093,13 @@ begin
               IncBar;
               GerarLinhaMemoLog('Arquivo: ' + FListaArquivos[iDx]);
 
-              // ** Load XML nfe ServiÁos de entrada
+              // ** Load XML nfe Servi√ßos de entrada
               sChave := SomenteNumeros(ExtractFileName(FListaArquivos[iDx]));
-              AtualizarStatus('Carregando informaÁıes do documento: ');
+              AtualizarStatus('Carregando informa√ß√µes do documento: ');
 
               try
 
-                 GerarLinhaMemoLog('Lendo informaÁıes do documento: ' + sChave);
+                 GerarLinhaMemoLog('Lendo informa√ß√µes do documento: ' + sChave);
 
                  FacbrNFe.NotasFiscais.Clear;
                  FacbrNFe.NotasFiscais.LoadFromFile(Trim(FListaArquivos[iDx]));
@@ -2098,21 +2110,21 @@ begin
                        // Adicionar dados Participante
                        AdicionarDadosParticipante(FacbrNFe.NotasFiscais, True);
 
-                       // Adicionar dados dos serviÁos
+                       // Adicionar dados dos servi√ßos
                        AdicionarDadosProdutos(FacbrNFe.NotasFiscais, True);
 
-                       // Adicionar dados do cabeÁalho dos documentos
+                       // Adicionar dados do cabe√ßalho dos documentos
                        iIDNota := AdicionarDadosNotasServicos(FacbrNFe.NotasFiscais, True);
                        if (iIDNota > 0) then;
                           begin
-                             // Adicionar itens de serviÁos
+                             // Adicionar itens de servi√ßos
                              AdicionarDadosItensNotasServicos(iIDNota, FacbrNFe.NotasFiscais, True);
 
                           end;
                     end;
               except
                  on E: Exception do
-                    GerarLinhaMemoLog('Erro ao processar nf-e serviÁos entrada: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
+                    GerarLinhaMemoLog('Erro ao processar nf-e servi√ßos entrada: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
               end;
            end; {for}
 
@@ -2125,17 +2137,17 @@ begin
 
 {$REGION}
 
-   // ** InformaÁıes de notas de despesas de Energia eletrica, ¡gua e Gaz no Caixa
+   // ** Informa√ß√µes de notas de despesas de Energia eletrica, √Ågua e Gaz no Caixa
    //CarregarInformacoesNotasAguaEnergiaGaz_C500;
 
 
-   // ** InformaÁıes de cupom fiscal - MFD n„o gera informaÁıes de PIS e COFINS dos cupons
+   // ** Informa√ß√µes de cupom fiscal - MFD n√£o gera informa√ß√µes de PIS e COFINS dos cupons
    //if (Self.GerarCupomFiscal) then
-//   if (False) then // MFD n„o gera informaÁıes de PIS e COFINS dos cupons
+//   if (False) then // MFD n√£o gera informa√ß√µes de PIS e COFINS dos cupons
 //      begin
 //         GerarLinhaMemoLog('Carregando movimentos Pis e Cofins de Cupom Fiscal');
 //         try
-//            // ** Conectar - verificar conex„o da impressora e arquivo ConfigECF.ini;
+//            // ** Conectar - verificar conex√£o da impressora e arquivo ConfigECF.ini;
 //            GerarLinhaMemoLog('Conectando na impressora fiscal! Aguarde...');
 //            if (not ConectarImpressoraECF(sMsgECF)) then
 //               GerarLinhaMemoLog(sMsgECF)
@@ -2143,15 +2155,15 @@ begin
 //               GerarLinhaMemoLog('Impressora fiscal conectada com sucesso!');
 //
 //            if (Self.FECF_RequerZ) then
-//               GerarLinhaMemoLog('ECF requer reduÁ„o "Z"! N„o È possÌvel ler os movimentos dos cupons.')
+//               GerarLinhaMemoLog('ECF requer redu√ß√£o "Z"! N√£o √© poss√≠vel ler os movimentos dos cupons.')
 //            else
 //               begin
 //                  // ** Pegando a data Str do movimento da ult. red. Z.
 //                  olstDadosUltimaReducaoZ := TStringlist.Create;
 //                  try
-//                     GerarLinhaMemoLog('Obter Dados ⁄ltima ReduÁ„o Z');
+//                     GerarLinhaMemoLog('Obter Dados √öltima Redu√ß√£o Z');
 //                     olstDadosUltimaReducaoZ.Text := StringReplace(FACBrECF.DadosUltimaReducaoZ, ' ', '', [rfReplaceAll, rfIgnoreCase]);
-//                     GerarLinhaMemoLog('Data do movimento da ˙ltima ReduÁ„o Z: ' + olstDadosUltimaReducaoZ.Values['DataMovimento']);
+//                     GerarLinhaMemoLog('Data do movimento da √∫ltima Redu√ß√£o Z: ' + olstDadosUltimaReducaoZ.Values['DataMovimento']);
 //                     sDataAux := Trim(olstDadosUltimaReducaoZ.Values['DataMovimento']);
 //
 //                     if (Length(sDataAux) < 10) then
@@ -2164,22 +2176,22 @@ begin
 //
 //                  // **
 //                  if (dtDataHoraUltimaReducaoZ < Self.FcompSpedPisCofins.DT_INI) then
-//                     GerarLinhaMemoLog('Data da ˙ltima ReduÁ„o Z "' + FormatDateTime('dd/mm/yyyy', dtDataHoraUltimaReducaoZ) +
-//                        '" È menor que a data inicial do periodo "' + FormatDateTime('dd/mm/yyyy', Self.FcompSpedPisCofins.DT_INI) +
-//                        '" - N„o h· movimentos para gerar.');
+//                     GerarLinhaMemoLog('Data da √∫ltima Redu√ß√£o Z "' + FormatDateTime('dd/mm/yyyy', dtDataHoraUltimaReducaoZ) +
+//                        '" √© menor que a data inicial do periodo "' + FormatDateTime('dd/mm/yyyy', Self.FcompSpedPisCofins.DT_INI) +
+//                        '" - N√£o h√° movimentos para gerar.');
 //                     begin
 //                        dtFinalMovCupons := Self.FcompSpedPisCofins.DT_FIN;
 //                        if (dtDataHoraUltimaReducaoZ < Self.FcompSpedPisCofins.DT_FIN) then
 //                           begin
 //                              dtFinalMovCupons := dtDataHoraUltimaReducaoZ;
-//                              GerarLinhaMemoLog('Data da ˙ltima ReduÁ„o Z "' + FormatDateTime('dd/mm/yyyy', dtDataHoraUltimaReducaoZ) +
-//                                '" È menor que a data final do periodo "' + FormatDateTime('dd/mm/yyyy', Self.FcompSpedPisCofins.DT_FIN) + '"!');
-//                              GerarLinhaMemoLog('PerÌodo considerado dos cupons: "' + FormatDateTime('dd/mm/yyyy', Self.FcompSpedPisCofins.DT_INI) +
-//                                '" atÈ "' + FormatDateTime('dd/mm/yyyy', dtFinalMovCupons) + '"!');
+//                              GerarLinhaMemoLog('Data da √∫ltima Redu√ß√£o Z "' + FormatDateTime('dd/mm/yyyy', dtDataHoraUltimaReducaoZ) +
+//                                '" √© menor que a data final do periodo "' + FormatDateTime('dd/mm/yyyy', Self.FcompSpedPisCofins.DT_FIN) + '"!');
+//                              GerarLinhaMemoLog('Per√≠odo considerado dos cupons: "' + FormatDateTime('dd/mm/yyyy', Self.FcompSpedPisCofins.DT_INI) +
+//                                '" at√© "' + FormatDateTime('dd/mm/yyyy', dtFinalMovCupons) + '"!');
 //                           end;
 //
 //                        // - Gerar o arquivo SPED FACBrECF.ArquivoMFD_DLL();
-//                        GerarLinhaMemoLog('GeraÁ„o do arquivo dos movimentos da ECF - ArquivoMFD_DLL');
+//                        GerarLinhaMemoLog('Gera√ß√£o do arquivo dos movimentos da ECF - ArquivoMFD_DLL');
 //
 //                        sNomeArquivoMFD := 'MFD_E_' + IntToStr(Self.FCodigoEmpresa) + '_' + FormatDateTime('mm_yyyy', Self.FcompSpedPisCofins.DT_INI) +
 //                                           '_' + FormatDateTime('ddmmyy_hhnnss', Now) + '.ecf';
@@ -2191,8 +2203,8 @@ begin
 //
 //                        FACBrSPEDECF.Arquivo := sNomeArquivoMFD;
 //                        GerarLinhaMemoLog('Local: ' + FACBrSPEDECF.Path + FACBrSPEDECF.Arquivo);
-//                        GerarLinhaMemoLog('Aguarde... Obtendo informaÁıes, n„o desligue a impressora!');
-//                        AtualizarStatus('Aguarde... Obtendo informaÁıes, n„o desligue a impressora!');
+//                        GerarLinhaMemoLog('Aguarde... Obtendo informa√ß√µes, n√£o desligue a impressora!');
+//                        AtualizarStatus('Aguarde... Obtendo informa√ß√µes, n√£o desligue a impressora!');
 //
 //                        FACBrECF.ArquivoMFD_DLL(Self.FcompSpedPisCofins.DT_INI, dtFinalMovCupons, AnsiString(FACBrSPEDECF.Path + FACBrSPEDECF.Arquivo), [docTodos], finSPED);
 //
@@ -2208,7 +2220,7 @@ begin
 //
 //                        GerarLinhaMemoLog('Total 0200: ' + IntToStr(FACBrSPEDECF.Bloco_0.Registro0001.Registro0200.Count) + ' - Produtos dos cupons');
 //                        GerarLinhaMemoLog('Total C400: ' + IntToStr(FACBrSPEDECF.Bloco_C.RegistroC001.RegistroC400.Count) + ' - Equipamento ECF');
-//                        GerarLinhaMemoLog('Total C405: ' + IntToStr(FACBrSPEDECF.Bloco_C.RegistroC001.RegistroC400.items[0].RegistroC405.Count) + ' - ReduÁ„o Z');
+//                        GerarLinhaMemoLog('Total C405: ' + IntToStr(FACBrSPEDECF.Bloco_C.RegistroC001.RegistroC400.items[0].RegistroC405.Count) + ' - Redu√ß√£o Z');
 //                        GerarLinhaMemoLog('Total C420: ' + IntToStr(FACBrSPEDECF.Bloco_C.RegistroC001.RegistroC400.items[0].RegistroC405.Items[0].RegistroC420.Count)
 //                           + ' - Totalizadores parciais');
 //                        GerarLinhaMemoLog('Total C460: ' + IntToStr(FACBrSPEDECF.Bloco_C.RegistroC001.RegistroC400.items[0].RegistroC405.Items[0].RegistroC460.Count)
@@ -2227,13 +2239,13 @@ begin
 //         end;
 //      end;{if GerarCupomFiscal}
 //
-//   // Gerar Pis Cofins de Notas de serviÁos
+//   // Gerar Pis Cofins de Notas de servi√ßos
 //   if (Self.LocalDocXml_NFSE <> '') and (DirectoryExists(Self.LocalDocXml_NFSE))then
 //      begin
-//         GerarLinhaMemoLog('Carregando arquivos xml NFSE (ServiÁos): ' + Self.LocalDocXml_NFSE);
+//         GerarLinhaMemoLog('Carregando arquivos xml NFSE (Servi√ßos): ' + Self.LocalDocXml_NFSE);
 //         FListaArquivos.Clear;
 //         ObterListaAqruivosDiretorio(Self.LocalDocXml_NFSE, 'xml', TStringList(FListaArquivos), sFiltroDocEmitido, True, iCountLimite);
-//         GerarLinhaMemoLog('Total documentos serviÁos - xml NFSE emitidas: ' + IntToStr(FListaArquivos.Count));
+//         GerarLinhaMemoLog('Total documentos servi√ßos - xml NFSE emitidas: ' + IntToStr(FListaArquivos.Count));
 //
 //         IniciaBar(FListaArquivos.Count);
 //         for iDx := 0 to FListaArquivos.Count - 1 do
@@ -2241,32 +2253,32 @@ begin
 //               IncBar;
 //               GerarLinhaMemoLog('Arquivo: ' + FListaArquivos[iDx]);
 //
-//               //Load XML ServiÁos
+//               //Load XML Servi√ßos
 //               sChave := SomenteNumeros(ExtractFileName(FListaArquivos[iDx]));
-//               AtualizarStatus('Carregando informaÁıes do documento de serviÁos: ');
+//               AtualizarStatus('Carregando informa√ß√µes do documento de servi√ßos: ');
 //
 //               if (Copy(sChave, 21, 2) = '55') then
 //                  begin
-//                     GerarLinhaMemoLog('Carregando XML de serviÁos (Load): ' + sChave);
+//                     GerarLinhaMemoLog('Carregando XML de servi√ßos (Load): ' + sChave);
 //                     try
 //                        FacbrNFe.NotasFiscais.Clear;
 //                        FacbrNFe.NotasFiscais.LoadFromFile(Trim(FListaArquivos[iDx]));
 //                     except
 //                        on E: Exception do
 //                           begin
-//                              GerarLinhaMemoLog('Erro no xml de serviÁos: ' + FListaArquivos[iDx] + ' Erro: ' + E.Message);
+//                              GerarLinhaMemoLog('Erro no xml de servi√ßos: ' + FListaArquivos[iDx] + ' Erro: ' + E.Message);
 //                           end;
 //                     end;
 //
 //                     if TemServicosNaNFe(FacbrNFe.NotasFiscais) then
 //                        begin
-//                           // Adicionar dados Participante de serviÁo
+//                           // Adicionar dados Participante de servi√ßo
 //                           AdicionarDadosParticipante(FacbrNFe.NotasFiscais);
 //
-//                           // Adicionar dados dos serviÁos
+//                           // Adicionar dados dos servi√ßos
 //                           AdicionarDadosProdutos(FacbrNFe.NotasFiscais);
 //
-//                           // Adicionar dados do cabeÁalho dos documentos
+//                           // Adicionar dados do cabe√ßalho dos documentos
 //                           iIDNota := AdicionarDadosNotasServicos(FacbrNFe.NotasFiscais);
 //                           if (iIDNota > 0) then;
 //                              begin
@@ -2277,15 +2289,15 @@ begin
 //                  end;
 //            end;{for}
 //
-//         {Notas de entradas - serviÁos como despesas}
+//         {Notas de entradas - servi√ßos como despesas}
 //         FListaArquivos.Clear;
 //         ObterListaAqruivosDiretorio(Self.LocalDocXml_NFSE, 'xml', TStringList(FListaArquivos), '*', True, iCountLimite);
 //         GerarLinhaMemoLog('Total documentos xml fornecedor: ' + IntToStr(FListaArquivos.Count));
 //
-//         // ** Filtra os documentos onde a empresa esteja como destinar·ria
+//         // ** Filtra os documentos onde a empresa esteja como destinar√°ria
 //         FiltrarDocumentosFornecedores(TStringList(FListaArquivos), iCountLimite);
 //
-//         GerarLinhaMemoLog('Total documentos NF-e serviÁos de entrada: ' + IntToStr(FListaArquivos.Count));
+//         GerarLinhaMemoLog('Total documentos NF-e servi√ßos de entrada: ' + IntToStr(FListaArquivos.Count));
 //
 //         IniciaBar(FListaArquivos.Count);
 //         for iDx := 0 to FListaArquivos.Count - 1 do
@@ -2293,12 +2305,12 @@ begin
 //              IncBar;
 //              GerarLinhaMemoLog('Arquivo: ' + FListaArquivos[iDx]);
 //
-//              // ** Load XML nfe ServiÁos de entrada
+//              // ** Load XML nfe Servi√ßos de entrada
 //              sChave := SomenteNumeros(ExtractFileName(FListaArquivos[iDx]));
-//              AtualizarStatus('Carregando informaÁıes do documento: ');
+//              AtualizarStatus('Carregando informa√ß√µes do documento: ');
 //
 //              try
-//                 GerarLinhaMemoLog('Lendo informaÁıes do documento: ' + sChave);
+//                 GerarLinhaMemoLog('Lendo informa√ß√µes do documento: ' + sChave);
 //                 FacbrNFe.NotasFiscais.Clear;
 //                 FacbrNFe.NotasFiscais.LoadFromFile(Trim(FListaArquivos[iDx]));
 //
@@ -2307,20 +2319,20 @@ begin
 //                       // Adicionar dados Participante
 //                       AdicionarDadosParticipante(FacbrNFe.NotasFiscais, True);
 //
-//                       // Adicionar dados dos serviÁos
+//                       // Adicionar dados dos servi√ßos
 //                       AdicionarDadosProdutos(FacbrNFe.NotasFiscais, True);
 //
-//                       // Adicionar dados do cabeÁalho dos documentos
+//                       // Adicionar dados do cabe√ßalho dos documentos
 //                       iIDNota := AdicionarDadosNotasServicos(FacbrNFe.NotasFiscais, True);
 //                       if (iIDNota > 0) then;
 //                          begin
-//                             // Adicionar itens de serviÁos
+//                             // Adicionar itens de servi√ßos
 //                             AdicionarDadosItensNotasServicos(iIDNota, FacbrNFe.NotasFiscais, True);
 //                          end;
 //                    end;
 //              except
 //                 on E: Exception do
-//                    GerarLinhaMemoLog('Erro ao processar nf-e serviÁos entrada: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
+//                    GerarLinhaMemoLog('Erro ao processar nf-e servi√ßos entrada: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
 //              end;
 //           end; {for}
 //
@@ -2335,11 +2347,11 @@ end;
 
 procedure TSpedPisCofins.CarregarInformacoesEmpresa;
 begin
-   // ** Carregando Par‚metros                                 '
+   // ** Carregando Par√¢metros                                 '
    dmPrincipal.cdsConsEmpresa.Close;
    dmPrincipal.cdsConsEmpresa.open;
 
-   GerarLinhaMemoLog('Carregando Par‚metros SPED Fiscal: FILIAL:' + IntToStr(CodigoEmpresa));
+   GerarLinhaMemoLog('Carregando Par√¢metros SPED Fiscal: FILIAL:' + IntToStr(CodigoEmpresa));
 
    FParamIndApurIPI := dmPrincipal.cdsConsEmpresaPERIODO_IPI.Value; //1-D ou 0-M
 
@@ -2353,7 +2365,7 @@ var
    sSQL: String;
    sCodForn: String;
 begin
-   GerarLinhaMemoLog('Consultando despesas do caixa de Energia elÈtrica, ¡gua e G·s (C500)');
+   GerarLinhaMemoLog('Consultando despesas do caixa de Energia el√©trica, √Ågua e G√°s (C500)');
    // ** Buscar notas
    FTabelaRegC500.Close;
    FqTabelaRegC500.Close;
@@ -2449,7 +2461,7 @@ begin
             begin
               Application.ProcessMessages;
                try
-                 // GerarLinhaMemoLog('Lendo informaÁıes do documento: ' + sChave);
+                 // GerarLinhaMemoLog('Lendo informa√ß√µes do documento: ' + sChave);
                   if iDx <>0 then
                    FacbrNFe.NotasFiscais.Clear;
 
@@ -2470,11 +2482,11 @@ begin
                      end;
                except
                   on E: Exception do
-                     GerarLinhaMemoLog('Erro ao processar arquivo saÌda: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
+                     GerarLinhaMemoLog('Erro ao processar arquivo sa√≠da: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
                end;
             end
          else
-           GerarLinhaMemoLog('A chave n„o È Nfe(55) ou NFCe(65): ' + sChave);
+           GerarLinhaMemoLog('A chave n√£o √© Nfe(55) ou NFCe(65): ' + sChave);
       end;
 
 
@@ -2516,7 +2528,7 @@ begin
             begin
 
                try
-                 // GerarLinhaMemoLog('Lendo informaÁıes do documento: ' + sChave);
+                 // GerarLinhaMemoLog('Lendo informa√ß√µes do documento: ' + sChave);
                  if iDx<>0 then
                   FacbrNFe.NotasFiscais.Clear;
 
@@ -2531,11 +2543,11 @@ begin
                      end;
                except
                   on E: Exception do
-                     GerarLinhaMemoLog('Erro ao processar arquivo saÌda: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
+                     GerarLinhaMemoLog('Erro ao processar arquivo sa√≠da: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
                end;
             end
          else
-           GerarLinhaMemoLog('A chave n„o È Nfe(55) ou NFCe(65): ' + sChave);
+           GerarLinhaMemoLog('A chave n√£o √© Nfe(55) ou NFCe(65): ' + sChave);
       end;
 
 end;
@@ -2577,7 +2589,7 @@ begin
             begin
               Application.ProcessMessages;
                try
-                //  GerarLinhaMemoLog('Lendo informaÁıes do documento: ' + sChave);
+                //  GerarLinhaMemoLog('Lendo informa√ß√µes do documento: ' + sChave);
                   FacbrNFe.NotasFiscais.Clear;
                   FacbrNFe.NotasFiscais.LoadFromFile(Trim(FListaArquivos[iDx]));
 
@@ -2589,11 +2601,11 @@ begin
                      end;
                except
                   on E: Exception do
-                     GerarLinhaMemoLog('Erro ao processar arquivo saÌda: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
+                     GerarLinhaMemoLog('Erro ao processar arquivo sa√≠da: ' + ExtractFileName(FListaArquivos[iDx]) + ' - ' + E.Message);
                end;
             end
          else
-         //  GerarLinhaMemoLog('A chave n„o È Nfe(55) ou NFCe(65): ' + sChave);
+         //  GerarLinhaMemoLog('A chave n√£o √© Nfe(55) ou NFCe(65): ' + sChave);
       end;
 
 end;
@@ -2628,7 +2640,7 @@ begin
       if (not FileExists(ExtractFilePath(Application.ExeName) + _ARQUIVO_CONFIG_INI_ECF)) then
          begin
             Result := False;
-            sMsgValid := 'Arquivo "' + _ARQUIVO_CONFIG_INI_ECF+ '" n„o econtrado!';
+            sMsgValid := 'Arquivo "' + _ARQUIVO_CONFIG_INI_ECF+ '" n√£o econtrado!';
             Exit;
          end;
 
@@ -2648,13 +2660,13 @@ begin
         if (iCodModECF = 0) then
            begin
               Result := False;
-              sMsgValid := sMsgValid + ' | Modelo ECF = ecfNenhum - Inv·lido';
+              sMsgValid := sMsgValid + ' | Modelo ECF = ecfNenhum - Inv√°lido';
            end;
 
         if (AnsiUpperCase(FACBrECF.Porta) = AnsiUpperCase('Procurar')) then
            begin
               Result := False;
-              sMsgValid := sMsgValid + ' | Porta = Procurar - Inv·lida';
+              sMsgValid := sMsgValid + ' | Porta = Procurar - Inv√°lida';
            end;
      finally
         INI.Free;
@@ -2672,8 +2684,8 @@ begin
            GerarLinhaMemoLog('Marca: ' + FACBrECF.ModeloStr);
            GerarLinhaMemoLog('Modelo: ' + FACBrECF.SubModeloECF);
            GerarLinhaMemoLog('Nr. ECF: ' + FACBrECF.NumECF);
-           GerarLinhaMemoLog('Nr. SÈrie: ' + FACBrECF.NumSerie);
-           GerarLinhaMemoLog('Nr. CRZ (Contador de ReduÁıes Z): ' + FACBrECF.NumCRZ);
+           GerarLinhaMemoLog('Nr. S√©rie: ' + FACBrECF.NumSerie);
+           GerarLinhaMemoLog('Nr. CRZ (Contador de Redu√ß√µes Z): ' + FACBrECF.NumCRZ);
         end;
      Result := True;
      sMsgRet := sMsgValid;
@@ -2689,16 +2701,16 @@ begin
    Result := False;
 
    if (DataInicial <= 0) then
-      MensagemAviso('A data inicial do perÌodo n„o foi informada no SPED Pis Cofins!')
+      MensagemAviso('A data inicial do per√≠odo n√£o foi informada no SPED Pis Cofins!')
    else
    if (DataFinal <= 0) then
-      MensagemAviso('A data final do perÌodo n„o foi informada no SPED Pis Cofins!')
+      MensagemAviso('A data final do per√≠odo n√£o foi informada no SPED Pis Cofins!')
    else
    if (CodigoEmpresa <= 0) then
-      MensagemAviso('CÛdigo da empresa n„o foi informado no SPED Pis Cofins!')
+      MensagemAviso('C√≥digo da empresa n√£o foi informado no SPED Pis Cofins!')
    else
    if (FGerarCupomFiscal) and (FGerarComArquivoMFDSPEDLocal) and (not FileExists(FLocalArquivoMFDSPED)) then
-      MensagemAviso('Arquivo MFD SPED n„o existe no local informado!' + sLineBreak +
+      MensagemAviso('Arquivo MFD SPED n√£o existe no local informado!' + sLineBreak +
                     FLocalArquivoMFDSPED)
    else
       Result := True;
@@ -2808,7 +2820,7 @@ begin
       3352,3353,3354,3355,3356,3503,3551,3553,3556,3651,3652,3653,3930,3949:
       Result := IntToStr(iCFOP)
    else
-      // Se a CFOP convertida n„o est· na lista v·lida, joga a padr„o
+      // Se a CFOP convertida n√£o est√° na lista v√°lida, joga a padr√£o
       Result := sCodAux + '102';
    end;
 end;
@@ -2857,7 +2869,7 @@ begin
 10, 70    |               201    |             -
 30        |               202    |             -
 60        |               500    |             -
-90        |               400    |             N„o Tributado
+90        |               400    |             N√£o Tributado
 -         |               900    |             Outros
 
 }
@@ -2918,7 +2930,7 @@ end;
 
 procedure TSpedPisCofins.CriarFieldsDataSets;
 begin
-   GerarLinhaMemoLog('Criando "Fields"... campos est·ticos nos datasets');
+   GerarLinhaMemoLog('Criando "Fields"... campos est√°ticos nos datasets');
 
     // Dataset Registro 0150 - Participantes
    FTabelaReg0150.Close;
@@ -2942,10 +2954,10 @@ begin
    FTabelaReg0190.FieldDefs.add('DESCR', ftString, 15);
    FTabelaReg0190.CreateDataSet;
 
-   // Dataset Registro 0200 - Produtos e ServiÁos
+   // Dataset Registro 0200 - Produtos e Servi√ßos
    FTabelaReg0200.Close;
    FTabelaReg0200.FieldDefs.Clear;
-   FTabelaReg0200.FieldDefs.add('TIPO_ITEM', ftString, 1); // S = ServiÁo e P = Produto
+   FTabelaReg0200.FieldDefs.add('TIPO_ITEM', ftString, 1); // S = Servi√ßo e P = Produto
    FTabelaReg0200.FieldDefs.add('COD_ITEM', ftString, 60);
    FTabelaReg0200.FieldDefs.add('DESCR_ITEM', ftString, 60);
    FTabelaReg0200.FieldDefs.add('COD_BARRA', ftString, 60);
@@ -2955,7 +2967,7 @@ begin
    FTabelaReg0200.FieldDefs.add('ALIQ_ICMS', ftFloat);
    FTabelaReg0200.CreateDataSet;
 
-   // Dataset Registro 0400 - Natureza de operaÁıes
+   // Dataset Registro 0400 - Natureza de opera√ß√µes
    FTabelaReg0400.Close;
    FTabelaReg0400.FieldDefs.Clear;
    FTabelaReg0400.FieldDefs.add('COD_NAT', ftInteger);
@@ -3113,7 +3125,7 @@ begin
    FTabelaRegA100.FieldDefs.add('NUM_DOC', ftString, 60);
    FTabelaRegA100.FieldDefs.add('CHV_NFSE', ftString, 60);
    FTabelaRegA100.FieldDefs.add('DT_DOC', ftDateTime);
-   FTabelaRegA100.FieldDefs.add('DT_EXE_SERV', ftDateTime); { Data conclus„o serviÁo }
+   FTabelaRegA100.FieldDefs.add('DT_EXE_SERV', ftDateTime); { Data conclus√£o servi√ßo }
    FTabelaRegA100.FieldDefs.add('VL_DOC', ftFloat);
    FTabelaRegA100.FieldDefs.add('IND_PGTO', ftInteger); {0 - A vista, 1 - A prazo, 9 - Sem Pgto}
    FTabelaRegA100.FieldDefs.add('VL_DESC', ftFloat);
@@ -3135,8 +3147,8 @@ begin
    FTabelaRegA170.FieldDefs.add('DESCR_COMPL', ftString, 60);
    FTabelaRegA170.FieldDefs.add('VL_ITEM', ftFloat);
    FTabelaRegA170.FieldDefs.add('VL_DESC', ftFloat);
-   FTabelaRegA170.FieldDefs.add('NAT_BC_CRED', ftString, 2); {CÛdigo da Base de C·lculo do CrÈdito - Tabela indicada no item 4.3.7}
-   FTabelaRegA170.FieldDefs.add('IND_ORIG_CRED', ftInteger); {0 - Oper. Mercado. Interno, 1 - Oper. ImportaÁ„o}
+   FTabelaRegA170.FieldDefs.add('NAT_BC_CRED', ftString, 2); {C√≥digo da Base de C√°lculo do Cr√©dito - Tabela indicada no item 4.3.7}
+   FTabelaRegA170.FieldDefs.add('IND_ORIG_CRED', ftInteger); {0 - Oper. Mercado. Interno, 1 - Oper. Importa√ß√£o}
    FTabelaRegA170.FieldDefs.add('CST_PIS', ftString, 2);
    FTabelaRegA170.FieldDefs.add('VL_BC_PIS', ftFloat);
    FTabelaRegA170.FieldDefs.add('ALIQ_PIS', ftFloat);
@@ -3351,10 +3363,10 @@ begin
    Registro0000 := FcompSpedPisCofins.Bloco_0.Registro0000New;
 
    {
-    001.100 - Vers„o 1.00 ADE Cofis n∫ 31/2010 de 01/01/2011
-    002.101 - Vers„o 1.01 ADE Cofis n∫ 34/2010 de 01/01/2011
-    002.200 - Vers„o 2.00 ADE Cofis n∫ 20/2012
-    003.201 - Vers„o 2.01 ADE Cofis n∫ 20/2012 de 14/03/2012
+    001.100 - Vers√£o 1.00 ADE Cofis n¬∫ 31/2010 de 01/01/2011
+    002.101 - Vers√£o 1.01 ADE Cofis n¬∫ 34/2010 de 01/01/2011
+    002.200 - Vers√£o 2.00 ADE Cofis n¬∫ 20/2012
+    003.201 - Vers√£o 2.01 ADE Cofis n¬∫ 20/2012 de 14/03/2012
    }
    Registro0000.COD_VER := vlVersao320;
 
@@ -3416,29 +3428,29 @@ begin
    Registro0100.EMAIL      := dmPrincipal.cdsConsDadosContadorEMAIL.Value;
    Registro0100.COD_MUN    := dmPrincipal.cdsConsDadosContadorCOD_CIDADE.AsInteger;
 
-   // ** Regime de apuraÁ„o
+   // ** Regime de apura√ß√£o
 
    { COD_INC_TRIB
-       codEscrOpIncNaoCumulativo = 1 - EscrituraÁ„o de operaÁıes com incidencia exclusivamente no regime n„o cumulativo
-       codEscrOpIncCumulativo    = 2 - EscrituraÁ„o de operaÁıes com incidencia exclusivamente no regime cumulativo
-       codEscrOpIncAmbos         = 3 - EscrituraÁ„o de operaÁıes com incidencia nos regimes cumulativo e n„o cumulativo
+       codEscrOpIncNaoCumulativo = 1 - Escritura√ß√£o de opera√ß√µes com incidencia exclusivamente no regime n√£o cumulativo
+       codEscrOpIncCumulativo    = 2 - Escritura√ß√£o de opera√ß√µes com incidencia exclusivamente no regime cumulativo
+       codEscrOpIncAmbos         = 3 - Escritura√ß√£o de opera√ß√µes com incidencia nos regimes cumulativo e n√£o cumulativo
 
     IND_APRO_CRED
-       indMetodoApropriacaoDireta    = 0 - MÈtodo de apropriaÁ„o direta
-       indMetodoDeRateioProporcional = 1 - MÈtodo de rateio proporcional(Receita Bruta)
+       indMetodoApropriacaoDireta    = 0 - M√©todo de apropria√ß√£o direta
+       indMetodoDeRateioProporcional = 1 - M√©todo de rateio proporcional(Receita Bruta)
 
     COD_TIPO_CONT
-       codIndTipoConExclAliqBasica = 1 - ApuraÁ„o da ContribuiÁ„o Exclusivamente a AlÌquota B·sica
-       codIndTipoAliqEspecificas   = 2 - ApuraÁ„o da ContribuiÁ„o a AlÌquotas EspecÌficas (Diferenciadas e/ou por Unidade de Medida de Produto)
+       codIndTipoConExclAliqBasica = 1 - Apura√ß√£o da Contribui√ß√£o Exclusivamente a Al√≠quota B√°sica
+       codIndTipoAliqEspecificas   = 2 - Apura√ß√£o da Contribui√ß√£o a Al√≠quotas Espec√≠ficas (Diferenciadas e/ou por Unidade de Medida de Produto)
 
     IND_REG_CUM
-       codRegimeCaixa,                  = 1 ñ Regime de Caixa ñ EscrituraÁ„o consolidada (Registro F500)
-       codRegimeCompetEscritConsolidada = 2 ñ Regime de CompetÍncia - EscrituraÁ„o consolidada (Registro F550)
-       codRegimeCompetEscritDetalhada   = 9 ñ Regime de CompetÍncia - EscrituraÁ„o detalhada, com base nos registros dos Blocos ìAî, ìCî, ìDî e ìFî.
+       codRegimeCaixa,                  = 1 ‚Äì Regime de Caixa ‚Äì Escritura√ß√£o consolidada (Registro F500)
+       codRegimeCompetEscritConsolidada = 2 ‚Äì Regime de Compet√™ncia - Escritura√ß√£o consolidada (Registro F550)
+       codRegimeCompetEscritDetalhada   = 9 ‚Äì Regime de Compet√™ncia - Escritura√ß√£o detalhada, com base nos registros dos Blocos ‚ÄúA‚Äù, ‚ÄúC‚Äù, ‚ÄúD‚Äù e ‚ÄúF‚Äù.
        }
 
 
-   GerarLinhaMemoLog(_SPED_PIS_COF_BLOCO_0 + ': Gerando Registro 0110 - Regimes de ApuraÁ„o');
+   GerarLinhaMemoLog(_SPED_PIS_COF_BLOCO_0 + ': Gerando Registro 0110 - Regimes de Apura√ß√£o');
 
    Registro0110 := FcompSpedPisCofins.Bloco_0.Registro0110New;
 
@@ -3475,12 +3487,12 @@ begin
       ** Regra do Manual SPED Pis Cofins
 
       F500
-      OC (se no registro 0110 o Campo ìCOD_INC_TRIBî = ì2î e o Campo ìIND_REG_CUMî = ì1î) -> Obrigatorio se houver informaÁ„o
-      N (se no registro 0110 o Campo ìCOD_INC_TRIBî = ì1î e ì3î ou, se ì2î o Campo ìIND_REG_CUMî = ì2î ou ì9î) -> N„o Informar
+      OC (se no registro 0110 o Campo ‚ÄúCOD_INC_TRIB‚Äù = ‚Äú2‚Äù e o Campo ‚ÄúIND_REG_CUM‚Äù = ‚Äú1‚Äù) -> Obrigatorio se houver informa√ß√£o
+      N (se no registro 0110 o Campo ‚ÄúCOD_INC_TRIB‚Äù = ‚Äú1‚Äù e ‚Äú3‚Äù ou, se ‚Äú2‚Äù o Campo ‚ÄúIND_REG_CUM‚Äù = ‚Äú2‚Äù ou ‚Äú9‚Äù) -> N√£o Informar
 
       F550
-      OC (se no registro 0110 o Campo ìCOD_INC_TRIBî = ì2î e o Campo ìIND_REG_CUMî = ì2î)
-      N (se no registro 0110 o Campo ìCOD_INC_TRIBî = ì1î e ì3î ou, se ì2î o Campo ìIND_REG_CUMî = ì1î ou ì9î)
+      OC (se no registro 0110 o Campo ‚ÄúCOD_INC_TRIB‚Äù = ‚Äú2‚Äù e o Campo ‚ÄúIND_REG_CUM‚Äù = ‚Äú2‚Äù)
+      N (se no registro 0110 o Campo ‚ÄúCOD_INC_TRIB‚Äù = ‚Äú1‚Äù e ‚Äú3‚Äù ou, se ‚Äú2‚Äù o Campo ‚ÄúIND_REG_CUM‚Äù = ‚Äú1‚Äù ou ‚Äú9‚Äù)
    }
 
    FGerarBlocoF := ((FcompSpedPisCofins.Bloco_0.Registro0001.Registro0110.COD_INC_TRIB = codEscrOpIncCumulativo) and
@@ -3493,8 +3505,8 @@ begin
    // *** Tabela de receita bruta mensal para rateio
 
    {
-     ObrigatÛrio  (se no registro 0110 o Campo ìCOD_INC_TRIBî = 1, ou 3 e o Campo ìIND_APRO_CREDî = 2)
-     N (se no registro 0110 o Campo ìCOD_INC_TRIBî = 2 ou o Campo ìIND_APRO_CREDî = 1)
+     Obrigat√≥rio  (se no registro 0110 o Campo ‚ÄúCOD_INC_TRIB‚Äù = 1, ou 3 e o Campo ‚ÄúIND_APRO_CRED‚Äù = 2)
+     N (se no registro 0110 o Campo ‚ÄúCOD_INC_TRIB‚Äù = 2 ou o Campo ‚ÄúIND_APRO_CRED‚Äù = 1)
    }
    if ( ((Registro0110.COD_INC_TRIB = codEscrOpIncNaoCumulativo) or
          (Registro0110.COD_INC_TRIB = codEscrOpIncAmbos)) and
@@ -3504,32 +3516,32 @@ begin
 
          Registro0111 := FcompSpedPisCofins.Bloco_0.Registro0111New;
 
-         {Valores informados nestes campos dever„o ser Receita bruta
+         {Valores informados nestes campos dever√£o ser Receita bruta
           mensal obtidas por todos os estabelecimentos.
           Tabela para alimentar mensalmente da receita bruta.}
 
          Registro0111.REC_BRU_NCUM_TRIB_MI := 0; {Informar neste campo o valor total da receita bruta obtida no mercado interno
-                                                  pela pessoa jurÌdica, vinculadas a receitas tributadas no regime n„o cumulativo:
-                                                  - a alÌquotas b·sicas de 1,65% (PIS/Pasep) e de 7,6% (Cofins);
-                                                  - a alÌquotas prÛprias do regime monof·sico (diferenciadas e/ou por unidade
+                                                  pela pessoa jur√≠dica, vinculadas a receitas tributadas no regime n√£o cumulativo:
+                                                  - a al√≠quotas b√°sicas de 1,65% (PIS/Pasep) e de 7,6% (Cofins);
+                                                  - a al√≠quotas pr√≥prias do regime monof√°sico (diferenciadas e/ou por unidade
                                                     medida de produto);
-                                                  - a outras alÌquotas especÌficas.}
+                                                  - a outras al√≠quotas espec√≠ficas.}
 
          Registro0111.REC_BRU_NCUM_NT_MI   := 0; {Informar neste campo o valor total da receita bruta obtida no
-                                                  mercado interno pela pessoa jurÌdica, vinculadas a vendas efetuadas
-                                                  com suspens„o, isenÁ„o, alÌquota zero ou n„o-incidÍncia das contribuiÁıes sociais.}
+                                                  mercado interno pela pessoa jur√≠dica, vinculadas a vendas efetuadas
+                                                  com suspens√£o, isen√ß√£o, al√≠quota zero ou n√£o-incid√™ncia das contribui√ß√µes sociais.}
 
-         Registro0111.REC_BRU_NCUM_EXP     := 0; {Informar neste campo o valor total da receita bruta obtida relativa a operaÁıes de:
-                                                  - exportaÁ„o de mercadorias para o exterior;
-                                                  - prestaÁ„o de serviÁos para pessoa fÌsica ou jurÌdica residente ou domiciliada no exterior,
+         Registro0111.REC_BRU_NCUM_EXP     := 0; {Informar neste campo o valor total da receita bruta obtida relativa a opera√ß√µes de:
+                                                  - exporta√ß√£o de mercadorias para o exterior;
+                                                  - presta√ß√£o de servi√ßos para pessoa f√≠sica ou jur√≠dica residente ou domiciliada no exterior,
                                                     cujo pagamento represente ingresso de divisas;
-                                                  - vendas a empresa comercial exportadora com o fim especÌfico de exportaÁ„o.}
+                                                  - vendas a empresa comercial exportadora com o fim espec√≠fico de exporta√ß√£o.}
 
-         Registro0111.REC_BRU_CUM          := 0; {informar neste campo o valor total da receita bruta obtida pela pessoa jurÌdica,
-                                                  vinculada a receitas tributadas no regime cumulativo a alÌquotas de 0,65% (PIS/Pasep)
+         Registro0111.REC_BRU_CUM          := 0; {informar neste campo o valor total da receita bruta obtida pela pessoa jur√≠dica,
+                                                  vinculada a receitas tributadas no regime cumulativo a al√≠quotas de 0,65% (PIS/Pasep)
                                                   e de 3% (Cofins).}
 
-         Registro0111.REC_BRU_TOTAL        := 0; {Informar o total da receita bruta auferida no perÌodo, correspondente ao somatÛrio dos
+         Registro0111.REC_BRU_TOTAL        := 0; {Informar o total da receita bruta auferida no per√≠odo, correspondente ao somat√≥rio dos
 
                                                   valores informados nos campos 02, 03, 04 e 05.}
       end;
@@ -3606,7 +3618,7 @@ begin
          if(unidade =  'CX') OR
            (unidade =  'UN') OR
            (unidade =  'PC') OR
-           (unidade =  'BI') OR     //mauricio 05062024   mudanÁa pra tratar erro de unidade de medida
+           (unidade =  'BI') OR     //mauricio 05062024   mudan√ßa pra tratar erro de unidade de medida
            (unidade =  'BL') OR
            (unidade =  'CT') OR
            (unidade =  'DP') OR
@@ -3627,9 +3639,9 @@ begin
          FTabelaReg0190.Next;
       end;
 
-   // 0200 - Produtos e serviÁos
-   GerarLinhaMemoLog(_SPED_PIS_COF_BLOCO_0 + ': Gerando Registro 0200 - Produtos e ServiÁos');
-   AtualizarStatus('Registro 0200 (Produtos e serviÁos): ');
+   // 0200 - Produtos e servi√ßos
+   GerarLinhaMemoLog(_SPED_PIS_COF_BLOCO_0 + ': Gerando Registro 0200 - Produtos e Servi√ßos');
+   AtualizarStatus('Registro 0200 (Produtos e servi√ßos): ');
    FTabelaReg0200.First;
    IniciaBar(FTabelaReg0200.RecordCount);
    while not FTabelaReg0200.Eof do
@@ -3656,10 +3668,10 @@ begin
          Registro0200.ALIQ_ICMS := FTabelaReg0200.FieldByName('ALIQ_ICMS').AsFloat;
 
          FTabelaReg0200.Next;
-      end; {while produtos e serviÁos}
+      end; {while produtos e servi√ßos}
 
-   // 0400 - Natureza de operaÁıes - CFOP
-   GerarLinhaMemoLog(_SPED_PIS_COF_BLOCO_0 + ': Gerando Registro 0400 - Natureza de operaÁıes - CFOP');
+   // 0400 - Natureza de opera√ß√µes - CFOP
+   GerarLinhaMemoLog(_SPED_PIS_COF_BLOCO_0 + ': Gerando Registro 0400 - Natureza de opera√ß√µes - CFOP');
    AtualizarStatus('Registro 0400 (CFOP): ');
    FTabelaReg0400.First;
    IniciaBar(FTabelaReg0400.RecordCount);
@@ -3675,8 +3687,8 @@ begin
          FTabelaReg0400.Next;
       end; {while}
 
-   // 0500 - Planos de Contas Cont·beis
-   /// Gerar esse registro se a empresa for "regime n„o cumulativo" ou "regime cumulativo pelo regime de competÍncia"
+   // 0500 - Planos de Contas Cont√°beis
+   /// Gerar esse registro se a empresa for "regime n√£o cumulativo" ou "regime cumulativo pelo regime de compet√™ncia"
    if (
         (Registro0110.COD_INC_TRIB = codEscrOpIncNaoCumulativo) or
         ((Registro0110.COD_INC_TRIB = codEscrOpIncCumulativo) and
@@ -3716,8 +3728,8 @@ begin
    {
     Registro 1900
 
-    Este registro È de escrituraÁ„o opcional atÈ o perÌodo de apuraÁ„o referente a marÁo de 2013. A partir de abril
-    de 2013 o registro ì1900î passa a ser de escrituraÁ„o obrigatÛria.
+    Este registro √© de escritura√ß√£o opcional at√© o per√≠odo de apura√ß√£o referente a mar√ßo de 2013. A partir de abril
+    de 2013 o registro ‚Äú1900‚Äù passa a ser de escritura√ß√£o obrigat√≥ria.
    }
    Registro1001 := FcompSpedPisCofins.Bloco_1.Registro1001New;
 
@@ -3742,9 +3754,9 @@ begin
 
                { COD_SIT
 
-                 csffRegular: 00 ñ Documento regular
-                 csfCancelado: 02 ñ Documento cancelado
-                 csfOutros: 99 ñ Outros
+                 csffRegular: 00 ‚Äì Documento regular
+                 csfCancelado: 02 ‚Äì Documento cancelado
+                 csfOutros: 99 ‚Äì Outros
                }
 
               Registro1900.COD_SIT    := csffRegular;
@@ -3752,15 +3764,15 @@ begin
               Registro1900.QUANT_DOC  := dmPrincipal.FTabelaReg1900.RecordCount; {Quantidade por modelo de documentos}
 
                {
-                  Existindo mais de um CST para o modelo de documento consolidado no registro, sem que a pessoa jurÌdica tenha
-                 como decompor por cada CST, o campo CST_PIS ser· escriturado em branco.
+                  Existindo mais de um CST para o modelo de documento consolidado no registro, sem que a pessoa jur√≠dica tenha
+                 como decompor por cada CST, o campo CST_PIS ser√° escriturado em branco.
                }
 
                Registro1900.CST_PIS := ACBrEPCBlocos.StrToCstPis(dmPrincipal.FTabelaReg1900CST_PIS_COF.AsString);
 
                {
-                  Existindo mais de um CST para o modelo de documento consolidado no registro, sem que a pessoa jurÌdica tenha
-                 como decompor por cada CST, o campo CST_COFINS ser· escriturado em branco.
+                  Existindo mais de um CST para o modelo de documento consolidado no registro, sem que a pessoa jur√≠dica tenha
+                 como decompor por cada CST, o campo CST_COFINS ser√° escriturado em branco.
                }
                Registro1900.CST_COFINS := ACBrEPCBlocos.StrToCstCofins(dmPrincipal.FTabelaReg1900CST_PIS_COF.AsString);
                Registro1900.CFOP := dmPrincipal.FTabelaReg1900CFOP.AsInteger;
@@ -3780,8 +3792,8 @@ var
     RegistroA100: ACBrEPCBloco_A.TRegistroA100;
     RegistroA170: ACBrEPCBloco_A.TRegistroA170;
 begin
-   {Gerar Tabela de ContrataÁ„o ou prestaÁ„o de ServiÁos...
-    Nota Fiscal de ServiÁos InstituÌda por MunicÌpios}
+   {Gerar Tabela de Contrata√ß√£o ou presta√ß√£o de Servi√ßos...
+    Nota Fiscal de Servi√ßos Institu√≠da por Munic√≠pios}
 
    RegistroA001 := FcompSpedPisCofins.Bloco_A.RegistroA001New;
 
@@ -3797,14 +3809,14 @@ begin
       end;
 
    {
-     N„o podem ser informados, para um mesmo documento fiscal, dois ou mais registros
-     com a mesma combinaÁ„o de valores dos campos formadores da chave do registro.
+     N√£o podem ser informados, para um mesmo documento fiscal, dois ou mais registros
+     com a mesma combina√ß√£o de valores dos campos formadores da chave do registro.
 
-     A chave deste registro È:
+     A chave deste registro √©:
 
-      ï Para documentos com campo IND_EMIT igual a ì1î (um) ñ emiss„o por terceiros: IND_OPER, IND_EMIT, COD_PART, COD_SIT, SER e NUM_DOC;
+      ‚Ä¢ Para documentos com campo IND_EMIT igual a ‚Äú1‚Äù (um) ‚Äì emiss√£o por terceiros: IND_OPER, IND_EMIT, COD_PART, COD_SIT, SER e NUM_DOC;
 
-      ï Para documentos com campo (IND_EMIT igual ì0î (zero) ñ emiss„o prÛpria: IND_OPER, IND_EMIT, COD_SIT, SER e NUM_DOC.
+      ‚Ä¢ Para documentos com campo (IND_EMIT igual ‚Äú0‚Äù (zero) ‚Äì emiss√£o pr√≥pria: IND_OPER, IND_EMIT, COD_SIT, SER e NUM_DOC.
    }
 
    FTabelaRegA100.First;
@@ -3846,7 +3858,7 @@ begin
          RegistroA100.NUM_DOC       := Trim(FTabelaRegA100.FieldByName('NUM_DOC').AsString);
          RegistroA100.CHV_NFSE      := Trim(FTabelaRegA100.FieldByName('CHV_NFSE').AsString);
          RegistroA100.DT_DOC        := FTabelaRegA100.FieldByName('DT_DOC').AsDateTime;
-         RegistroA100.DT_EXE_SERV   := FTabelaRegA100.FieldByName('DT_EXE_SERV').AsDateTime; { Data conclus„o serviÁo }
+         RegistroA100.DT_EXE_SERV   := FTabelaRegA100.FieldByName('DT_EXE_SERV').AsDateTime; { Data conclus√£o servi√ßo }
          RegistroA100.VL_DOC        := FTabelaRegA100.FieldByName('VL_DOC').AsFloat;
          RegistroA100.VL_DESC       := FTabelaRegA100.FieldByName('VL_DESC').AsFloat;
          RegistroA100.VL_BC_PIS     := FTabelaRegA100.FieldByName('VL_BC_PIS').AsFloat;
@@ -3874,7 +3886,7 @@ begin
                RegistroA170.VL_ITEM       := FTabelaRegA170.FieldByName('VL_ITEM').AsFloat;
                RegistroA170.VL_DESC       := FTabelaRegA170.FieldByName('VL_DESC').AsFloat;
                RegistroA170.NAT_BC_CRED   := GetTypeNatBcCred(FTabelaRegA170.FieldByName('NAT_BC_CRED').AsString);
-               RegistroA170.IND_ORIG_CRED := opcMercadoInterno; //0 ñ OperaÁ„o no Mercado Interno // 1 ñ OperaÁ„o de ImportaÁ„o - FTabelaRegA170.FieldByName('IND_ORIG_CRED').AsInteger
+               RegistroA170.IND_ORIG_CRED := opcMercadoInterno; //0 ‚Äì Opera√ß√£o no Mercado Interno // 1 ‚Äì Opera√ß√£o de Importa√ß√£o - FTabelaRegA170.FieldByName('IND_ORIG_CRED').AsInteger
                RegistroA170.CST_PIS       := ACBrEPCBlocos.StrToCstPis(Trim(FTabelaRegA170.FieldByName('CST_PIS').AsString));
                RegistroA170.VL_BC_PIS     := FTabelaRegA170.FieldByName('VL_BC_PIS').AsFloat;
                RegistroA170.ALIQ_PIS      := FTabelaRegA170.FieldByName('ALIQ_PIS').AsFloat;
@@ -3951,7 +3963,7 @@ begin
 
 
          {
-          Na escrituraÁ„o das NFC-e no registro C100, n„o precisam ser informados os campos:
+          Na escritura√ß√£o das NFC-e no registro C100, n√£o precisam ser informados os campos:
                  COD_PART, VL_BC_ICMS_ST, VL_ICMS_ST, VL_IPI, VL_PIS, VL_COFINS, VL_PIS_ST e VL_COFINS_ST
          }
          RegistroC100 := FcompSpedPisCofins.Bloco_C.RegistroC100New;
@@ -3963,7 +3975,7 @@ begin
             RegistroC100.IND_OPER := ACBrEPCBlocos.tpSaidaPrestacao;
 
 
-         {Se encontrar o CNPJ na chave do documetno È emiss„o propria}
+         {Se encontrar o CNPJ na chave do documetno √© emiss√£o propria}
          if (Pos(Self.FCnpjEmpresa, FTabelaRegC100.FieldByName('CHV_NFE').AsString) > 0) then
             RegistroC100.IND_EMIT := ACBrEPCBlocos.edEmissaoPropria
          else
@@ -4016,7 +4028,7 @@ begin
 
          if (RegistroC100.COD_SIT = ACBrEPCBlocos.sdRegular) then
             begin
-               {Na escrituraÁ„o das NFC-e no registro C100, n„o precisam ser informados os campos:
+               {Na escritura√ß√£o das NFC-e no registro C100, n√£o precisam ser informados os campos:
                    COD_PART, VL_BC_ICMS_ST, VL_ICMS_ST, VL_IPI, VL_PIS, VL_COFINS, VL_PIS_ST e VL_COFINS_ST.
 F               }
                if (RegistroC100.COD_MOD = '65') then
@@ -4116,7 +4128,7 @@ F               }
                      RegistroC170.COD_NAT        := Trim(FTabelaRegC170.FieldByName('COD_NAT').AsString);
 
 
-                     { 30, 40, 41, 50, ou 60, ent„o os valores dos campos VL_BC_ICMS, ALIQ_ICMS e VL_ICMS dever„o ser iguais a ì0î (zero)}
+                     { 30, 40, 41, 50, ou 60, ent√£o os valores dos campos VL_BC_ICMS, ALIQ_ICMS e VL_ICMS dever√£o ser iguais a ‚Äú0‚Äù (zero)}
                      if (RegistroC170.CST_ICMS = ACBrEPCBlocos.sticmsIsentaComCobracaPorST) or
                         (RegistroC170.CST_ICMS = ACBrEPCBlocos.sticmsIsenta) or
                         (RegistroC170.CST_ICMS = ACBrEPCBlocos.sticmsNaoTributada) or
@@ -4129,13 +4141,13 @@ F               }
                         end
                      else
                         begin
-                           {Diferentes de 30, 40, 41, 50, e 60, ent„o os valores dos campos VL_BC_ICMS, ALIQ_ICMS e VL_ICMS dever„o ser maiores que ì0î (zero)}
+                           {Diferentes de 30, 40, 41, 50, e 60, ent√£o os valores dos campos VL_BC_ICMS, ALIQ_ICMS e VL_ICMS dever√£o ser maiores que ‚Äú0‚Äù (zero)}
                            RegistroC170.VL_BC_ICMS := FTabelaRegC170.FieldByName('VL_BC_ICMS').AsFloat;
                            RegistroC170.ALIQ_ICMS  := FTabelaRegC170.FieldByName('ALIQ_ICMS').AsFloat;
                            RegistroC170.VL_ICMS    := FTabelaRegC170.FieldByName('VL_ICMS').AsFloat;
                         end;
 
-                        {10, 30 ou 70, os valores dos campos VL_BC_ICMS_ST, ALIQ_ST e VL_ICMS_ST dever„o ser maiores ou iguais a ì0î (zero).}
+                        {10, 30 ou 70, os valores dos campos VL_BC_ICMS_ST, ALIQ_ST e VL_ICMS_ST dever√£o ser maiores ou iguais a ‚Äú0‚Äù (zero).}
                      if (RegistroC170.CST_ICMS = ACBrEPCBlocos.sticmsTributadaComCobracaPorST) or
                         (RegistroC170.CST_ICMS = ACBrEPCBlocos.sticmsIsentaComCobracaPorST) or
                         (RegistroC170.CST_ICMS = ACBrEPCBlocos.sticmsComReducaoPorST) then
@@ -4146,7 +4158,7 @@ F               }
                         end
                      else
                         begin
-                           {Diferentes de 10, 30 ou 70, os valores dos campos VL_BC_ST, ALIQ_ST e VL_ICMS_ST dever„o ser iguais a ì0î (zero). }
+                           {Diferentes de 10, 30 ou 70, os valores dos campos VL_BC_ST, ALIQ_ST e VL_ICMS_ST dever√£o ser iguais a ‚Äú0‚Äù (zero). }
                            RegistroC170.VL_BC_ICMS_ST := 0;
                            RegistroC170.ALIQ_ST       := 0;
                            RegistroC170.VL_ICMS_ST    := 0;
@@ -4160,7 +4172,7 @@ F               }
 
 
                      RegistroC170.CST_IPI  := ACBrEPCBlocos.StrToCstIpi(FTabelaRegC170.FieldByName('CST_IPI').AsString);
-                     RegistroC170.COD_ENQ  := ''; {N„o preencher - segundo o manual}
+                     RegistroC170.COD_ENQ  := ''; {N√£o preencher - segundo o manual}
                      RegistroC170.ALIQ_IPI := FTabelaRegC170.FieldByName('ALIQ_IPI').AsCurrency;
 
 
@@ -4209,7 +4221,7 @@ F               }
                      else
                        RegistroC170.COD_CTA := '';
 
-                     {Totaliza pis e cofins para atualizar o cabeÁalho da nota}
+                     {Totaliza pis e cofins para atualizar o cabe√ßalho da nota}
                      {Corrigir problemas de arredondamento}
                      cTotalPIS_Itens := cTotalPIS_Itens + RegistroC170.VL_PIS;
                      cTotalCOF_Itens := cTotalCOF_Itens + RegistroC170.VL_COFINS;
@@ -4218,16 +4230,16 @@ F               }
                      Inc(iSequencialItem);
                   end; {while itens C170}
 
-               {Atualiza valores de PIS e COFINS no cabeÁalho da nota}
+               {Atualiza valores de PIS e COFINS no cabe√ßalho da nota}
                RegistroC100.VL_PIS    := cTotalPIS_Itens;
                RegistroC100.VL_COFINS := cTotalCOF_Itens;
 
-               // Registro - C175 - vis„o analÌtica, por CST
+               // Registro - C175 - vis√£o anal√≠tica, por CST
                if (RegistroC100.COD_MOD = '65') then
                   begin
 
-                     GerarLinhaMemoLog(_SPED_PIS_COF_BLOCO_C + ': Gerando Registros C175 - AnalÌtico por CST NFC-e');
-                      AtualizarStatus('Gerando Registros C175 - AnalÌtico por CST NFC-e');
+                     GerarLinhaMemoLog(_SPED_PIS_COF_BLOCO_C + ': Gerando Registros C175 - Anal√≠tico por CST NFC-e');
+                      AtualizarStatus('Gerando Registros C175 - Anal√≠tico por CST NFC-e');
 
                      cTotalPIS_Itens_NFCE := 0;
                      cTotalCOF_Itens_NFCE := 0;
@@ -4289,7 +4301,7 @@ F               }
                            dmPrincipal.FTabelaRegC175.Next;
                         end; {while C175}
 
-                     {Atualiza valores de PIS e COFINS no cabeÁalho da NFC-e}
+                     {Atualiza valores de PIS e COFINS no cabe√ßalho da NFC-e}
                      RegistroC100.VL_PIS    := cTotalPIS_Itens_NFCE;
                      RegistroC100.VL_COFINS := cTotalCOF_Itens_NFCE;
                      RegistroC100.VL_MERC := cTotalOperacoes;
@@ -4308,12 +4320,12 @@ F               }
 
 
 
-   // MFD dos cupons n„o geram informaÁıes de Pis e Cofins
+   // MFD dos cupons n√£o geram informa√ß√µes de Pis e Cofins
    //if (Self.GerarCupomFiscal) then
    if (False) then
       begin
          if (FACBrSPEDECF.Bloco_C.RegistroC001.RegistroC400.Count = 0) then
-            GerarLinhaMemoLog('N„o encontrado movimentos de cupom fiscal para gerar! (RegistroC400.Count = 0)')
+            GerarLinhaMemoLog('N√£o encontrado movimentos de cupom fiscal para gerar! (RegistroC400.Count = 0)')
          else
             begin
                RegistroC400List := FACBrSPEDECF.Bloco_C.RegistroC001.RegistroC400;
@@ -4347,7 +4359,7 @@ F               }
                            FTabelaRegC481_C485.First;
                            while not FTabelaRegC481_C485.Eof do
                               begin
-                                 // ** C481 (Pis) - Resumo Di·rio de Documentos Emitidos por ECF
+                                 // ** C481 (Pis) - Resumo Di√°rio de Documentos Emitidos por ECF
                                  RegistroC481 := FcompSpedPisCofins.Bloco_C.RegistroC481New;
 
                                  RegistroC481.CST_PIS := ACBrEPCBlocos.StrToCstPis(FTabelaRegC481_C485.FieldByName('CST_PIS').AsString);
@@ -4376,7 +4388,7 @@ F               }
                                  else
                                    RegistroC481.COD_CTA := '';
 
-                                 // ** C485 (Cofins) - Resumo Di·rio de Documentos Emitidos por ECF
+                                 // ** C485 (Cofins) - Resumo Di√°rio de Documentos Emitidos por ECF
                                  RegistroC485 := FcompSpedPisCofins.Bloco_C.RegistroC485New;
 
                                  RegistroC485.CST_COFINS := ACBrEPCBlocos.StrToCstCofins(FTabelaRegC481_C485.FieldByName('CST_COFINS').AsString);
@@ -4474,8 +4486,8 @@ procedure TSpedPisCofins.GerarBloco_D;
 var
    RegistroD001: ACBrEPCBloco_D.TRegistroD001;
 begin
-   // Documentos Fiscais II ñ ServiÁos (ICMS)
-   // N„o est· no contrato do sped
+   // Documentos Fiscais II ‚Äì Servi√ßos (ICMS)
+   // N√£o est√° no contrato do sped
    RegistroD001 := FcompSpedPisCofins.Bloco_D.RegistroD001New;
    RegistroD001.IND_MOV := ACBrEPCBlocos.imSemDados;
 end;
@@ -4492,7 +4504,7 @@ var
 begin
     GerarLinhaMemoLog(_SPED_PIS_COF_BLOCO_F + ': Gerando Registros F001');
 
-   // ** Demais Documentos e OperaÁıes
+   // ** Demais Documentos e Opera√ß√µes
    RegistroF001 := FcompSpedPisCofins.Bloco_F.RegistroF001New;
 
    if (FGerarBlocoF) then
@@ -4503,12 +4515,12 @@ begin
    if (FGerarBlocoF) then
       begin
          GerarLinhaMemoLog(_SPED_PIS_COF_BLOCO_F + ': Gerando Registros F010');
-         {IdentificaÁ„o do Estabelecimento}
+         {Identifica√ß√£o do Estabelecimento}
          RegistroF010 := FcompSpedPisCofins.Bloco_F.RegistroF010New;
 
          RegistroF010.CNPJ := Self.CnpjEmpresa;
 
-         {Lucro Presumido ñ IncidÍncia do PIS/Pasep e da Cofins pelo Regime de Caixa}
+         {Lucro Presumido ‚Äì Incid√™ncia do PIS/Pasep e da Cofins pelo Regime de Caixa}
          if (FcompSpedPisCofins.Bloco_0.Registro0001.Registro0110.IND_REG_CUM = codRegimeCaixa) then
             begin
                GerarLinhaMemoLog(_SPED_PIS_COF_BLOCO_F + ': Gerando Registros F500');
@@ -4534,12 +4546,12 @@ begin
             end;
 
          { ** F509 - OC
-          Registro especÌfico para a pessoa jurÌdica informar a existÍncia de processo administrativo ou judicial que autoriza a adoÁ„o de tratamento tribut·rio
-          (CST), base de c·lculo ou alÌquota diversa da prevista na legislaÁ„o. Trata-se de informaÁ„o essencial a ser prestada na escrituraÁ„o para a adequada
-          validaÁ„o das contribuiÁıes sociais ou dos crÈditos.
+          Registro espec√≠fico para a pessoa jur√≠dica informar a exist√™ncia de processo administrativo ou judicial que autoriza a ado√ß√£o de tratamento tribut√°rio
+          (CST), base de c√°lculo ou al√≠quota diversa da prevista na legisla√ß√£o. Trata-se de informa√ß√£o essencial a ser prestada na escritura√ß√£o para a adequada
+          valida√ß√£o das contribui√ß√µes sociais ou dos cr√©ditos.
          }
 
-         {Lucro Presumido ñ IncidÍncia do PIS/Pasep e da Cofins pelo Regime de Caixa (ApuraÁ„o da ContribuiÁ„o por Unidade de Medida de Produto)}
+         {Lucro Presumido ‚Äì Incid√™ncia do PIS/Pasep e da Cofins pelo Regime de Caixa (Apura√ß√£o da Contribui√ß√£o por Unidade de Medida de Produto)}
          // ** F510
          if ((FcompSpedPisCofins.Bloco_0.Registro0001.Registro0110.IND_REG_CUM = codRegimeCaixa) and
              (FcompSpedPisCofins.Bloco_0.Registro0001.Registro0110.COD_TIPO_CONT = codIndTipoAliqEspecificas)) then
@@ -4566,24 +4578,24 @@ begin
             end;
 
          { ** F519 - OC
-          1. Registro especÌfico para a pessoa jurÌdica informar a existÍncia de processo administrativo ou judicial que autoriza a adoÁ„o de tratamento
-          tribut·rio (CST), base de c·lculo ou alÌquota diversa da prevista na legislaÁ„o. Trata-se de informaÁ„o essencial a ser prestada na escrituraÁ„o
-          para a adequada validaÁ„o das contribuiÁıes sociais ou dos crÈditos.
+          1. Registro espec√≠fico para a pessoa jur√≠dica informar a exist√™ncia de processo administrativo ou judicial que autoriza a ado√ß√£o de tratamento
+          tribut√°rio (CST), base de c√°lculo ou al√≠quota diversa da prevista na legisla√ß√£o. Trata-se de informa√ß√£o essencial a ser prestada na escritura√ß√£o
+          para a adequada valida√ß√£o das contribui√ß√µes sociais ou dos cr√©ditos.
 
-          2. Uma vez procedida ‡ escrituraÁ„o do Registro ìF519î, deve a pessoa jurÌdica gerar os registros ì1010î ou ì1020î referentes ao detalhamento do
-          processo judicial ou do processo administrativo, conforme o caso, que autoriza a adoÁ„o de procedimento especifico de apuraÁ„o das contribuiÁıes
-          sociais ou dos crÈditos.
+          2. Uma vez procedida √† escritura√ß√£o do Registro ‚ÄúF519‚Äù, deve a pessoa jur√≠dica gerar os registros ‚Äú1010‚Äù ou ‚Äú1020‚Äù referentes ao detalhamento do
+          processo judicial ou do processo administrativo, conforme o caso, que autoriza a ado√ß√£o de procedimento especifico de apura√ß√£o das contribui√ß√µes
+          sociais ou dos cr√©ditos.
 
-          3. Devem ser relacionados todos os processos judiciais ou administrativos que fundamente ou autorize a adoÁ„o de procedimento especifico na apuraÁ„o
-          das contribuiÁıes sociais e dos crÈditos.
+          3. Devem ser relacionados todos os processos judiciais ou administrativos que fundamente ou autorize a ado√ß√£o de procedimento especifico na apura√ß√£o
+          das contribui√ß√µes sociais e dos cr√©ditos.
          }
 
-         {ComposiÁ„o da Receita Escriturada no PerÌodo ñ Detalhamento da Receita Recebida pelo Regime de Caixa}
+         {Composi√ß√£o da Receita Escriturada no Per√≠odo ‚Äì Detalhamento da Receita Recebida pelo Regime de Caixa}
          // ** F525 - OC
          if (FcompSpedPisCofins.Bloco_0.Registro0001.Registro0110.IND_REG_CUM = codRegimeCaixa) then
             RegistroF525 := FcompSpedPisCofins.Bloco_F.RegistroF525New;
 
-         {Lucro Presumido ñ IncidÍncia do PIS/Pasep e da Cofins pelo Regime de CompetÍncia}
+         {Lucro Presumido ‚Äì Incid√™ncia do PIS/Pasep e da Cofins pelo Regime de Compet√™ncia}
          // ** F550
          if (FcompSpedPisCofins.Bloco_0.Registro0001.Registro0110.IND_REG_CUM = codRegimeCompetEscritConsolidada) then
             begin
@@ -4594,7 +4606,7 @@ begin
                   begin
                      RegistroF550 := FcompSpedPisCofins.Bloco_F.RegistroF550New;
 
-                     {VL_REC_COMP: Valor total da receita auferida, referente ‡ combinaÁ„o de CST e AlÌquota.}
+                     {VL_REC_COMP: Valor total da receita auferida, referente √† combina√ß√£o de CST e Al√≠quota.}
                      RegistroF550.VL_REC_COMP := dmPrincipal.FTabelaReg1900VL_TOT_REC.AsCurrency;
 
                      {Pis}
@@ -4637,19 +4649,19 @@ begin
             end;
 
          { ** F559 - OC
-           1. Registro especÌfico para a pessoa jurÌdica informar a existÍncia de processo administrativo ou judicial que autoriza a adoÁ„o de tratamento
-           tribut·rio (CST), base de c·lculo ou alÌquota diversa da prevista na legislaÁ„o. Trata-se de informaÁ„o essencial a ser prestada na escrituraÁ„o
-           para a adequada validaÁ„o das contribuiÁıes sociais ou dos crÈditos.
+           1. Registro espec√≠fico para a pessoa jur√≠dica informar a exist√™ncia de processo administrativo ou judicial que autoriza a ado√ß√£o de tratamento
+           tribut√°rio (CST), base de c√°lculo ou al√≠quota diversa da prevista na legisla√ß√£o. Trata-se de informa√ß√£o essencial a ser prestada na escritura√ß√£o
+           para a adequada valida√ß√£o das contribui√ß√µes sociais ou dos cr√©ditos.
 
-           2. Uma vez procedida ‡ escrituraÁ„o do Registro ìF559î, deve a pessoa jurÌdica gerar os registros ì1010î ou ì1020î referentes ao detalhamento do
-           processo judicial ou do processo administrativo, conforme o caso, que autoriza a adoÁ„o de procedimento especifico de apuraÁ„o das contribuiÁıes
-           sociais ou dos crÈditos.
+           2. Uma vez procedida √† escritura√ß√£o do Registro ‚ÄúF559‚Äù, deve a pessoa jur√≠dica gerar os registros ‚Äú1010‚Äù ou ‚Äú1020‚Äù referentes ao detalhamento do
+           processo judicial ou do processo administrativo, conforme o caso, que autoriza a ado√ß√£o de procedimento especifico de apura√ß√£o das contribui√ß√µes
+           sociais ou dos cr√©ditos.
 
-           3. Devem ser relacionados todos os processos judiciais ou administrativos que fundamente ou autorize a adoÁ„o de procedimento especifico na apuraÁ„o
-           das contribuiÁıes sociais e dos crÈditos.
+           3. Devem ser relacionados todos os processos judiciais ou administrativos que fundamente ou autorize a ado√ß√£o de procedimento especifico na apura√ß√£o
+           das contribui√ß√µes sociais e dos cr√©ditos.
          }
 
-         {Lucro Presumido ñ IncidÍncia do PIS/Pasep e da Cofins pelo Regime de CompetÍncia (ApuraÁ„o da ContribuiÁ„o por Unidade de Medida de Produto)}
+         {Lucro Presumido ‚Äì Incid√™ncia do PIS/Pasep e da Cofins pelo Regime de Compet√™ncia (Apura√ß√£o da Contribui√ß√£o por Unidade de Medida de Produto)}
          // ** F560
          if ((FcompSpedPisCofins.Bloco_0.Registro0001.Registro0110.IND_REG_CUM = codRegimeCompetEscritConsolidada) and
              (FcompSpedPisCofins.Bloco_0.Registro0001.Registro0110.COD_TIPO_CONT = codIndTipoAliqEspecificas)) then
@@ -4659,16 +4671,16 @@ begin
 
          {Processo Referenciado}
          { ** F569
-          1. Registro especÌfico para a pessoa jurÌdica informar a existÍncia de processo administrativo ou judicial que autoriza a adoÁ„o de tratamento
-          tribut·rio (CST), base de c·lculo ou alÌquota diversa da prevista na legislaÁ„o. Trata-se de informaÁ„o essencial a ser prestada na escrituraÁ„o
-          para a adequada validaÁ„o das contribuiÁıes sociais ou dos crÈditos.
+          1. Registro espec√≠fico para a pessoa jur√≠dica informar a exist√™ncia de processo administrativo ou judicial que autoriza a ado√ß√£o de tratamento
+          tribut√°rio (CST), base de c√°lculo ou al√≠quota diversa da prevista na legisla√ß√£o. Trata-se de informa√ß√£o essencial a ser prestada na escritura√ß√£o
+          para a adequada valida√ß√£o das contribui√ß√µes sociais ou dos cr√©ditos.
 
-          2. Uma vez procedida ‡ escrituraÁ„o do Registro ìF569î, deve a pessoa jurÌdica gerar os registros ì1010î ou ì1020î referentes ao detalhamento do
-          processo judicial ou do processo administrativo, conforme o caso, que autoriza a adoÁ„o de procedimento especifico de apuraÁ„o das contribuiÁıes
-          sociais ou dos crÈditos.
+          2. Uma vez procedida √† escritura√ß√£o do Registro ‚ÄúF569‚Äù, deve a pessoa jur√≠dica gerar os registros ‚Äú1010‚Äù ou ‚Äú1020‚Äù referentes ao detalhamento do
+          processo judicial ou do processo administrativo, conforme o caso, que autoriza a ado√ß√£o de procedimento especifico de apura√ß√£o das contribui√ß√µes
+          sociais ou dos cr√©ditos.
 
-          3. Devem ser relacionados todos os processos judiciais ou administrativos que fundamente ou autorize a adoÁ„o de procedimento especifico na apuraÁ„o
-          das contribuiÁıes sociais e dos crÈditos.
+          3. Devem ser relacionados todos os processos judiciais ou administrativos que fundamente ou autorize a ado√ß√£o de procedimento especifico na apura√ß√£o
+          das contribui√ß√µes sociais e dos cr√©ditos.
          }
       end;
 end;
@@ -4723,7 +4735,7 @@ begin
    TemP400_410;
  //  TemP800_810;
 
-   //M100 - CrÈdito de PIS/PASEP Relativo ao PerÌodo
+   //M100 - Cr√©dito de PIS/PASEP Relativo ao Per√≠odo
    AtualizarStatus('Sped Pis Cofins - Bloco M: Gerando Registros M');
 
   with FcompSpedPisCofins.Bloco_M do
@@ -4774,7 +4786,7 @@ begin
                       VL_CRED_DIF    := 0;
                       VL_CRED_DISP   := dValorPis;
                       IND_DESC_CRED  := idcTotal;
-                      VL_CRED_DESC   := dValorPis; //Valor do CrÈdito disponÌvel, descontado da contribuiÁ„o apurada no prÛprio perÌodo. Se IND_DESC_CRED=0, informar o valor total do Campo 12; Se IND_DESC_CRED=1, informar o valor parcial do Campo 12.
+                      VL_CRED_DESC   := dValorPis; //Valor do Cr√©dito dispon√≠vel, descontado da contribui√ß√£o apurada no pr√≥prio per√≠odo. Se IND_DESC_CRED=0, informar o valor total do Campo 12; Se IND_DESC_CRED=1, informar o valor parcial do Campo 12.
                       SLD_CRED       := 0;
 
 
@@ -4790,7 +4802,7 @@ begin
 //                      VL_CRED_DIF    := 0;
 //                      VL_CRED_DISP   := dValorPis;
 //                      IND_DESC_CRED  := idcTotal;
-//                      VL_CRED_DESC   := dValorPis; //Valor do CrÈdito disponÌvel, descontado da contribuiÁ„o apurada no prÛprio perÌodo. Se IND_DESC_CRED=0, informar o valor total do Campo 12; Se IND_DESC_CRED=1, informar o valor parcial do Campo 12.
+//                      VL_CRED_DESC   := dValorPis; //Valor do Cr√©dito dispon√≠vel, descontado da contribui√ß√£o apurada no pr√≥prio per√≠odo. Se IND_DESC_CRED=0, informar o valor total do Campo 12; Se IND_DESC_CRED=1, informar o valor parcial do Campo 12.
 //                      SLD_CRED       := 0;
 ////
 //
@@ -4838,7 +4850,7 @@ begin
                       VL_CRED_DIF    := 0;
                       VL_CRED_DISP   := 0;
                       IND_DESC_CRED  := idcTotal;
-                      VL_CRED_DESC   := 0; //Valor do CrÈdito disponÌvel, descontado da contribuiÁ„o apurada no prÛprio perÌodo. Se IND_DESC_CRED=0, informar o valor total do Campo 12; Se IND_DESC_CRED=1, informar o valor parcial do Campo 12.
+                      VL_CRED_DESC   := 0; //Valor do Cr√©dito dispon√≠vel, descontado da contribui√ß√£o apurada no pr√≥prio per√≠odo. Se IND_DESC_CRED=0, informar o valor total do Campo 12; Se IND_DESC_CRED=1, informar o valor parcial do Campo 12.
                       SLD_CRED       := 0;
                    end; //Bloco M100
 //
@@ -4928,10 +4940,10 @@ begin
                             with RegistroM205New do
                                begin
                                  if FrmPrincipal.CbbIncidenciaTributaria.ItemIndex <> 1 then
-                                    NUM_CAMPO := '08'                                      // Saldo N„o-Cumulativo a recolher
+                                    NUM_CAMPO := '08'                                      // Saldo N√£o-Cumulativo a recolher
                                  else
                                     NUM_CAMPO := '12';                                     // Saldo Cumulativo a recolher
-                                 COD_REC      := '192101';                                 // Anexo VI do Codac - ContribuiÁ„o para o PIS_PASEP
+                                 COD_REC      := '192101';                                 // Anexo VI do Codac - Contribui√ß√£o para o PIS_PASEP
                                  VL_DEBITO    := SaldoNaoCumulativoaPagarPIS;
                                end; // Bloco M205
 
@@ -5029,7 +5041,7 @@ begin
                          VL_CRED_DIFER  := 0;
                          VL_CRED_DISP   := dValorCof;;       //DmSPEDContribuicoes.CdsSPEDM500VL_COFINS.AsFloat;
                          IND_DESC_CRED  := idcTotal;
-                         VL_CRED_DESC   := dValorCof;;      //DmSPEDContribuicoes.CdsSPEDM500VL_COFINS.AsFloat; //Valor do CrÈdito disponÌvel, descontado da contribuiÁ„o apurada no prÛprio perÌodo. Se IND_DESC_CRED=0, informar o valor total do Campo 12; Se IND_DESC_CRED=1, informar o valor parcial do Campo 12.
+                         VL_CRED_DESC   := dValorCof;;      //DmSPEDContribuicoes.CdsSPEDM500VL_COFINS.AsFloat; //Valor do Cr√©dito dispon√≠vel, descontado da contribui√ß√£o apurada no pr√≥prio per√≠odo. Se IND_DESC_CRED=0, informar o valor total do Campo 12; Se IND_DESC_CRED=1, informar o valor parcial do Campo 12.
                          SLD_CRED       := 0;
                        end;
 
@@ -5065,7 +5077,7 @@ begin
                          VL_CRED_DIFER  := 0;
                          VL_CRED_DISP   := 0;       //DmSPEDContribuicoes.CdsSPEDM500VL_COFINS.AsFloat;
                          IND_DESC_CRED  := idcTotal;
-                         VL_CRED_DESC   := 0;      //DmSPEDContribuicoes.CdsSPEDM500VL_COFINS.AsFloat; //Valor do CrÈdito disponÌvel, descontado da contribuiÁ„o apurada no prÛprio perÌodo. Se IND_DESC_CRED=0, informar o valor total do Campo 12; Se IND_DESC_CRED=1, informar o valor parcial do Campo 12.
+                         VL_CRED_DESC   := 0;      //DmSPEDContribuicoes.CdsSPEDM500VL_COFINS.AsFloat; //Valor do Cr√©dito dispon√≠vel, descontado da contribui√ß√£o apurada no pr√≥prio per√≠odo. Se IND_DESC_CRED=0, informar o valor total do Campo 12; Se IND_DESC_CRED=1, informar o valor parcial do Campo 12.
                          SLD_CRED       := 0;
                        end;
 
@@ -5144,11 +5156,11 @@ begin
                         with RegistroM605New do
                              begin
                               if FrmPrincipal.CbbIncidenciaTributaria.ItemIndex <> 1then
-                                 NUM_CAMPO := '08'            // Saldo N„o-Cumulativo a recolher
+                                 NUM_CAMPO := '08'            // Saldo N√£o-Cumulativo a recolher
                               else
                                  NUM_CAMPO := '12';           // Saldo Cumulativo a recolher
 
-                              COD_REC   := '184001';         // Anexo VII do Codac - ContribuiÁ„o para o COFINS
+                              COD_REC   := '184001';         // Anexo VII do Codac - Contribui√ß√£o para o COFINS
                               VL_DEBITO := SaldoNaoCumulativoaPagarCOFINS; //StrtoFloat(FormatFloat('#0.00', (dmPrincipal.CdsSPEDM200VL_REC_BRT.AsFloat * AliqCof ) / 100));
 
                              end; // Bloco M605
@@ -5301,23 +5313,23 @@ end;
 
 function TSpedPisCofins.GetTypeNatBcCred(const sCodNatBaseCred: String): ACBrEPCBlocos.TACBrNatBcCred;
 begin
- {   '01' // AquisiÁ„o de bens para revenda
-     '02' // AquisiÁ„o de bens utilizados como insumo
-     '03' // AquisiÁ„o de serviÁos utilizados como insumo
-     '04' // Energia elÈtrica e tÈrmica, inclusive sob a forma de vapor
-     '05' // AluguÈis de prÈdios
-     '06' // AluguÈis de m·quinas e equipamentos
-     '07' // Armazenagem de mercadoria e frete na operaÁ„o de venda
-     '08' // ContraprestaÁıes de arrendamento mercantil
-     '09' // M·quinas, equipamentos e outros bens incorporados ao ativo imobilizado (crÈdito sobre encargos de depreciaÁ„o).
-     '10' // M·quinas, equipamentos e outros bens incorporados ao ativo imobilizado (crÈdito com base no valor de aquisiÁ„o).
-     '11' // AmortizaÁ„o e DepreciaÁ„o de edificaÁıes e benfeitorias em imÛveis
-     '12' // DevoluÁ„o de Vendas Sujeitas ‡ IncidÍncia N„o-Cumulativa
-     '13' // Outras OperaÁıes com Direito a CrÈdito
-     '14' // Atividade de Transporte de Cargas ñ SubcontrataÁ„o
-     '15' // Atividade Imobili·ria ñ Custo Incorrido de Unidade Imobili·ria
-     '16' // Atividade Imobili·ria ñ Custo OrÁado de unidade n„o concluÌda
-     '17' // Atividade de PrestaÁ„o de ServiÁos de Limpeza, ConservaÁ„o e ManutenÁ„o ñ vale-transporte, vale-refeiÁ„o ou vale-alimentaÁ„o, fardamento ou uniforme.
+ {   '01' // Aquisi√ß√£o de bens para revenda
+     '02' // Aquisi√ß√£o de bens utilizados como insumo
+     '03' // Aquisi√ß√£o de servi√ßos utilizados como insumo
+     '04' // Energia el√©trica e t√©rmica, inclusive sob a forma de vapor
+     '05' // Alugu√©is de pr√©dios
+     '06' // Alugu√©is de m√°quinas e equipamentos
+     '07' // Armazenagem de mercadoria e frete na opera√ß√£o de venda
+     '08' // Contrapresta√ß√µes de arrendamento mercantil
+     '09' // M√°quinas, equipamentos e outros bens incorporados ao ativo imobilizado (cr√©dito sobre encargos de deprecia√ß√£o).
+     '10' // M√°quinas, equipamentos e outros bens incorporados ao ativo imobilizado (cr√©dito com base no valor de aquisi√ß√£o).
+     '11' // Amortiza√ß√£o e Deprecia√ß√£o de edifica√ß√µes e benfeitorias em im√≥veis
+     '12' // Devolu√ß√£o de Vendas Sujeitas √† Incid√™ncia N√£o-Cumulativa
+     '13' // Outras Opera√ß√µes com Direito a Cr√©dito
+     '14' // Atividade de Transporte de Cargas ‚Äì Subcontrata√ß√£o
+     '15' // Atividade Imobili√°ria ‚Äì Custo Incorrido de Unidade Imobili√°ria
+     '16' // Atividade Imobili√°ria ‚Äì Custo Or√ßado de unidade n√£o conclu√≠da
+     '17' // Atividade de Presta√ß√£o de Servi√ßos de Limpeza, Conserva√ß√£o e Manuten√ß√£o ‚Äì vale-transporte, vale-refei√ß√£o ou vale-alimenta√ß√£o, fardamento ou uniforme.
      '18' // Estoque de abertura de bens
  }
 
@@ -5411,18 +5423,18 @@ begin
    else
    if (Trim(Notas.Items[0].NFe.procNFe.nProt) = '') then
       begin
-         GerarLinhaMemoLog('NF-e n„o est· autorizada! Arquivo XML n„o contÈm protocolo de autorizaÁ„o! Chave: ' + Notas.Items[0].NFe.procNFe.chNFe);
+         GerarLinhaMemoLog('NF-e n√£o est√° autorizada! Arquivo XML n√£o cont√©m protocolo de autoriza√ß√£o! Chave: ' + Notas.Items[0].NFe.procNFe.chNFe);
       end
    else
    if (not docEntrada) and (Notas.Items[0].NFe.Emit.CNPJCPF <> RemoveMascaraStr(Self.CnpjEmpresa)) then
       begin
-         GerarLinhaMemoLog('CNPJ Emitente È do arquivo È diferente do cadastro da empresa! Chave: ' + Notas.Items[0].NFe.procNFe.chNFe);
+         GerarLinhaMemoLog('CNPJ Emitente √© do arquivo √© diferente do cadastro da empresa! Chave: ' + Notas.Items[0].NFe.procNFe.chNFe);
          GerarLinhaMemoLog('CNPJ do Arquivo: ' + MascaraCNPFCPF(Notas.Items[0].NFe.Emit.CNPJCPF) + ' - CNPJ Empresa: ' + MascaraCNPFCPF(Self.CnpjEmpresa));
       end
    else
    if ChaveDuplicadaNaApuracao(Notas.Items[0].NFe.procNFe.chNFe) then
       begin
-         GerarLinhaMemoLog('Existem mais de um arquivo no diretÛrio XML! Chave: ' + Notas.Items[0].NFe.procNFe.chNFe);
+         GerarLinhaMemoLog('Existem mais de um arquivo no diret√≥rio XML! Chave: ' + Notas.Items[0].NFe.procNFe.chNFe);
       end
    else
      Result := True;
@@ -5527,7 +5539,7 @@ var
    oListaCanceladas: TStrings;
    idx: Integer;
 begin
-   //** Lista NF ServiÁos
+   //** Lista NF Servi√ßos
    if (not Result) then
       begin
          oListaCanceladas := TStringList.Create;
@@ -5708,7 +5720,7 @@ var
  sNcm,msg:string;
 begin
 
-  AtualizarStatus('Carregando informaÁıes do  Registro M400...');
+  AtualizarStatus('Carregando informa√ß√µes do  Registro M400...');
 
  dmPrincipal.FdQueryAuxiliar.sql.Clear;
  dmPrincipal.FdQueryAuxiliar.SQL.Text:='DELETE FROM TEMP_SPEDC_M410';
@@ -5817,7 +5829,7 @@ begin
 
      end;
 
-   AtualizarStatus('Carregando informaÁıes do Cst Registro M410...');
+   AtualizarStatus('Carregando informa√ß√µes do Cst Registro M410...');
    dmPrincipal.cdsTemCstPIsCof.close;
    dmPrincipal.cdsTemCstPIsCof.Filtered :=false;
    dmPrincipal.cdsTemCstPIsCof.Filter   :='CST_PIS =06';
@@ -5995,7 +6007,7 @@ begin
    except
       on E: Exception do
          begin
-            GerarLinhaMemoLog('FuncÁ„o "TSpedFiscal.ExecSQL" - Erro SQL: ' + E.Message);
+            GerarLinhaMemoLog('Func√ß√£o "TSpedFiscal.ExecSQL" - Erro SQL: ' + E.Message);
          end;
    end;
 end;
@@ -6007,56 +6019,56 @@ var
 begin
    GerarLinhaMemoLog('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Filtrando Xml de Fornecedores <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
    GerarLinhaMemoLog('Selecionando documentos de entradas/fornecedores:');
-   GerarLinhaMemoLog('> Ser„o apurados somente documentos: ');
-   GerarLinhaMemoLog('>> CNPJ destinat·rio que contÈm o CNPJ da empresa ' + Self.CnpjEmpresa);
-   GerarLinhaMemoLog('>> Data de entrada/saÌda (dEmi ou dhEmi) do documento deve estar entre "' + FormatDateTime('dd.mm.yyyy', DataInicial) + '"' +
+   GerarLinhaMemoLog('> Ser√£o apurados somente documentos: ');
+   GerarLinhaMemoLog('>> CNPJ destinat√°rio que cont√©m o CNPJ da empresa ' + Self.CnpjEmpresa);
+   GerarLinhaMemoLog('>> Data de entrada/sa√≠da (dEmi ou dhEmi) do documento deve estar entre "' + FormatDateTime('dd.mm.yyyy', DataInicial) + '"' +
                      ' e "' + FormatDateTime('dd.mm.yyyy', DataFinal) + '"');
    GerarLinhaMemoLog('>> Modelo do documento deve ser "55" ');
 
    for idx := oListaArq.Count - 1 downto 0 do
       begin
          try
-            // Checagem se a estrutura do documento È valido NF-e
+            // Checagem se a estrutura do documento √© valido NF-e
             FacbrNFe.NotasFiscais.Clear;
             FacbrNFe.NotasFiscais.LoadFromFile(Trim(oListaArq[iDx]));
             bArquivoValido := True;
 
             if FacbrNFe.NotasFiscais.Count = 0 then
                begin
-                  GerarLinhaMemoLog('Arquivo xml de entrada estrutura inv·lida: ' + Trim(oListaArq[idx]));
+                  GerarLinhaMemoLog('Arquivo xml de entrada estrutura inv√°lida: ' + Trim(oListaArq[idx]));
                   bArquivoValido := False;
                end;
 
          except
-            GerarLinhaMemoLog('Arquivo xml de entrada estrutura inv·lida: ' + Trim(oListaArq[idx]));
+            GerarLinhaMemoLog('Arquivo xml de entrada estrutura inv√°lida: ' + Trim(oListaArq[idx]));
             bArquivoValido := False;
          end;
 
          if (bArquivoValido) then
             begin
-               // Se o CNPJ destinatario È o da empresa selecionada para gerar o arquivo fiscal
+               // Se o CNPJ destinatario √© o da empresa selecionada para gerar o arquivo fiscal
                if (FacbrNFe.NotasFiscais.Items[0].NFe.Dest.CNPJCPF <> RemoveMascaraStr(Self.CnpjEmpresa)) then
                   begin
-                     //GerarLinhaMemoLog('CNPJ Destinat·rio do documento de entrada difere da empresa (' + Self.CnpjEmpresa + '): ' + Trim(oListaArq[idx]));
+                     //GerarLinhaMemoLog('CNPJ Destinat√°rio do documento de entrada difere da empresa (' + Self.CnpjEmpresa + '): ' + Trim(oListaArq[idx]));
                      bArquivoValido := False;
                   end;
             end;
 
          if (bArquivoValido) then
             begin
-               // Se data ent_sai n„o est· dentro do periodo selecionado
+               // Se data ent_sai n√£o est√° dentro do periodo selecionado
                if not ((FacbrNFe.NotasFiscais.Items[0].NFe.Ide.dEmi >= (DataInicial - 7)) and
                         (FacbrNFe.NotasFiscais.Items[0].NFe.Ide.dEmi <= DataFinal)) then
                   begin
-                     //GerarLinhaMemoLog('A data de entrada "dEmi" do documento de entrada difere do periodo de apuraÁ„o "' + FormatDateTime('dd.mm.yyyy', DataInicial) + '"' +
-                     //                  ' atÈ "' + FormatDateTime('dd.mm.yyyy', DataFinal) + '": ' + Trim(oListaArq[idx]));
+                     GerarLinhaMemoLog('A data de entrada "dEmi" do documento de entrada difere do periodo de apura√ß√£o "' + FormatDateTime('dd.mm.yyyy', DataInicial) + '"' +
+                                      ' at√© "' + FormatDateTime('dd.mm.yyyy', DataFinal) + '": ' + Trim(oListaArq[idx]));
                      bArquivoValido := False;
                   end;
             end;
 
          if (bArquivoValido) then
             begin
-               // Se È documento modelo 55
+               // Se √© documento modelo 55
                if (FacbrNFe.NotasFiscais.Items[0].NFe.Ide.modelo <> 55) then
                   begin
                      GerarLinhaMemoLog('Modelo de documento de entrada difere de 55: ' + Trim(oListaArq[idx]));
@@ -6064,12 +6076,12 @@ begin
                   end;
             end;
 
-        // Remove da lista o arquivo inv·lido
+        // Remove da lista o arquivo inv√°lido
         if (not bArquivoValido) then
            oListaArq.Delete(idx);
       end;{for}
 
-   // LimitaÁ„o
+   // Limita√ß√£o
    if (iLim > 0) then
       begin
          if (oListaArq.Count > 0) then

@@ -64,7 +64,6 @@ type
     chkGerarBlocoK: TCheckBox;
     edtLocalXML_NFSE: TEdit;
     tabLog: TTabSheet;
-    mmLogSped: TMemo;
     tabCadastro: TTabSheet;
     PcEmpresa: TPageControl;
     tabEmpresa: TTabSheet;
@@ -186,6 +185,12 @@ type
     Label55: TLabel;
     Label56: TLabel;
     IdHTTP1: TIdHTTP;
+    CbbImportarFisco: TCheckBox;
+    cbbUsarDadosFiscal: TCheckBox;
+    PnLogArquivo: TPanel;
+    PnLogErro: TPanel;
+    mmLogSped: TMemo;
+    MemoLogErro: TMemo;
     procedure Sobre1Click(Sender: TObject);
     procedure actFecharExecute(Sender: TObject);
     procedure actGerarArquivoExecute(Sender: TObject);
@@ -252,6 +257,10 @@ type
      Function  VerificarArquivosXML(const Pasta: string):boolean;
      function  ConectadoInternet: boolean;
      procedure VerificaVersao;
+     procedure ExibeMensagem(Texto : String; Exibe : Boolean);
+
+     var
+      UsarDadosFiscaisLoja :Boolean;
 
 
 
@@ -269,7 +278,7 @@ uses
    udmPrincipal, uFrmGerarSpedFiscal, uFuncoesBasicas, uFrmConfigurarECF,
     uConstsGerais, uFrmGerarSpedPisCofins, uFrmSobre, System.IniFiles,
   UXmlCompras, UXmlVenda, UXmlNFeDanfe, UGerarArquivosFarmax, System.Types,
-  ConfigServer;
+  ConfigServer, UMensagem;
 
 {$R *.dfm}
 
@@ -427,16 +436,21 @@ begin
 
    dmPrincipal.FDConnFarmax.Connected :=true;
    showmessage('Salvo com sucesso!'+sLineBreak +
-              'verifique se as informaçoes foram salvo banco Sped.'+
+               'Verifique se as informaçoes foram salvo banco Sped.'+
                 sLineBreak+'Na opção Empresa.');
+    showmessage('Aguarde Validando e Importando os dados.');
    ImportarDadosFarmax;
-   SPbSalvarClick(Sender);
+    showmessage('Aguarde Importando os dados.');
    CarreDadosSped;
+   SpbImPortarClick(Sender);
+   SPbSalvarClick(Sender);
+   sleep(200);
    pgcPrincipal.ActivePage := tabCadastro;
 
   except
 
-   ExibeWarning('Servidor não localizado. '+EdtServidorFarmax.Text +'-'+ EdtCaminhofarmax.Text+'  Verifique as configurações.');
+   ExibeWarning('Servidor não localizado. '+sLineBreak+EdtServidorFarmax.Text +sLineBreak+ EdtCaminhofarmax.Text
+   +sLineBreak+ '  Verifique as configurações.');
 
   end;
 
@@ -599,22 +613,22 @@ begin
 
 
   //mauricio abril 2024
-   EditRazao.Text:= dmPrincipal.cdsConsEmpresaRAZAO.Value;
-   EditFantasia.Text:= dmPrincipal.cdsConsEmpresaFANTASIA.Value;
-   EditEndereco.Text:= dmPrincipal.cdsConsEmpresaENDERECO.Value;
-   EditCidade.Text  := dmPrincipal.cdsConsEmpresacidade.Value;
-   Editbairro.Text  := dmPrincipal.cdsConsEmpresaBAIRRO.Value;
-   EditNumero.Text  := dmPrincipal.cdsConsEmpresaNUMERO.Value;
-   EditUf.Text      := dmPrincipal.cdsConsEmpresaUF.Value;
-   EditCnpj.Text    := dmPrincipal.cdsConsEmpresaCGC.Value;
-   EditCodigoMunicipio.Text  := dmPrincipal.cdsConsEmpresaCODIGO_CIDADE.Value;
-   EditTelefone.Text := dmPrincipal.cdsConsEmpresaTELEFONE.Value;
-   EditEmail.Text  := dmPrincipal.cdsConsEmpresaEMAIL.Value;
-   EditContadorPerfil.Text:=  dmPrincipal.cdsConsEmpresaPERFIL.Value;
-   CbbCrt.ItemIndex  :=  dmPrincipal.cdsConsEmpresaTIPO_ATIV.AsInteger;
-   EditIE.Text          :=  dmPrincipal.cdsConsEmpresaINSC_ESTADUAL.Value;
-   EditIEMunicipal.Text :=  dmPrincipal.cdsConsEmpresaINSC_MUNICIPAL.Value;
-   EditCep.Text     :=dmPrincipal.cdsConsEmpresaCEP.Value;
+   EditRazao.Text          := dmPrincipal.cdsConsEmpresaRAZAO.Value;
+   EditFantasia.Text       := dmPrincipal.cdsConsEmpresaFANTASIA.Value;
+   EditEndereco.Text       := dmPrincipal.cdsConsEmpresaENDERECO.Value;
+   EditCidade.Text         := dmPrincipal.cdsConsEmpresacidade.Value;
+   Editbairro.Text         := dmPrincipal.cdsConsEmpresaBAIRRO.Value;
+   EditNumero.Text         := dmPrincipal.cdsConsEmpresaNUMERO.Value;
+   EditUf.Text             := dmPrincipal.cdsConsEmpresaUF.Value;
+   EditCnpj.Text           := dmPrincipal.cdsConsEmpresaCGC.Value;
+   EditCodigoMunicipio.Text:= dmPrincipal.cdsConsEmpresaCODIGO_CIDADE.Value;
+   EditTelefone.Text       := dmPrincipal.cdsConsEmpresaTELEFONE.Value;
+   EditEmail.Text          := dmPrincipal.cdsConsEmpresaEMAIL.Value;
+   EditContadorPerfil.Text := dmPrincipal.cdsConsEmpresaPERFIL.Value;
+   CbbCrt.ItemIndex        := dmPrincipal.cdsConsEmpresaTIPO_ATIV.AsInteger;
+   EditIE.Text             := dmPrincipal.cdsConsEmpresaINSC_ESTADUAL.Value;
+   EditIEMunicipal.Text    := dmPrincipal.cdsConsEmpresaINSC_MUNICIPAL.Value;
+   EditCep.Text            := dmPrincipal.cdsConsEmpresaCEP.Value;
 
    EditContadorNome.Text        := dmPrincipal.cdsConsDadosContadorNOME.Value;
    EditContadorCPF.Text         := RemoveMascaraStr(dmPrincipal.cdsConsDadosContadorCPF.Value);
@@ -755,6 +769,29 @@ begin
  edtDataFinal.Date:= EndofTheMonth(edtDataInicial.Date);
 end;
 
+procedure TFrmPrincipal.ExibeMensagem(Texto: String; Exibe: Boolean);
+begin
+   Application.ProcessMessages;
+  if Exibe then
+   begin
+     FrmMensagem.LabelMensagem.Caption := Texto;
+     FrmMensagem.Width := FrmMensagem.LabelMensagem.Width + 10;
+     FrmMensagem.Left := StrtoInt(FloattoStr(Int((Screen.Width / 2) - (FrmMensagem.Width / 2))));
+     Screen.Cursor := crHourGlass;
+     //FrmMensagem.Color:=clBlue;
+     FrmMensagem.Show;
+   end
+  else
+   begin
+     Screen.Cursor := crDefault;
+     FrmMensagem.ModalResult := mrOk;
+     FrmMensagem.Close;
+   end;
+  Application.ProcessMessages;
+  SetForegroundWindow(Application.Handle);
+
+end;
+
 procedure TFrmPrincipal.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
    SalvarLog;
@@ -853,6 +890,7 @@ begin
  if ValidaBdFarmax then
     begin
 
+      /// ExibeMensagem('Aguarde...',True);
        dmPrincipal.cdsBD.Close;
        dmPrincipal.cdsBD.open;
 
@@ -892,6 +930,52 @@ begin
        EditContadorEmail.Text   := dmPrincipal.cdsConsParametrosCONTADOREMAIL.Value;
        EditContadorCodCidade.Text:= dmPrincipal.cdsConsParametrosCONTADORCD_MUNICIPIO.Value;
 
+
+       if CbbImportarFisco.Checked =True then
+         begin
+
+           with dmPrincipal do
+             begin
+
+               FdQueryAuxiliar.close;
+               FdQueryAuxiliar.SQL.Text:=' DELETE FROM PRODUTOS_FISCO';
+               FdQueryAuxiliar.ExecSQL;
+
+
+
+               cdscadProdutosfisco.close;
+               cdscadProdutosfisco.open;
+
+               cdsProdutosfisco.close;
+               cdsProdutosfisco.open;
+               cdsProdutosfisco.first;
+               while  not cdsProdutosfisco.eof do
+                  begin
+                     cdscadProdutosfisco.append;
+                     cdsCadProdutosFiscoID_PRODUTO.value             := cdsProdutosFiscoID_PRODUTO.value;
+                     cdsCadProdutosFiscoCODIGO_BARRAS.value          := cdsProdutosFiscoCODIGO_BARRAS.value;
+                     cdsCadProdutosFiscoDESCRICAO.value              := cdsProdutosFiscoDESCRICAO.value;
+                     cdsCadProdutosFiscoCD_CFOP.value                := cdsProdutosFiscoCD_CFOP.value;
+                     cdsCadProdutosFiscoSITUACAO_TRIBUTARIA.value    := cdsProdutosFiscoSITUACAO_TRIBUTARIA.value;
+                     cdsCadProdutosFiscoCST_ICMS.value               := cdsProdutosFiscoCST_ICMS.value;
+                     cdsCadProdutosFiscoCST_PIS_COFINS_ENTRADA.value := cdsProdutosFiscoCST_PIS_COFINS_ENTRADA.value;
+                     cdsCadProdutosFiscoCST_PIS_COFINS_SAIDA.value   := cdsProdutosFiscoCST_PIS_COFINS_SAIDA.value;
+                     cdsCadProdutosFiscoALIQUOTA_ICMS.value          := cdsProdutosFiscoALIQUOTA_ICMS.value;
+                     cdsCadProdutosFiscoALIQUOTA_PIS.value           := cdsProdutosFiscoALIQUOTA_PIS.value;
+                     cdsCadProdutosFiscoALIQUOTA_COFINS.value        := cdsProdutosFiscoALIQUOTA_COFINS.value;
+                     cdsCadProdutosFiscoNCM.value                    := cdsProdutosFiscoNCM.value;
+                     cdsCadProdutosFiscoCEST.value                   := cdsProdutosFiscoCEST.value;
+                     cdsCadProdutosFiscoFCP.value                    := cdsProdutosFiscoFCP.value;
+                     cdsCadProdutosFiscoCODBENEFICIO.value           := cdsProdutosFiscoCODBENEFICIO.value;
+                     cdsCadProdutosFiscoDESONERACAOICMS.value        := cdsProdutosFiscoDESONERACAOICMS.value;
+                     cdsCadProdutosFisco.post;
+
+                     cdsProdutosfisco.next;
+                  end;
+               cdsCadProdutosFisco.ApplyUpdates(0);
+             end;
+
+         end;
 
     end;
 
@@ -998,6 +1082,7 @@ procedure TFrmPrincipal.SalvarLog;
 var
    sLocalDirLog: String;
 begin
+
    if (not FLogSalvo) then
       begin
          if (mmLogSped.Lines.Count > 0) then
@@ -1008,8 +1093,12 @@ begin
 
                mmLogSped.Lines.SaveToFile(sLocalDirLog + 'LOG_SPED_MES_ANO_' + FormatDateTime('mm_yyyy', edtDataInicial.DateTime) +
                  '_' + FormatDateTime('ddmmyyy_hhnnss', Now) + '.txt');
+
+
+
             end;
       end;
+
 end;
 
 procedure TFrmPrincipal.Sobre1Click(Sender: TObject);
@@ -1030,14 +1119,24 @@ var
   Ano, Mes, Dia: Word;
   FListaArquivos:String;
   iCount:integer;
+  Data, ArquivoLog :String;
 begin
 
+   Data := FormatDateTime('ddmmyyyy',Now);
+   ArquivoLog := ExtractFilePath(Application.ExeName)+'LogsSped\LogFarmaxSped'+Data+'.txt';
 
    dmPrincipal.cdsConsEmpresa.close;
    dmPrincipal.cdsConsEmpresa.open;
 
+   if FileExists(ArquivoLog) then
+      DeleteFile(ArquivoLog);
+
+
    if spbGerarArquivo.Enabled then
     begin
+
+      if cbbUsarDadosFiscal.Checked = True then
+         UsarDadosFiscaisLoja :=True;
 
       Screen.Cursor := crHourGlass;
 
@@ -1369,7 +1468,7 @@ begin
 
   try
 
-   dmPrincipal.FDConnFarmax.Connected :=true;
+     dmPrincipal.FDConnFarmax.Connected :=true;
      result:=true;
   except
    result:=false;

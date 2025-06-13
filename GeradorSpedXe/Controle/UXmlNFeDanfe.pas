@@ -57,7 +57,7 @@ begin
 
          FrmGerarArquivo.pgbSpedFiscal.Position:=FrmGerarArquivo.pgbSpedFiscal.Position+1;
          Application.ProcessMessages;
-
+         Arquivo.clear;
          Arquivo.Text:= dmPrincipal.cdsbuscaDanfeARQUIVO.Value;
          chave_nf    := dmPrincipal.cdsbuscaDanfeCHAVE.AsString;
          Arquivo.SaveToFile(ExtractFilePath(Application.ExeName) +'\NFeEnviadas\'+ chave_nf + '.xml');

@@ -20,7 +20,8 @@ uses
   UXmlNFeDanfe in 'Controle\UXmlNFeDanfe.pas',
   UXmlVenda in 'Controle\UXmlVenda.pas',
   UGerarArquivosFarmax in 'UGerarArquivosFarmax.pas' {FrmGerarArquivo},
-  UFrmConsistencia in 'UFrmConsistencia.pas' {FrmConsistencia};
+  UFrmConsistencia in 'UFrmConsistencia.pas' {FrmConsistencia},
+  UMensagem in 'UMensagem.pas' {FrmMensagem};
 
 {$R *.res}
 
@@ -28,7 +29,7 @@ uses
 //  bContinuarSistema: Boolean;
 
 begin
-  ReportMemoryLeaksOnShutdown := True;
+ // ReportMemoryLeaksOnShutdown := True;
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TdmPrincipal, dmPrincipal);

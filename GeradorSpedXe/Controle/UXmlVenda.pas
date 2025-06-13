@@ -76,7 +76,7 @@ begin
       dmPrincipal.CDSBuscarNfce.First;
       while not dmPrincipal.CDSBuscarNfce.eof do
         begin
-
+         Arquivo.Clear;
          chave_nf :=dmPrincipal.CDSBuscarNfceCHAVE.Value;
          Arquivo.Text  :=dmPrincipal.CDSBuscarNfceARQUIVO.Value;
          Arquivo.SaveToFile(ExtractFilePath(Application.ExeName) +'\NFCeEnviadas\'+ chave_nf+'.xml');  //'TempNFes \' +
