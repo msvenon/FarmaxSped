@@ -214,7 +214,7 @@ object FrmPrincipal: TFrmPrincipal
           Top = 0
           Width = 1005
           Height = 594
-          ActivePage = TabConfiguracao
+          ActivePage = tabOpcoes
           Align = alClient
           Style = tsFlatButtons
           TabOrder = 0
@@ -465,7 +465,7 @@ object FrmPrincipal: TFrmPrincipal
               TabOrder = 1
               object Label5: TLabel
                 Left = 34
-                Top = 194
+                Top = 211
                 Width = 95
                 Height = 13
                 Alignment = taRightJustify
@@ -480,7 +480,7 @@ object FrmPrincipal: TFrmPrincipal
               end
               object Label6: TLabel
                 Left = 237
-                Top = 194
+                Top = 211
                 Width = 55
                 Height = 13
                 Alignment = taRightJustify
@@ -495,7 +495,7 @@ object FrmPrincipal: TFrmPrincipal
               end
               object Label7: TLabel
                 Left = 34
-                Top = 223
+                Top = 240
                 Width = 95
                 Height = 13
                 Alignment = taRightJustify
@@ -510,7 +510,7 @@ object FrmPrincipal: TFrmPrincipal
               end
               object btnProcurarLocalSalvar: TSpeedButton
                 Left = 647
-                Top = 219
+                Top = 236
                 Width = 25
                 Height = 21
                 Cursor = crHandPoint
@@ -546,7 +546,7 @@ object FrmPrincipal: TFrmPrincipal
               end
               object Label10: TLabel
                 Left = 2
-                Top = 248
+                Top = 265
                 Width = 126
                 Height = 13
                 Alignment = taRightJustify
@@ -561,7 +561,7 @@ object FrmPrincipal: TFrmPrincipal
               end
               object btnProcurarLocalXML_NFE: TSpeedButton
                 Left = 647
-                Top = 243
+                Top = 260
                 Width = 25
                 Height = 21
                 Cursor = crHandPoint
@@ -597,7 +597,7 @@ object FrmPrincipal: TFrmPrincipal
               end
               object Label12: TLabel
                 Left = 15
-                Top = 273
+                Top = 290
                 Width = 114
                 Height = 13
                 Alignment = taRightJustify
@@ -612,7 +612,7 @@ object FrmPrincipal: TFrmPrincipal
               end
               object btnProcurarLocalXML_NFCE: TSpeedButton
                 Left = 647
-                Top = 268
+                Top = 285
                 Width = 25
                 Height = 21
                 Cursor = crHandPoint
@@ -648,7 +648,7 @@ object FrmPrincipal: TFrmPrincipal
               end
               object Label13: TLabel
                 Left = 15
-                Top = 298
+                Top = 315
                 Width = 114
                 Height = 13
                 Alignment = taRightJustify
@@ -663,7 +663,7 @@ object FrmPrincipal: TFrmPrincipal
               end
               object btnProcurarLocalXML_FORN: TSpeedButton
                 Left = 647
-                Top = 292
+                Top = 309
                 Width = 25
                 Height = 21
                 Cursor = crHandPoint
@@ -768,7 +768,7 @@ object FrmPrincipal: TFrmPrincipal
               end
               object btnProcurarLocalXML_NFSE: TSpeedButton
                 Left = 647
-                Top = 319
+                Top = 336
                 Width = 25
                 Height = 21
                 Cursor = crHandPoint
@@ -805,7 +805,7 @@ object FrmPrincipal: TFrmPrincipal
               end
               object ShPesquisa: TShape
                 Left = 134
-                Top = 318
+                Top = 336
                 Width = 171
                 Height = 31
                 Brush.Color = 4862501
@@ -814,7 +814,7 @@ object FrmPrincipal: TFrmPrincipal
               end
               object spbGerarArquivo: TSpeedButton
                 Left = 132
-                Top = 315
+                Top = 332
                 Width = 171
                 Height = 34
                 Cursor = crHandPoint
@@ -849,7 +849,7 @@ object FrmPrincipal: TFrmPrincipal
               end
               object edtDataInicial: TDateTimePicker
                 Left = 132
-                Top = 190
+                Top = 207
                 Width = 97
                 Height = 23
                 Date = 42599.000000000000000000
@@ -867,7 +867,7 @@ object FrmPrincipal: TFrmPrincipal
               end
               object edtDataFinal: TDateTimePicker
                 Left = 298
-                Top = 189
+                Top = 206
                 Width = 92
                 Height = 23
                 Date = 42599.000000000000000000
@@ -883,7 +883,7 @@ object FrmPrincipal: TFrmPrincipal
               end
               object edtLocalArquivo: TEdit
                 Left = 132
-                Top = 217
+                Top = 234
                 Width = 513
                 Height = 21
                 Font.Charset = DEFAULT_CHARSET
@@ -928,7 +928,7 @@ object FrmPrincipal: TFrmPrincipal
                 ParentFont = False
                 TabOrder = 3
                 object edtNrReciboAnt: TEdit
-                  Left = 19
+                  Left = 10
                   Top = 22
                   Width = 230
                   Height = 21
@@ -943,7 +943,7 @@ object FrmPrincipal: TFrmPrincipal
               end
               object edtLocalXML_NFE: TEdit
                 Left = 132
-                Top = 244
+                Top = 261
                 Width = 513
                 Height = 21
                 Font.Charset = DEFAULT_CHARSET
@@ -956,7 +956,7 @@ object FrmPrincipal: TFrmPrincipal
               end
               object edtLocalXML_NFCE: TEdit
                 Left = 132
-                Top = 269
+                Top = 286
                 Width = 513
                 Height = 21
                 Font.Charset = DEFAULT_CHARSET
@@ -969,7 +969,7 @@ object FrmPrincipal: TFrmPrincipal
               end
               object edtLocalXML_FORN: TEdit
                 Left = 132
-                Top = 293
+                Top = 310
                 Width = 513
                 Height = 21
                 Font.Charset = DEFAULT_CHARSET
@@ -1030,7 +1030,7 @@ object FrmPrincipal: TFrmPrincipal
                 ParentFont = False
                 TabOrder = 1
                 object chkGerarBlocoH: TCheckBox
-                  Left = 24
+                  Left = 10
                   Top = 24
                   Width = 238
                   Height = 17
@@ -1044,7 +1044,7 @@ object FrmPrincipal: TFrmPrincipal
                   TabOrder = 0
                 end
                 object chkGerarBlocoK: TCheckBox
-                  Left = 24
+                  Left = 10
                   Top = 54
                   Width = 238
                   Height = 17
@@ -1279,35 +1279,42 @@ object FrmPrincipal: TFrmPrincipal
                       's registros dos Blocos '#8220'A'#8221', '#8220'C'#8221', '#8220'D'#8221' e '#8220'F'#8221'.')
                 end
               end
-              object CheckBGerarArquivoFarmax: TCheckBox
-                Left = 396
-                Top = 164
-                Width = 229
-                Height = 17
-                Caption = 'Importa xml direto do Farmax'
-                Font.Charset = DEFAULT_CHARSET
-                Font.Color = clWindowText
-                Font.Height = -12
-                Font.Name = 'Segoe UI'
-                Font.Style = [fsBold]
-                ParentFont = False
+              object GroupBox6: TGroupBox
+                Left = 132
+                Top = 160
+                Width = 540
+                Height = 33
                 TabOrder = 14
-                OnClick = CheckBGerarArquivoFarmaxClick
-              end
-              object cbbUsarDadosFiscal: TCheckBox
-                Left = 139
-                Top = 164
-                Width = 220
-                Height = 17
-                Caption = 'Usar tabela Fiscal Loja na gera'#231#227'o sped'
-                Enabled = False
-                Font.Charset = DEFAULT_CHARSET
-                Font.Color = clWindowText
-                Font.Height = -12
-                Font.Name = 'Segoe UI'
-                Font.Style = [fsBold]
-                ParentFont = False
-                TabOrder = 15
+                object CheckBGerarArquivoFarmax: TCheckBox
+                  Left = 274
+                  Top = 8
+                  Width = 229
+                  Height = 17
+                  Caption = 'Importa xml direto do Farmax.'
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Segoe UI'
+                  Font.Style = [fsBold]
+                  ParentFont = False
+                  TabOrder = 0
+                  OnClick = CheckBGerarArquivoFarmaxClick
+                end
+                object cbbUsarDadosFiscal: TCheckBox
+                  Left = 8
+                  Top = 8
+                  Width = 237
+                  Height = 17
+                  Caption = 'Usar tabela Fiscal Loja na gera'#231#227'o sped.'
+                  Font.Charset = DEFAULT_CHARSET
+                  Font.Color = clWindowText
+                  Font.Height = -12
+                  Font.Name = 'Segoe UI'
+                  Font.Style = [fsBold]
+                  ParentFont = False
+                  TabOrder = 1
+                  Visible = False
+                end
               end
             end
           end
@@ -7960,7 +7967,6 @@ object FrmPrincipal: TFrmPrincipal
                   Width = 137
                   Height = 17
                   Caption = 'Importar Tabela Fiscal'
-                  Enabled = False
                   TabOrder = 4
                 end
               end

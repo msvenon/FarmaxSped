@@ -178,7 +178,6 @@ type
     Label53: TLabel;
     Label1: TLabel;
     Label54: TLabel;
-    CheckBGerarArquivoFarmax: TCheckBox;
     Image2: TImage;
     lblVersao: TLabel;
     EditPorta: TEdit;
@@ -186,11 +185,13 @@ type
     Label56: TLabel;
     IdHTTP1: TIdHTTP;
     CbbImportarFisco: TCheckBox;
-    cbbUsarDadosFiscal: TCheckBox;
     PnLogArquivo: TPanel;
     PnLogErro: TPanel;
     mmLogSped: TMemo;
     MemoLogErro: TMemo;
+    GroupBox6: TGroupBox;
+    CheckBGerarArquivoFarmax: TCheckBox;
+    cbbUsarDadosFiscal: TCheckBox;
     procedure Sobre1Click(Sender: TObject);
     procedure actFecharExecute(Sender: TObject);
     procedure actGerarArquivoExecute(Sender: TObject);
@@ -259,8 +260,8 @@ type
      procedure VerificaVersao;
      procedure ExibeMensagem(Texto : String; Exibe : Boolean);
 
-     var
-      UsarDadosFiscaisLoja :Boolean;
+
+
 
 
 
@@ -435,13 +436,19 @@ begin
   try
 
    dmPrincipal.FDConnFarmax.Connected :=true;
+
    showmessage('Salvo com sucesso!'+sLineBreak +
                'Verifique se as informaçoes foram salvo banco Sped.'+
                 sLineBreak+'Na opção Empresa.');
-    showmessage('Aguarde Validando e Importando os dados.');
+
+   showmessage('Aguarde Validando e Importando os dados.');
+
    ImportarDadosFarmax;
-    showmessage('Aguarde Importando os dados.');
+
+   showmessage('Aguarde Importando os dados.');
+
    CarreDadosSped;
+
    SpbImPortarClick(Sender);
    SPbSalvarClick(Sender);
    sleep(200);
@@ -585,6 +592,9 @@ begin
    edtLocalArquivo.Text := dmPrincipal.cdsConsEmpresaLOCAL_ARQUIVOS.Value;
    txtEmpresa.Caption   :=dmPrincipal.cdsConsEmpresaRAZAO.Value;
 
+   EmpresaUf := dmPrincipal.cdsConsEmpresaUF.Value;
+
+   EmpresaCrt:= dmPrincipal.cdsConsEmpresaTIPO_ATIV.AsInteger + 1;
 
 
     case dmPrincipal.cdsConsEmpresaTIPO_ATIV.AsInteger + 1 of
@@ -598,12 +608,17 @@ begin
    end;
 
 
+
+
+
    if dmPrincipal.cdsConsEmpresaENQUADRAMENTO_TRIBUTARIO.value='S' then
       lblRegime.Caption:='Simples Nacional'
    else if dmPrincipal.cdsConsEmpresaENQUADRAMENTO_TRIBUTARIO.value='P' then
       lblRegime.Caption:='Lucro Presumido'
    else if dmPrincipal.cdsConsEmpresaENQUADRAMENTO_TRIBUTARIO.value='R' then
       lblRegime.Caption:='Lucro Real';
+
+   EmprEnquadramentoTrib :=dmPrincipal.cdsConsEmpresaENQUADRAMENTO_TRIBUTARIO.value;
 
 
    if dmPrincipal.cdsConsEmpresaENQUADRAMENTO_TRIBUTARIO.value='P' then
@@ -890,7 +905,7 @@ begin
  if ValidaBdFarmax then
     begin
 
-      /// ExibeMensagem('Aguarde...',True);
+       ///ExibeMensagem('Aguarde...',True);
        dmPrincipal.cdsBD.Close;
        dmPrincipal.cdsBD.open;
 
@@ -942,7 +957,6 @@ begin
                FdQueryAuxiliar.ExecSQL;
 
 
-
                cdscadProdutosfisco.close;
                cdscadProdutosfisco.open;
 
@@ -952,7 +966,6 @@ begin
                while  not cdsProdutosfisco.eof do
                   begin
                      cdscadProdutosfisco.append;
-                     cdsCadProdutosFiscoID_PRODUTO.value             := cdsProdutosFiscoID_PRODUTO.value;
                      cdsCadProdutosFiscoCODIGO_BARRAS.value          := cdsProdutosFiscoCODIGO_BARRAS.value;
                      cdsCadProdutosFiscoDESCRICAO.value              := cdsProdutosFiscoDESCRICAO.value;
                      cdsCadProdutosFiscoCD_CFOP.value                := cdsProdutosFiscoCD_CFOP.value;
@@ -961,21 +974,22 @@ begin
                      cdsCadProdutosFiscoCST_PIS_COFINS_ENTRADA.value := cdsProdutosFiscoCST_PIS_COFINS_ENTRADA.value;
                      cdsCadProdutosFiscoCST_PIS_COFINS_SAIDA.value   := cdsProdutosFiscoCST_PIS_COFINS_SAIDA.value;
                      cdsCadProdutosFiscoALIQUOTA_ICMS.value          := cdsProdutosFiscoALIQUOTA_ICMS.value;
-                     cdsCadProdutosFiscoALIQUOTA_PIS.value           := cdsProdutosFiscoALIQUOTA_PIS.value;
+                     cdsCadProdutosFiscoALIQUOTA_PIS.value           := cdsProdutosFiscoALIQUOTA_PIS.value ;
                      cdsCadProdutosFiscoALIQUOTA_COFINS.value        := cdsProdutosFiscoALIQUOTA_COFINS.value;
                      cdsCadProdutosFiscoNCM.value                    := cdsProdutosFiscoNCM.value;
                      cdsCadProdutosFiscoCEST.value                   := cdsProdutosFiscoCEST.value;
-                     cdsCadProdutosFiscoFCP.value                    := cdsProdutosFiscoFCP.value;
-                     cdsCadProdutosFiscoCODBENEFICIO.value           := cdsProdutosFiscoCODBENEFICIO.value;
-                     cdsCadProdutosFiscoDESONERACAOICMS.value        := cdsProdutosFiscoDESONERACAOICMS.value;
+                     //cdsCadProdutosFiscoFCP.value                    := cdsProdutosFiscoFCP.value;
                      cdsCadProdutosFisco.post;
 
+                    
                      cdsProdutosfisco.next;
                   end;
                cdsCadProdutosFisco.ApplyUpdates(0);
              end;
 
          end;
+
+     //  ExibeMensagem('Aguarde...',false);
 
     end;
 
@@ -1524,7 +1538,7 @@ begin
 
          try
 
-            IdHTTP1.Get(UrlArquivo+arquivo, MyFile); // fazendo o download do arquivo
+            IdHTTP1.Get(UrlArquivo + arquivo, MyFile); // fazendo o download do arquivo
 
           finally
 

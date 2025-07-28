@@ -4064,7 +4064,7 @@ F               }
 
                    RegistroC100.VL_DESC    := FTabelaRegC100.FieldByName('VL_DESC').AsCurrency;
                    RegistroC100.VL_ABAT_NT := 0;
-                   RegistroC100.VL_MERC    := FTabelaRegC100.FieldByName('VL_DOC').AsCurrency; //FTabelaRegC100.FieldByName('VL_MERC').AsCurrency    mauricio teste 0804/2025
+                   RegistroC100.VL_MERC    := FTabelaRegC100.FieldByName('VL_DOC').AsCurrency;
 
                   end;
 

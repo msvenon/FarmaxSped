@@ -357,7 +357,29 @@ type
     FdProdutosFisco: TFDQuery;
     dspProdutosFisco: TDataSetProvider;
     cdsProdutosFisco: TClientDataSet;
-    cdsProdutosFiscoID_PRODUTO: TFloatField;
+    FDCadProdutosFisco: TFDQuery;
+    dspCadProdutosFisco: TDataSetProvider;
+    cdsCadProdutosFisco: TClientDataSet;
+    FDCadTempCompras: TFDQuery;
+    dspCadTempCompras: TDataSetProvider;
+    cdsCadTempCompras: TClientDataSet;
+    cdsCadTempComprasDT_ENTRADA: TDateField;
+    cdsCadTempComprasCHAVENFE: TStringField;
+    cdsCadProdutosFiscoCD_CFOP: TFloatField;
+    cdsCadProdutosFiscoDESCRICAO: TStringField;
+    cdsCadProdutosFiscoSITUACAO_TRIBUTARIA: TStringField;
+    cdsCadProdutosFiscoCST_ICMS: TStringField;
+    cdsCadProdutosFiscoCST_PIS_COFINS_ENTRADA: TStringField;
+    cdsCadProdutosFiscoCST_PIS_COFINS_SAIDA: TStringField;
+    cdsCadProdutosFiscoALIQUOTA_ICMS: TFloatField;
+    cdsCadProdutosFiscoALIQUOTA_PIS: TFloatField;
+    cdsCadProdutosFiscoALIQUOTA_COFINS: TFloatField;
+    cdsCadProdutosFiscoNCM: TStringField;
+    cdsCadProdutosFiscoCEST: TStringField;
+    cdsCadProdutosFiscoFCP: TStringField;
+    cdsCadProdutosFiscoCODBENEFICIO: TFloatField;
+    cdsCadProdutosFiscoDESONERACAOICMS: TStringField;
+    cdsCadProdutosFiscoCODIGO_BARRAS: TStringField;
     cdsProdutosFiscoCODIGO_BARRAS: TStringField;
     cdsProdutosFiscoDESCRICAO: TStringField;
     cdsProdutosFiscoCD_CFOP: TFloatField;
@@ -365,38 +387,14 @@ type
     cdsProdutosFiscoCST_ICMS: TStringField;
     cdsProdutosFiscoCST_PIS_COFINS_ENTRADA: TStringField;
     cdsProdutosFiscoCST_PIS_COFINS_SAIDA: TStringField;
-    cdsProdutosFiscoALIQUOTA_ICMS: TCurrencyField;
-    cdsProdutosFiscoALIQUOTA_PIS: TCurrencyField;
-    cdsProdutosFiscoALIQUOTA_COFINS: TCurrencyField;
+    cdsProdutosFiscoALIQUOTA_ICMS: TFloatField;
+    cdsProdutosFiscoALIQUOTA_PIS: TFloatField;
+    cdsProdutosFiscoALIQUOTA_COFINS: TFloatField;
     cdsProdutosFiscoNCM: TStringField;
     cdsProdutosFiscoCEST: TStringField;
-    cdsProdutosFiscoFCP: TCurrencyField;
-    cdsProdutosFiscoCODBENEFICIO: TStringField;
-    cdsProdutosFiscoDESONERACAOICMS: TCurrencyField;
-    FDCadProdutosFisco: TFDQuery;
-    dspCadProdutosFisco: TDataSetProvider;
-    cdsCadProdutosFisco: TClientDataSet;
-    cdsCadProdutosFiscoID_PRODUTO: TFloatField;
-    cdsCadProdutosFiscoCODIGO_BARRAS: TStringField;
-    cdsCadProdutosFiscoDESCRICAO: TStringField;
-    cdsCadProdutosFiscoCD_CFOP: TFloatField;
-    cdsCadProdutosFiscoSITUACAO_TRIBUTARIA: TStringField;
-    cdsCadProdutosFiscoCST_ICMS: TStringField;
-    cdsCadProdutosFiscoCST_PIS_COFINS_ENTRADA: TStringField;
-    cdsCadProdutosFiscoCST_PIS_COFINS_SAIDA: TStringField;
-    cdsCadProdutosFiscoALIQUOTA_ICMS: TCurrencyField;
-    cdsCadProdutosFiscoALIQUOTA_PIS: TCurrencyField;
-    cdsCadProdutosFiscoALIQUOTA_COFINS: TCurrencyField;
-    cdsCadProdutosFiscoNCM: TStringField;
-    cdsCadProdutosFiscoCEST: TStringField;
-    cdsCadProdutosFiscoFCP: TCurrencyField;
-    cdsCadProdutosFiscoCODBENEFICIO: TStringField;
-    cdsCadProdutosFiscoDESONERACAOICMS: TCurrencyField;
-    FDCadTempCompras: TFDQuery;
-    dspCadTempCompras: TDataSetProvider;
-    cdsCadTempCompras: TClientDataSet;
-    cdsCadTempComprasDT_ENTRADA: TDateField;
-    cdsCadTempComprasCHAVENFE: TStringField;
+    cdsProdutosFiscoFCP: TFMTBCDField;
+    cdsProdutosFiscoCODBENEFICIO: TFloatField;
+    cdsProdutosFiscoDESONERACAOICMS: TFMTBCDField;
     procedure DataModuleCreate(Sender: TObject);
 
   private
@@ -414,6 +412,7 @@ type
      function GetValorFieldDataSet(cds: TClientDataSet; const Campo: String): String;
      function VerificaFtpFarmaxOnline: Boolean;
      function  ConectadoInternet: boolean;
+     function ConverterCSTPISCOFEntrada(CSTPISCOF,EAN: String): String;
 
      procedure VAlidaBd;
      procedure GeraINI;
@@ -426,7 +425,9 @@ type
 var
   dmPrincipal: TdmPrincipal;
   Ini : TIniFile;
-  NomeServidor, CaminhoBD,sLocalConfig : String;
+  NomeServidor, CaminhoBD,sLocalConfig ,EmprEnquadramentoTrib,EmpresaUf: String;
+  EmpresaCrt : Integer;
+  UsarDadosFiscaisLoja :Boolean;
 
 implementation
 
@@ -447,6 +448,37 @@ begin
     Result := True;
   end;
 
+
+end;
+
+function TdmPrincipal.ConverterCSTPISCOFEntrada(CSTPISCOF, EAN: String): String;
+begin
+
+   if not UsarDadosFiscaisLoja then
+    begin
+
+     if Pos(CSTPISCOF,'01,02,04,06,07,08') > 0  then
+         result:='70'
+     else
+        result:='98';
+
+    end
+    else
+    begin
+     dmPrincipal.FDSQL.Close;
+     dmPrincipal.FDSQL.sql.Text:='SELECT CST_PIS_COFINS_ENTRADA FROM PRODUTOS_FISCO WHERE CODIGO_BARRAS=:EAN';
+     dmPrincipal.FDSQL.ParamByName('EAN').Value:= EAN;
+     dmPrincipal.FDSQL.Open();
+     if dmPrincipal.FDSQL.RecordCount > 0 then
+        begin
+          result:= dmPrincipal.FDSQL.FieldByName('CST_PIS_COFINS_ENTRADA').Value;
+        end
+        else
+        begin
+         result:='98';
+        end;
+
+    end;
 
 end;
 

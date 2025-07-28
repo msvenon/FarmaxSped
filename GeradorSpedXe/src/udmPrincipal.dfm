@@ -25,35 +25,35 @@ object dmPrincipal: TdmPrincipal
   end
   object FdConsulta: TFDQuery
     Left = 32
-    Top = 312
+    Top = 270
   end
   object DsFDConsulta: TDataSource
     DataSet = FdConsulta
     Left = 32
-    Top = 360
+    Top = 318
   end
   object FDEmpresa: TFDQuery
     SQL.Strings = (
       ''
       'SELECT * FROM CONFIG WHERE SECAO_CAMPO LIKE '#39'EMPRESA%'#39' ')
-    Left = 96
-    Top = 328
+    Left = 114
+    Top = 272
   end
   object FDContador: TFDQuery
     SQL.Strings = (
       'SELECT * FROM CONFIG WHERE SECAO_CAMPO LIKE '#39'%CONTADOR%'#39' ')
-    Left = 168
-    Top = 328
+    Left = 203
+    Top = 276
   end
   object DsEmpresa: TDataSource
     DataSet = FDEmpresa
-    Left = 96
-    Top = 376
+    Left = 114
+    Top = 316
   end
   object DsContador: TDataSource
     DataSet = FDContador
-    Left = 168
-    Top = 368
+    Left = 201
+    Top = 320
   end
   object connBaseDados: TSQLConnection
     DriverName = 'Firebird'
@@ -105,8 +105,10 @@ object dmPrincipal: TdmPrincipal
       'Password=masterkey'
       'Protocol=TCPIP'
       'Server=localhost'
-      'Port=3055'
+      'Port=3050'
+      'Database=C:\FarmaxWin\IGOR.FDB'
       'DriverID=FB')
+    Connected = True
     LoginPrompt = False
     Left = 208
     Top = 8
@@ -118,7 +120,11 @@ object dmPrincipal: TdmPrincipal
       'Protocol=TCPIP'
       'Server=localhost'
       'Port=3050'
+      
+        'Database=C:\Development\FarmaxSped\GeradorSpedXe\bin\Base\SPED.F' +
+        'DB'
       'DriverID=FB')
+    Connected = True
     LoginPrompt = False
     Left = 128
     Top = 8
@@ -128,19 +134,19 @@ object dmPrincipal: TdmPrincipal
     SQL.Strings = (
       'SELECT * FROM EMPRESA')
     Left = 128
-    Top = 88
+    Top = 108
   end
   object dspConsEmpresa: TDataSetProvider
     DataSet = FDConsEmpresa
     Left = 128
-    Top = 136
+    Top = 156
   end
   object cdsConsEmpresa: TClientDataSet
     Aggregates = <>
     Params = <>
     ProviderName = 'dspConsEmpresa'
     Left = 128
-    Top = 181
+    Top = 201
     object cdsConsEmpresaCD_FILIAL: TIntegerField
       FieldName = 'CD_FILIAL'
       Required = True
@@ -248,7 +254,7 @@ object dmPrincipal: TdmPrincipal
     Connection = FDConnSped
     SQL.Strings = (
       'SELECT * FROM CONTADOR WHERE CD_FILIAL=:CD_FILIAL')
-    Left = 313
+    Left = 308
     Top = 272
     ParamData = <
       item
@@ -260,7 +266,7 @@ object dmPrincipal: TdmPrincipal
   end
   object dspConsDadosContadior: TDataSetProvider
     DataSet = FDConsDadosContador
-    Left = 312
+    Left = 307
     Top = 316
   end
   object cdsConsDadosContador: TClientDataSet
@@ -272,7 +278,7 @@ object dmPrincipal: TdmPrincipal
         ParamType = ptInput
       end>
     ProviderName = 'dspConsDadosContadior'
-    Left = 312
+    Left = 307
     Top = 351
     object cdsConsDadosContadorCD_FILIAL: TIntegerField
       FieldName = 'CD_FILIAL'
@@ -509,19 +515,19 @@ object dmPrincipal: TdmPrincipal
     SQL.Strings = (
       'select * from bd where id=1')
     Left = 216
-    Top = 104
+    Top = 106
   end
   object dspBd: TDataSetProvider
     DataSet = FdBd
     Left = 216
-    Top = 152
+    Top = 154
   end
   object cdsBD: TClientDataSet
     Aggregates = <>
     Params = <>
     ProviderName = 'dspBd'
     Left = 216
-    Top = 200
+    Top = 202
     object cdsBDSERVIDORSPED: TStringField
       FieldName = 'SERVIDORSPED'
       Size = 100
@@ -907,7 +913,7 @@ object dmPrincipal: TdmPrincipal
       '   '
       ' '
       '')
-    Left = 567
+    Left = 589
     Top = 429
     ParamData = <
       item
@@ -920,7 +926,7 @@ object dmPrincipal: TdmPrincipal
   end
   object DspBuscaNfeMatriz: TDataSetProvider
     DataSet = FDQBuscaNfeMatriz
-    Left = 567
+    Left = 589
     Top = 485
   end
   object cdsBuscaNfeMatriz: TClientDataSet
@@ -932,7 +938,7 @@ object dmPrincipal: TdmPrincipal
         ParamType = ptInput
       end>
     ProviderName = 'DspBuscaNfeMatriz'
-    Left = 567
+    Left = 589
     Top = 541
     object StringField1: TStringField
       FieldName = 'CNPJ_FORNECEDOR'
@@ -989,8 +995,8 @@ object dmPrincipal: TdmPrincipal
     UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
     UpdateOptions.CheckRequired = False
     UpdateOptions.AutoCommitUpdates = True
-    Left = 125
-    Top = 264
+    Left = 597
+    Top = 112
     object FDMConsultaNfechave: TStringField
       FieldName = 'chave'
       Size = 80
@@ -1016,7 +1022,7 @@ object dmPrincipal: TdmPrincipal
   object dsConsEmpresa: TDataSource
     DataSet = cdsConsEmpresa
     Left = 128
-    Top = 216
+    Top = 220
   end
   object FDSpedM400: TFDQuery
     Connection = FDConnSped
@@ -1026,20 +1032,20 @@ object dmPrincipal: TdmPrincipal
       '     SUM(VL_REC) AS VL_REC'
       'FROM TEMP_SPEDC_M410'
       'GROUP BY CST')
-    Left = 757
-    Top = 105
+    Left = 861
+    Top = 106
   end
   object dsSPED_M400: TDataSetProvider
     DataSet = FDSpedM400
-    Left = 757
-    Top = 153
+    Left = 861
+    Top = 154
   end
   object cdsSPEDM400: TClientDataSet
     Aggregates = <>
     Params = <>
     ProviderName = 'dsSPED_M400'
-    Left = 757
-    Top = 201
+    Left = 861
+    Top = 202
     object cdsSPEDM400CST: TStringField
       FieldName = 'CST'
       Size = 3
@@ -1058,8 +1064,8 @@ object dmPrincipal: TdmPrincipal
       'FROM TEMP_SPEDC_M410'
       'WHERE CST = :CST'
       'GROUP BY NAT_REC')
-    Left = 869
-    Top = 105
+    Left = 934
+    Top = 106
     ParamData = <
       item
         Position = 1
@@ -1070,8 +1076,8 @@ object dmPrincipal: TdmPrincipal
   end
   object dspSpedM410: TDataSetProvider
     DataSet = FDSpedM410
-    Left = 869
-    Top = 153
+    Left = 938
+    Top = 151
   end
   object cdsSPEDM410: TClientDataSet
     Aggregates = <>
@@ -1082,8 +1088,8 @@ object dmPrincipal: TdmPrincipal
         ParamType = ptInput
       end>
     ProviderName = 'dspSpedM410'
-    Left = 869
-    Top = 201
+    Left = 940
+    Top = 196
     object cdsSPEDM410NAT_REC: TStringField
       FieldName = 'NAT_REC'
       Size = 10
@@ -1234,7 +1240,7 @@ object dmPrincipal: TdmPrincipal
       'FROM TEMP_SPEDC_M810'
       'WHERE CST = :CST'
       'GROUP BY NAT_REC')
-    Left = 989
+    Left = 1004
     Top = 105
     ParamData = <
       item
@@ -1248,7 +1254,7 @@ object dmPrincipal: TdmPrincipal
   end
   object dspSPEDM810: TDataSetProvider
     DataSet = FDSPEDM810
-    Left = 989
+    Left = 1007
     Top = 147
   end
   object cdsSPEDM810: TClientDataSet
@@ -1261,7 +1267,7 @@ object dmPrincipal: TdmPrincipal
         Size = 3
       end>
     ProviderName = 'dspSPEDM810'
-    Left = 989
+    Left = 1009
     Top = 192
     object cdsSPEDM810NAT_REC: TStringField
       FieldName = 'NAT_REC'
@@ -1380,7 +1386,7 @@ object dmPrincipal: TdmPrincipal
       'FROM'
       ' TEMP_SPEDC_M210')
     Left = 1086
-    Top = 276
+    Top = 284
   end
   object DataSetProvider1: TDataSetProvider
     DataSet = FDQuery1
@@ -1447,19 +1453,19 @@ object dmPrincipal: TdmPrincipal
     Connection = FDConnSped
     SQL.Strings = (
       'SELECT * FROM PROD_TRIB_ERRADA')
-    Left = 424
+    Left = 421
     Top = 272
   end
   object dspConsTributacaoErrada: TDataSetProvider
     DataSet = FDConsTributacaoErrada
-    Left = 424
+    Left = 421
     Top = 312
   end
   object cdsConsTributacaoErrada: TClientDataSet
     Aggregates = <>
     Params = <>
     ProviderName = 'dspConsTributacaoErrada'
-    Left = 424
+    Left = 421
     Top = 360
     object cdsConsTributacaoErradaCFOP: TStringField
       FieldName = 'CFOP'
@@ -1853,7 +1859,7 @@ object dmPrincipal: TdmPrincipal
         'UTOS_FISCO.ID_PRODUTO'
       'WHERE QUANTIDADE >0'
       'AND DATA =:DATA')
-    Left = 912
+    Left = 939
     Top = 271
     ParamData = <
       item
@@ -1865,7 +1871,7 @@ object dmPrincipal: TdmPrincipal
   end
   object dspConsInventario: TDataSetProvider
     DataSet = FDConsInventaio
-    Left = 912
+    Left = 939
     Top = 318
   end
   object cdsConsInventario: TClientDataSet
@@ -1877,7 +1883,7 @@ object dmPrincipal: TdmPrincipal
         ParamType = ptInput
       end>
     ProviderName = 'dspConsInventario'
-    Left = 912
+    Left = 939
     Top = 359
     object cdsConsInventarioID_PRODUTO: TFloatField
       FieldName = 'ID_PRODUTO'
@@ -1917,7 +1923,7 @@ object dmPrincipal: TdmPrincipal
     Connection = FDConnSped
     SQL.Strings = (
       'SELECT * FROM BLOCO_H')
-    Left = 992
+    Left = 1004
     Top = 270
     ParamData = <
       item
@@ -1929,7 +1935,7 @@ object dmPrincipal: TdmPrincipal
   end
   object dspConsBlocoH: TDataSetProvider
     DataSet = FDConBlocoH
-    Left = 992
+    Left = 1004
     Top = 317
   end
   object cdsConsBlocoH: TClientDataSet
@@ -1941,7 +1947,7 @@ object dmPrincipal: TdmPrincipal
         ParamType = ptInput
       end>
     ProviderName = 'dspConsBlocoH'
-    Left = 992
+    Left = 1004
     Top = 366
     object cdsConsBlocoHID_PRODUTO: TStringField
       FieldName = 'ID_PRODUTO'
@@ -1995,19 +2001,19 @@ object dmPrincipal: TdmPrincipal
     SQL.Strings = (
       'SELECT * FROM TEMP_REG0200')
     Left = 40
-    Top = 616
+    Top = 600
   end
   object dspConsReg0200: TDataSetProvider
     DataSet = FDConsTemReg0200
     Left = 40
-    Top = 656
+    Top = 640
   end
   object cdsConsTempReg0200: TClientDataSet
     Aggregates = <>
     Params = <>
     ProviderName = 'dspConsReg0200'
     Left = 40
-    Top = 696
+    Top = 680
     object cdsConsTempReg0200CODIGO_ITEM: TFloatField
       FieldName = 'CODIGO_ITEM'
       Required = True
@@ -2017,7 +2023,7 @@ object dmPrincipal: TdmPrincipal
     Filtered = True
     Connection = FDConnFarmax
     SQL.Strings = (
-      'SELECT  ID_PRODUTO,'
+      'SELECT '
       '        CODIGO_BARRAS,'
       '        DESCRICAO,'
       '        CD_CFOP,'
@@ -2025,46 +2031,33 @@ object dmPrincipal: TdmPrincipal
       '        CST_ICMS,'
       '        CST_PIS_COFINS_ENTRADA,'
       '        CST_PIS_COFINS_SAIDA,'
-      '        ALIQUOTA_ICMS,'
-      '        ALIQUOTA_PIS,'
-      '        ALIQUOTA_COFINS,'
+      
+        '        CAST(ALIQUOTA_ICMS AS DOUBLE PRECISION) as ALIQUOTA_ICMS' +
+        ','
+      '        CAST(ALIQUOTA_PIS AS DOUBLE PRECISION) AS ALIQUOTA_PIS,'
+      
+        '        CAST(ALIQUOTA_COFINS AS DOUBLE PRECISION)AS ALIQUOTA_COF' +
+        'INS,'
       '        NCM,'
       '        CEST,'
       '        FCP,'
-      '        CODBENEFICIO,'
+      '        CAST(CODBENEFICIO AS DOUBLE PRECISION)AS CODBENEFICIO,'
       '        DESONERACAOICMS'
       'FROM PRODUTOS_FISCO')
     Left = 173
-    Top = 612
-    ParamData = <
-      item
-        Position = 1
-        Name = 'DATA_INI'
-        DataType = ftDate
-        ParamType = ptInput
-      end
-      item
-        Position = 2
-        Name = 'DATA_FIN'
-        DataType = ftDate
-        ParamType = ptInput
-      end>
+    Top = 596
   end
   object dspProdutosFisco: TDataSetProvider
     DataSet = FdProdutosFisco
     Left = 173
-    Top = 660
+    Top = 644
   end
   object cdsProdutosFisco: TClientDataSet
     Aggregates = <>
     Params = <>
     ProviderName = 'dspProdutosFisco'
     Left = 173
-    Top = 707
-    object cdsProdutosFiscoID_PRODUTO: TFloatField
-      FieldName = 'ID_PRODUTO'
-      Required = True
-    end
+    Top = 691
     object cdsProdutosFiscoCODIGO_BARRAS: TStringField
       FieldName = 'CODIGO_BARRAS'
       Required = True
@@ -2093,14 +2086,17 @@ object dmPrincipal: TdmPrincipal
       FieldName = 'CST_PIS_COFINS_SAIDA'
       Size = 3
     end
-    object cdsProdutosFiscoALIQUOTA_ICMS: TCurrencyField
+    object cdsProdutosFiscoALIQUOTA_ICMS: TFloatField
       FieldName = 'ALIQUOTA_ICMS'
+      ReadOnly = True
     end
-    object cdsProdutosFiscoALIQUOTA_PIS: TCurrencyField
+    object cdsProdutosFiscoALIQUOTA_PIS: TFloatField
       FieldName = 'ALIQUOTA_PIS'
+      ReadOnly = True
     end
-    object cdsProdutosFiscoALIQUOTA_COFINS: TCurrencyField
+    object cdsProdutosFiscoALIQUOTA_COFINS: TFloatField
       FieldName = 'ALIQUOTA_COFINS'
+      ReadOnly = True
     end
     object cdsProdutosFiscoNCM: TStringField
       FieldName = 'NCM'
@@ -2110,74 +2106,70 @@ object dmPrincipal: TdmPrincipal
       FieldName = 'CEST'
       Size = 10
     end
-    object cdsProdutosFiscoFCP: TCurrencyField
+    object cdsProdutosFiscoFCP: TFMTBCDField
       FieldName = 'FCP'
+      Precision = 18
+      Size = 2
     end
-    object cdsProdutosFiscoCODBENEFICIO: TStringField
+    object cdsProdutosFiscoCODBENEFICIO: TFloatField
       FieldName = 'CODBENEFICIO'
-      Size = 10
+      ReadOnly = True
     end
-    object cdsProdutosFiscoDESONERACAOICMS: TCurrencyField
+    object cdsProdutosFiscoDESONERACAOICMS: TFMTBCDField
       FieldName = 'DESONERACAOICMS'
+      Precision = 18
+      Size = 2
     end
   end
   object FDCadProdutosFisco: TFDQuery
     Filtered = True
     Connection = FDConnSped
     SQL.Strings = (
-      'SELECT  *'
-      'FROM PRODUTOS_FISCO')
+      'select * from produtos_fisco')
     Left = 269
-    Top = 613
+    Top = 597
   end
   object dspCadProdutosFisco: TDataSetProvider
     DataSet = FDCadProdutosFisco
     Left = 269
-    Top = 661
+    Top = 645
   end
   object cdsCadProdutosFisco: TClientDataSet
     Aggregates = <>
     Params = <>
     ProviderName = 'dspCadProdutosFisco'
     Left = 269
-    Top = 708
-    object cdsCadProdutosFiscoID_PRODUTO: TFloatField
-      FieldName = 'ID_PRODUTO'
-    end
-    object cdsCadProdutosFiscoCODIGO_BARRAS: TStringField
-      FieldName = 'CODIGO_BARRAS'
-      Size = 14
-    end
-    object cdsCadProdutosFiscoDESCRICAO: TStringField
-      FieldName = 'DESCRICAO'
-      Size = 60
-    end
+    Top = 692
     object cdsCadProdutosFiscoCD_CFOP: TFloatField
       FieldName = 'CD_CFOP'
     end
+    object cdsCadProdutosFiscoDESCRICAO: TStringField
+      FieldName = 'DESCRICAO'
+      Size = 50
+    end
     object cdsCadProdutosFiscoSITUACAO_TRIBUTARIA: TStringField
       FieldName = 'SITUACAO_TRIBUTARIA'
-      Size = 1
+      Size = 2
     end
     object cdsCadProdutosFiscoCST_ICMS: TStringField
       FieldName = 'CST_ICMS'
-      Size = 3
+      Size = 2
     end
     object cdsCadProdutosFiscoCST_PIS_COFINS_ENTRADA: TStringField
       FieldName = 'CST_PIS_COFINS_ENTRADA'
-      Size = 3
+      Size = 2
     end
     object cdsCadProdutosFiscoCST_PIS_COFINS_SAIDA: TStringField
       FieldName = 'CST_PIS_COFINS_SAIDA'
-      Size = 3
+      Size = 2
     end
-    object cdsCadProdutosFiscoALIQUOTA_ICMS: TCurrencyField
+    object cdsCadProdutosFiscoALIQUOTA_ICMS: TFloatField
       FieldName = 'ALIQUOTA_ICMS'
     end
-    object cdsCadProdutosFiscoALIQUOTA_PIS: TCurrencyField
+    object cdsCadProdutosFiscoALIQUOTA_PIS: TFloatField
       FieldName = 'ALIQUOTA_PIS'
     end
-    object cdsCadProdutosFiscoALIQUOTA_COFINS: TCurrencyField
+    object cdsCadProdutosFiscoALIQUOTA_COFINS: TFloatField
       FieldName = 'ALIQUOTA_COFINS'
     end
     object cdsCadProdutosFiscoNCM: TStringField
@@ -2188,15 +2180,20 @@ object dmPrincipal: TdmPrincipal
       FieldName = 'CEST'
       Size = 10
     end
-    object cdsCadProdutosFiscoFCP: TCurrencyField
+    object cdsCadProdutosFiscoFCP: TStringField
       FieldName = 'FCP'
+      Size = 5
     end
-    object cdsCadProdutosFiscoCODBENEFICIO: TStringField
+    object cdsCadProdutosFiscoCODBENEFICIO: TFloatField
       FieldName = 'CODBENEFICIO'
-      Size = 10
     end
-    object cdsCadProdutosFiscoDESONERACAOICMS: TCurrencyField
+    object cdsCadProdutosFiscoDESONERACAOICMS: TStringField
       FieldName = 'DESONERACAOICMS'
+      Size = 4
+    end
+    object cdsCadProdutosFiscoCODIGO_BARRAS: TStringField
+      FieldName = 'CODIGO_BARRAS'
+      Size = 14
     end
   end
   object FDCadTempCompras: TFDQuery
@@ -2205,19 +2202,19 @@ object dmPrincipal: TdmPrincipal
     SQL.Strings = (
       'SELECT * FROM  TEMP_COMPRAS')
     Left = 373
-    Top = 616
+    Top = 600
   end
   object dspCadTempCompras: TDataSetProvider
     DataSet = FDCadTempCompras
     Left = 373
-    Top = 664
+    Top = 648
   end
   object cdsCadTempCompras: TClientDataSet
     Aggregates = <>
     Params = <>
     ProviderName = 'dspCadTempCompras'
     Left = 373
-    Top = 711
+    Top = 695
     object cdsCadTempComprasDT_ENTRADA: TDateField
       FieldName = 'DT_ENTRADA'
     end
