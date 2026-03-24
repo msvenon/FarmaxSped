@@ -145,6 +145,10 @@ type
       procedure AdicionarDadosProdutosCSTAliquitaBlocoM400M800(Notas: TNotasFiscais);
       function  ConverteCstIPI_Entrada(vIpi :string):String;
 
+      {calculo do bloco 0900}
+      function CalcularReceitaBlocoC: Currency;
+      function ReceitaNaoBrutaBlocoC: Currency;
+
       procedure AdicionarDadosNotasNotas(Notas: TNotasFiscais);
 
 
@@ -156,6 +160,7 @@ type
       procedure GerarBloco_F;
       procedure GerarBloco_M;
       procedure GerarBloco_1;
+      procedure GerarBloco_0900;
 
       procedure SetCnpjEmpresa(const Value: String);
       procedure ExecSQL(const SQL: String);
@@ -207,7 +212,8 @@ uses udmPrincipal, uMenuPrincipal, Vcl.Controls,
      ACBrEPCBloco_C_Class, ACBrSped,
      ACBrEPCBloco_A_Class, ACBrEPCBloco_0_Class, ACBrEPCBloco_M_Class,
   uSpedFiscal, Vcl.Dialogs, UFrmConsistencia, System.Variants,
-  System.Generics.Collections, Winapi.Windows, ACBrNFe.Classes, UXmlCompras;
+  System.Generics.Collections, Winapi.Windows, ACBrNFe.Classes, UXmlCompras,
+  System.DateUtils;
 
 
 procedure TSpedPisCofins.ACBrECFAguardandoRespostaChange(Sender: TObject);
@@ -1713,6 +1719,23 @@ begin
 
          Application.ProcessMessages;
       end;
+end;
+
+function TSpedPisCofins.CalcularReceitaBlocoC: Currency;
+var
+  Total: Currency;
+  RegistroC100: TRegistroC100;
+begin
+
+  Total := 0;
+
+  dmPrincipal.FDSQL.Close;
+  dmPrincipal.FDSQL.SQL.Text:='select sum(vl_opr) from ftabelaregc175 where cst_pis <>'+QuotedStr('49');
+  dmPrincipal.FDSQL.Open;
+  if dmPrincipal.FDSQL.RecordCount >0 then
+     Result := dmPrincipal.FDSQL.Fields[0].Value
+  else
+    Result := Total;
 end;
 
 procedure TSpedPisCofins.CarregarDocumentosXML;
@@ -3313,6 +3336,9 @@ begin
          GerarBloco_M;
          GerarBloco_1;
 
+         if DataFinal <= IncDay(Now, -50) then
+            GerarBloco_0900;
+
          {Salva o arquivo}
          try
             FcompSpedPisCofins.SaveFileTXT;
@@ -3345,6 +3371,7 @@ var
    Registro0200: ACBrEPCBloco_0.TRegistro0200;
    Registro0400: ACBrEPCBloco_0.TRegistro0400;
    Registro0500: ACBrEPCBloco_0.TRegistro0500;
+   Registro0900: ACBrEPCBloco_0.TRegistro0900; //gerar sped com periodo superior a 50 dias
 
    sDocContador,unidade: String;
    IND_REG_CUMULATIVO:Integer;
@@ -3718,6 +3745,99 @@ begin
      Registro0500.COD_CTA_REF := '0';
      Registro0500.CNPJ_EST    := Self.FCnpjEmpresa;
    end;
+
+  {Gerar Bloco 0900 para sped com data superior a 50 dias de atraso}
+
+
+   // Registro 0900 - Encerramento do Bloco 0
+   GerarLinhaMemoLog(_SPED_PIS_COF_BLOCO_0 + ': Gerando Registro 0900 - Encerramento do Bloco');
+
+//   with FcompSpedPisCofins.Bloco_0 do
+//   begin
+//
+//     // Bloco A
+//      Registro0900.REC_TOTAL_BLOCO_A := 10000.00;
+//      Registro0900.REC_NRB_BLOCO_A   := 2000.00;
+//
+//      // Bloco C
+//      Registro0900.REC_TOTAL_BLOCO_C := 50000.00;
+//      Registro0900.REC_NRB_BLOCO_C   := 0.00;
+//
+//      // Bloco D
+//      Registro0900.REC_TOTAL_BLOCO_D := 5000.00;
+//      Registro0900.REC_NRB_BLOCO_D   := 1000.00;
+//
+//      // Bloco F
+//      Registro0900.REC_TOTAL_BLOCO_F := 2000.00;
+//      Registro0900.REC_NRB_BLOCO_F   := 500.00;
+//
+//      // Bloco I
+//      Registro0900.REC_TOTAL_BLOCO_I := 3000.00;
+//      Registro0900.REC_NRB_BLOCO_I   := 0.00;
+//
+//      // Bloco 1
+//      Registro0900.REC_TOTAL_BLOCO_1 := 400.00;
+//      Registro0900.REC_NRB_BLOCO_1   := 100.00;
+//   end;
+//
+
+
+end;
+
+procedure TSpedPisCofins.GerarBloco_0900;
+ var
+   Registro0900: TRegistro0900;
+
+  i: Integer;
+  ValorTotalBlocoC, ReceitaNaoBrutaC: Double;
+
+begin
+
+  GerarLinhaMemoLog(' Sped Pis Cofins - Bloco 0900.');
+  AtualizarStatus('Gerando Bloco 0900...');
+
+
+
+   Registro0900 := FcompSpedPisCofins.Bloco_0.Registro0900New;
+
+   // Bloco A
+    Registro0900.REC_TOTAL_BLOCO_A := 0.00;
+    Registro0900.REC_NRB_BLOCO_A   := 0.00;
+
+    // Bloco C
+    Registro0900.REC_TOTAL_BLOCO_C := CalcularReceitaBlocoC;
+    Registro0900.REC_NRB_BLOCO_C   := 0.00;
+
+    // Bloco D
+    Registro0900.REC_TOTAL_BLOCO_D := 0.00;
+    Registro0900.REC_NRB_BLOCO_D   := 0.00;
+//
+//    // Bloco F
+    Registro0900.REC_TOTAL_BLOCO_F := 0.00;
+    Registro0900.REC_NRB_BLOCO_F   := 0.00;
+//
+//    // Bloco I
+    Registro0900.REC_TOTAL_BLOCO_I := 0.00;
+    Registro0900.REC_NRB_BLOCO_I   := 0.00;
+//
+//    // Bloco 1
+//    Registro0900.REC_TOTAL_BLOCO_1 := CalcularReceitaBloco1;
+//    Registro0900.REC_NRB_BLOCO_1   := CalcularReceitaNaoBrutaBloco1;
+
+    Registro0900.REC_TOTAL_BLOCO_1 := 0.00;
+    Registro0900.REC_NRB_BLOCO_1   := 0.00;
+
+    //totais
+
+    Registro0900.REC_TOTAL_PERIODO := Registro0900.REC_TOTAL_BLOCO_A + Registro0900.REC_TOTAL_BLOCO_C +
+                                      Registro0900.REC_TOTAL_BLOCO_D + Registro0900.REC_TOTAL_BLOCO_F +
+                                      Registro0900.REC_TOTAL_BLOCO_I + Registro0900.REC_TOTAL_BLOCO_1;
+
+    Registro0900.REC_TOTAL_NRB_PERIODO := Registro0900.REC_NRB_BLOCO_A + Registro0900.REC_NRB_BLOCO_C +
+                                          Registro0900.REC_NRB_BLOCO_D + Registro0900.REC_NRB_BLOCO_F +
+                                          Registro0900.REC_NRB_BLOCO_I + Registro0900.REC_NRB_BLOCO_1;
+
+
 end;
 
 procedure TSpedPisCofins.GerarBloco_1;
@@ -5606,6 +5726,24 @@ begin
             oTmp.Free;
          end;
       end;
+end;
+
+function TSpedPisCofins.ReceitaNaoBrutaBlocoC: Currency;
+var
+  Total: Currency;
+  Registro: TRegistroC100;
+begin
+  Total := 0;
+  while not  FTabelaRegC100.Eof do
+  begin
+
+    if SameText(FTabelaRegC100.FieldByName('CFOP').AsString, '5949') or
+        SameText(FTabelaRegC100.FieldByName('CFOP').AsString, '5927') then
+       Total := Total + FTabelaRegC100.FieldByName('VL_DOC').AsCurrency;
+
+  end;
+  Result := Total;
+
 end;
 
 procedure TSpedPisCofins.SetMemoErro(const Value: TMemo);

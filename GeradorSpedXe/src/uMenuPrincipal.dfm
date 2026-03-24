@@ -1321,6 +1321,10 @@ object FrmPrincipal: TFrmPrincipal
           object tabLog: TTabSheet
             Caption = 'Log'
             ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object PnLogArquivo: TPanel
               Left = 0
               Top = 0
@@ -1795,6 +1799,10 @@ object FrmPrincipal: TFrmPrincipal
               object tabContador: TTabSheet
                 Caption = 'Contador'
                 ImageIndex = 2
+                ExplicitLeft = 0
+                ExplicitTop = 0
+                ExplicitWidth = 0
+                ExplicitHeight = 0
                 object GroupBox2: TGroupBox
                   Left = 3
                   Top = 3
@@ -2096,6 +2104,10 @@ object FrmPrincipal: TFrmPrincipal
           object tabHome: TTabSheet
             Caption = 'Home'
             ImageIndex = 3
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object pnHome: TPanel
               Left = 0
               Top = 0
@@ -7722,6 +7734,10 @@ object FrmPrincipal: TFrmPrincipal
           object TabConfiguracao: TTabSheet
             Caption = 'Configura'#231#227'o Server'
             ImageIndex = 4
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object Panel2: TPanel
               Left = 0
               Top = 0

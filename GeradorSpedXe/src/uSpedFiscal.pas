@@ -116,7 +116,8 @@ type
       procedure IncluirUnidFatConverReg0220(const CodProd, UnidConv, EAN: String; const dFatConv: Double);
       function  ChaveDuplicadaNaApuracao(const Chave: String): Boolean;
       function  NotaCancelada(const Chave: String): Boolean;
-      function  AnoToVersao: TACBrVersaoLeiauteSPEDFiscal;
+     // function  AnoToVersao: TACBrVersaoLeiauteSPEDFiscal;
+      function  AnoToVersao(ADtRef: TDateTime): TACBrVersaoLeiauteSPEDFiscal;
 
       procedure CarregarInformacoesEmpresa;
       procedure CarregarInformacoesContador;
@@ -272,50 +273,52 @@ end;
 procedure TSpedFiscal.AcumularSaldoEstoque(const bEntrada: Boolean; const CodItem, Unid: String; const Qtde, VlUnit: Double;
      const DescrProd, EAN, UnidM, NCM: String; const pIcms: Double);
      var
-      codigo:String;
+      codigo,teste:String;
 begin
 
-   if (Self.FGerarBlocoH) then
-      begin
+ teste :='';
 
-         FTabelaRegH010.Filtered := False;
-         FTabelaRegH010.Filter := 'COD_ITEM = ' + QuotedStr(Trim(CodItem));
-         FTabelaRegH010.Filtered := True;
-
-
-         if (FTabelaRegH010.RecordCount > 0) then
-            FTabelaRegH010.Edit
-         else
-            FTabelaRegH010.Append;
-
-         if (FTabelaRegH010.State = dsInsert) then
-            begin
-               FTabelaRegH010.FieldByName('COD_ITEM').AsString := CodItem;
-               FTabelaRegH010.FieldByName('UNID').AsString := Unid ;
-               FTabelaRegH010.FieldByName('QTD').AsFloat := Qtde;
-
-               IncluirCodItemProdReg0200(CodItem,
-                                         DescrProd,
-                                         EAN,
-                                         UnidM,
-                                         NCM,
-                                         pIcms);
-
-               IncluirUnidProdReg0190(Unid);
-            end;
-
-         if (bEntrada) then
-            FTabelaRegH010.FieldByName('QTD').AsFloat  := FTabelaRegH010.FieldByName('QTD').AsFloat + Qtde
-         else // Saída
-            FTabelaRegH010.FieldByName('QTD').AsFloat  := FTabelaRegH010.FieldByName('QTD').AsFloat - Qtde;
-
-         FTabelaRegH010.FieldByName('VL_UNIT').AsFloat := VlUnit;
-         FTabelaRegH010.FieldByName('VL_ITEM').AsFloat := (FTabelaRegH010.FieldByName('VL_UNIT').AsFloat *
-                                                           FTabelaRegH010.FieldByName('QTD').AsFloat);
-
-         FTabelaRegH010.Post;
-         FTabelaRegH010.Filtered := False;
-      end;
+//   if (Self.FGerarBlocoH) then      mexer  20032026
+//      begin
+//
+//         FTabelaRegH010.Filtered := False;
+//         FTabelaRegH010.Filter := 'COD_ITEM = ' + QuotedStr(Trim(CodItem));
+//         FTabelaRegH010.Filtered := True;
+//
+//
+//         if (FTabelaRegH010.RecordCount > 0) then
+//            FTabelaRegH010.Edit
+//         else
+//            FTabelaRegH010.Append;
+//
+//         if (FTabelaRegH010.State = dsInsert) then
+//            begin
+//               FTabelaRegH010.FieldByName('COD_ITEM').AsString := CodItem;
+//               FTabelaRegH010.FieldByName('UNID').AsString := Unid ;
+//               FTabelaRegH010.FieldByName('QTD').AsFloat := Qtde;
+//
+//               IncluirCodItemProdReg0200(CodItem,
+//                                         DescrProd,
+//                                         EAN,
+//                                         UnidM,
+//                                         NCM,
+//                                         pIcms);
+//
+//               IncluirUnidProdReg0190(Unid);
+//            end;
+//
+//         if (bEntrada) then
+//            FTabelaRegH010.FieldByName('QTD').AsFloat  := FTabelaRegH010.FieldByName('QTD').AsFloat + Qtde
+//         else // Saída
+//            FTabelaRegH010.FieldByName('QTD').AsFloat  := FTabelaRegH010.FieldByName('QTD').AsFloat - Qtde;
+//
+//         FTabelaRegH010.FieldByName('VL_UNIT').AsFloat := VlUnit;
+//         FTabelaRegH010.FieldByName('VL_ITEM').AsFloat := (FTabelaRegH010.FieldByName('VL_UNIT').AsFloat *
+//                                                           FTabelaRegH010.FieldByName('QTD').AsFloat);
+//
+//         FTabelaRegH010.Post;
+//         FTabelaRegH010.Filtered := False;
+//      end;
 end;
 
 procedure TSpedFiscal.AcumularValoresIPI(const CFOP, CST: String; const ValorBaseIPI, ValorIPI: Double);
@@ -427,7 +430,7 @@ begin
                if (Notas.Items[0].NFe.Emit.CRT <> crtRegimeNormal) then
                  sCstIcms := ConverterEquivalenciaCSOSNToCST( CSOSNIcmsToStr(oItemProduto.Imposto.ICMS.CSOSN), (oItemProduto.Imposto.ICMS.pICMS > 0) )
                else
-                if (EmprEnquadramentoTrib <> 'S') and (EmprEnquadramentoTrib <> 'R' ) {and (oItemProduto.Prod.CFOP ='1403')mau} then
+                if (EmprEnquadramentoTrib <> 'S') {and (EmprEnquadramentoTrib <> 'R' )} {and (oItemProduto.Prod.CFOP ='1403')mau} then
                   begin
 
                      if (CSTICMSToStr(oItemProduto.Imposto.ICMS.CST) ='10') or
@@ -1179,49 +1182,34 @@ begin
 {$endregion}
 end;
 
-function TSpedFiscal.AnoToVersao: TACBrVersaoLeiauteSPEDFiscal;
+function TSpedFiscal.AnoToVersao(ADtRef: TDateTime): TACBrVersaoLeiauteSPEDFiscal;
 var
   xVer: string;
+  iVer: integer;
+  Ano: integer;
 begin
-   if (DataInicial >= StrToDate('01/01/2009')) and (DataFinal <= StrToDate('31/12/2009')) then
-    xVer := '002'
-  else if (DataInicial >= StrToDate('01/01/2010')) and (DataFinal <= StrToDate('31/12/2010')) then
-    xVer := '003'
-  else if (DataInicial >= StrToDate('01/01/2011')) and (DataFinal <= StrToDate('31/12/2011')) then
-    xVer := '004'
-  else if (DataInicial >= StrToDate('01/01/2012')) and (DataFinal <= StrToDate('30/06/2012')) then
-    xVer := '005'
-  else if (DataInicial >= StrToDate('01/07/2012')) and (DataFinal <= StrToDate('31/12/2012')) then
-    xVer := '006'
-  else if (DataInicial >= StrToDate('01/01/2013')) and (DataFinal <= StrToDate('31/12/2013')) then
-    xVer := '007'
-  else if (DataInicial >= StrToDate('01/01/2014')) and (DataFinal <= StrToDate('31/12/2014')) then
-    xVer := '008'
-  else if (DataInicial >= StrToDate('01/01/2015')) and (DataFinal <= StrToDate('31/12/2015')) then
-    xVer := '009'
-  else if (DataInicial >= StrToDate('01/01/2016')) and (DataFinal <= StrToDate('31/12/2016')) then
-    xVer := '010'
-  else if (DataInicial >= StrToDate('01/01/2017')) and (DataFinal <= StrToDate('31/12/2017')) then
-    xVer := '011'
-  else if (DataInicial >= StrToDate('01/01/2018')) and (DataFinal <= StrToDate('31/12/2018')) then
-    xVer := '012'
-  else if (DataInicial >= StrToDate('01/01/2019')) and (DataFinal <= StrToDate('31/12/2019')) then
-    xVer := '013'
-  else if (DataInicial >= StrToDate('01/01/2020')) and (DataFinal <= StrToDate('31/12/2020')) then
-    xVer := '014'
-  else if (DataInicial >= StrToDate('01/01/2021')) and (DataFinal <= StrToDate('31/12/2021')) then
-    xVer := '015'
-  else if (DataInicial >= StrToDate('01/01/2022')) and (DataFinal <= StrToDate('31/12/2022')) then
-    xVer := '016'
-  else if (DataInicial >= StrToDate('01/01/2023')) and (DataFinal <= StrToDate('31/12/2023')) then
-    xVer := '017'
-  else if (DataInicial >= StrToDate('01/01/2024')) and (DataFinal <= StrToDate('31/12/2024')) then
-    xVer := '018'
-  else if (DataInicial >= StrToDate('01/01/2025')) and (DataFinal <= StrToDate('31/12/2025')) then
-    xVer := '019' ;
 
-   Result := StrToCodVer(xVer);
 
+  if Ano < 2009 then
+    iVer := YearOf(now) - 2006
+  else if Ano < 2012 then
+    iVer := Ano - 2007
+  else if Ano = 2012 then
+  begin
+    if MonthOf(ADtRef) < 7 then
+      iVer := 5
+    else
+      iVer := 6
+  end
+  else
+    iVer := Ano - 2006;
+
+  if iVer > StrToIntDef(TACBrVersaoLeiauteSPEDFiscalArrayofstrings[High(TACBrVersaoLeiauteSPEDFiscalArrayofstrings)],-1) then
+    xVer := TACBrVersaoLeiauteSPEDFiscalArrayofstrings[High(TACBrVersaoLeiauteSPEDFiscalArrayofstrings)]
+  else
+    xVer := Format('%.3d', [iVer]);
+
+  Result := StrToCodVer(xVer);
 end;
 
 procedure TSpedFiscal.AtualizarStatus(const Msg: String);
@@ -2414,8 +2402,8 @@ begin
    Registro0000 := FcompSpedFiscal.Bloco_0.Registro0000New;
 
    // Versão Layout
-   ConfigurarVersaoLayout(Registro0000);
-
+    // ConfigurarVersaoLayout(Registro0000);
+     Registro0000.COD_VER := AnoToVersao(DataInicial);
 
    if Self.Original then
       Registro0000.COD_FIN := raOriginal
@@ -2826,7 +2814,7 @@ begin
 
 
          {somatorios de valores para lucro presumido igo 04072025}
-         if (EmprEnquadramentoTrib <> 'S') and (EmprEnquadramentoTrib <> 'R' ) then
+         if (EmprEnquadramentoTrib <> 'S') {and (EmprEnquadramentoTrib <> 'R' )} then
             begin
 
                FTabelaRegC170.Filtered := False;
@@ -3059,7 +3047,7 @@ begin
                                    begin
                                     {configsped 04072025 igor}
 
-                                    if (EmprEnquadramentoTrib <> 'S') and (EmprEnquadramentoTrib <> 'R' ) and  (FTabelaRegC170.FieldByName('CFOP').Value ='1403') then
+                                    if (EmprEnquadramentoTrib <> 'S') {and (EmprEnquadramentoTrib <> 'R' )} and  (FTabelaRegC170.FieldByName('CFOP').Value ='1403') then
                                       begin
 
                                         RegistroC170.CST_ICMS      := '60';
@@ -4276,17 +4264,16 @@ var
 begin
 
 
-
-
    if (Self.FGerarBlocoH) then
       begin
 
          dmprincipal.cdsConsEmpresa.Close;
          dmprincipal.cdsConsEmpresa.open;
 
+
          GerarLinhaMemoLog(_SPED_FIS_BLOCO_H + ': Gerando Registro H005');
          GerarLinhaMemoLog(_SPED_FIS_BLOCO_H + ': Gerando Registro H010');
-         if (FTabelaRegH010.RecordCount > 0) then
+         if (FTabelaRegH010.RecordCount >= 0) then
             begin
                dTotalSaldoEstoque := 0;
                FcompSpedFiscal.Bloco_H.RegistroH001.IND_MOV := imComDados;
@@ -4370,7 +4357,7 @@ begin
                              dmprincipal.cdsConsBlocoHDESCRICAO.Value   := dmprincipal.cdsConsInventarioDESCRICAO.Value;
                              dmprincipal.cdsConsBlocoHQUANTIDADE.Value  := dmprincipal.cdsConsInventarioQUANTIDADE.Value;
                              dmprincipal.cdsConsBlocoHVL_UNIT_ITEM.Value:= dmprincipal.cdsConsInventarioVL_UNIT_ITEM.Value;
-                             dmprincipal.cdsConsBlocoHVL_ITEM.Value     := dmprincipal.cdsConsInventarioVL_ITEM.Value;
+                             dmprincipal.cdsConsBlocoHVL_ITEM.Value     := dmprincipal.cdsConsInventarioVL_ITEM.Value;//dmprincipal.cdsConsInventarioVL_ITEM.Value;
                              dmprincipal.cdsConsBlocoH.Post;
 
                              dmprincipal.cdsConsInventario.Next;
@@ -5127,7 +5114,7 @@ begin
    dmPrincipal.FDQuery.Close;
    dmPrincipal.FDQuery.SQL.Clear;
    dmPrincipal.FDQuery.sql.Text:='SELECT DISTINCT(DATA)FROM POSICAOESTOQUEDATA WHERE DATA =:Data';   //mes 12 do dia anterior
-   dmPrincipal.FDQuery.ParamByName('DATA').AsString := StringReplace(data,'/','.',[rfReplaceAll, rfIgnoreCase]);
+   dmPrincipal.FDQuery.ParamByName('DATA').AsString := '02.01.2026';//StringReplace(data,'/','.',[rfReplaceAll, rfIgnoreCase]);   mexer
    dmPrincipal.FDQuery.Open();
    if dmPrincipal.FDQuery.RecordCount > 0 then
       begin

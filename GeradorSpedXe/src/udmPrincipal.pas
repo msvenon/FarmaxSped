@@ -433,7 +433,7 @@ implementation
 
 {$R *.dfm}
 
-uses uFuncoesBasicas, ConfigServer, Winapi.Windows;
+uses uFuncoesBasicas, ConfigServer, Winapi.Windows, uMenuPrincipal;
 
 
 
@@ -515,33 +515,21 @@ var
  MyFile:TFileStream;
   DirExecutavel:string;
 begin
-    //deleta o arquivo Versao.txt do computador,caso exista
- DirExecutavel:=ExtractFilePath(Application.ExeName);
-    //deleta o arquivo Versao.txt do computador,caso exista
-  if FileExists(ExtractFilePath(Application.ExeName)+'Versoes.txt') then
-     DeleteFile(Pchar(ExtractFilePath(Application.ExeName)+'Versoes.txt'));
 
-       //deleta o arquivo VersaoOrizon.ini do computador,caso exista
   if FileExists(ExtractFilePath(Application.ExeName)+'Versoes.ini') then
      DeleteFile(Pchar(ExtractFilePath(Application.ExeName)+'Versoes.ini'));
 
-  try
 
-   UrlArquivo:='http://www.farmax.far.br/download/';
-   SalvarEm  := DirExecutavel;
-   arquivo   := 'Versoes.ini'; ;
+     DirExecutavel:=ExtractFilePath(Application.ExeName);
+  if FileExists(ExtractFilePath(Application.ExeName)+'Versoes.ini') then
+     DeleteFile(Pchar(ExtractFilePath(Application.ExeName)+'Versoes.ini'));
 
-   MyFile := TFileStream.Create(DirExecutavel+arquivo, fmCreate);
-      try
-        IdHTTP1.Get(UrlArquivo+arquivo, MyFile);
-      finally
-        IdHTTP1.Free;
-        MyFile.Free;
-       // RenameFile(DirExecutavel+'VersaoTrn.txt',DirExecutavel + 'VersaoTrn.ini');
-      end;
-  except on E:Exception do
-    GeraLog('Erro ao baixar Versoes.ini:'+E.Message );
-  end;
+ UrlArquivo:='http://www.farmax.far.br/download/';
+ SalvarEm  := DirExecutavel;
+ arquivo   := 'Versoes.ini';
+
+ if not FrmPrincipal.DownloadArquivo(UrlArquivo+arquivo,DirExecutavel+arquivo) then
+        GeraLog('Erro ao baixar Versoes.ini');
 
 end;
 

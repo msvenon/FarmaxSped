@@ -6,7 +6,7 @@ uses
    Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, ExtCtrls, Menus, StdCtrls, Buttons, pngimage, ActnList, ComCtrls,
    DateUtils, ACBrSpedFiscal, System.Actions, ACBrBase, Vcl.Mask, Vcl.DBCtrls,
   dxGDIPlusClasses,midas, midaslib,System.IOUtils, IdBaseComponent, IdComponent,
-  IdTCPConnection, IdTCPClient, IdHTTP,ShellAPI,WinInet;
+  IdTCPConnection, IdTCPClient, IdHTTP,ShellAPI,WinInet,Winapi.UrlMon;
 
 type
   TFrmPrincipal = class(TForm)
@@ -259,6 +259,8 @@ type
      function  ConectadoInternet: boolean;
      procedure VerificaVersao;
      procedure ExibeMensagem(Texto : String; Exibe : Boolean);
+     function  DownloadArquivo(const Url,Destino: string): Boolean;
+
 
 
 
@@ -741,6 +743,12 @@ begin
 
 end;
 
+function TFrmPrincipal.DownloadArquivo(const Url, Destino: string): Boolean;
+begin
+    Result :=
+            URLDownloadToFile(nil,PChar(Url),PChar(Destino),0,nil) = S_OK;
+end;
+
 procedure TFrmPrincipal.edtDataFinalChange(Sender: TObject);
 begin
    if not (edtDataFinal.DroppedDown) then
@@ -832,9 +840,6 @@ begin
 
     end;
 
-
-
-
 end;
 
 procedure TFrmPrincipal.FormKeyDown(Sender: TObject; var Key: Word;
@@ -848,6 +853,7 @@ var
    DateTmp: TDate;
    sEndereco: String;
    i:integer;
+   Mes :Word;
 begin
 
 
@@ -889,6 +895,14 @@ begin
 
    edtDataInicial.Date := TDate(StartOfTheMonth(DateTmp));
    edtDataFinal.Date := TDate(EndOfTheMonth(DateTmp));
+
+   Mes := Monthof(DateTmp);
+
+   if Mes = 2 then
+   begin
+     chkGerarBlocoH.checked :=true;
+   end;
+
 
    CarreDadosSped;
 
@@ -1526,31 +1540,19 @@ begin
   if FileExists(ExtractFilePath(Application.ExeName)+'AtualizaVersao.exe') then
      DeleteFile(Pchar(ExtractFilePath(Application.ExeName)+'AtualizaVersao.exe'));
 
-  if not FileExists(DirExecutavel+'AtualizaVersao.exe') then
-     begin
 
-       try
 
-         DirSalvar:=ExtractFilePath(Application.ExeName);
-         UrlArquivo:='http://www.farmax.far.br/download/';
-         Arquivo  :='AtualizaVersao.exe';
-         MyFile := TFileStream.Create(DirSalvar+Arquivo, fmCreate);
+  if not FileExists(DirExecutavel + 'AtualizaVersao.exe') then
+    begin
+      DirSalvar  := DirExecutavel;
+      Arquivo    := 'AtualizaVersao.exe';
+      UrlArquivo := 'https://www.farmax.far.br/download/' + Arquivo;
 
-         try
 
-            IdHTTP1.Get(UrlArquivo + arquivo, MyFile); // fazendo o download do arquivo
+       if not DownloadArquivo('https://www.farmax.far.br/download/'+Arquivo,  DirExecutavel + Arquivo) then
+          ShowMessage('Erro ao baixar atualização');
+    end;
 
-          finally
-
-            MyFile.Free;
-
-          end;
-
-       except on E:Exception do
-         dmPrincipal.GeraLog('Erro ao baixar AtualizaVersao.exe:'+E.Message );
-       end;
-
-     end;
 
 
   if not FileExists(DirExecutavel+'VersaoLocal.ini') then
@@ -1562,20 +1564,20 @@ begin
 
      end;
 
-     begin
 
-      nNumeroVersaoFTP  := ObterNumeroVersaoFTP;
-      nNumeroVersaoLocal:= ObterNumeroVersaoLocal;
 
-       if nNumeroVersaoLocal < nNumeroVersaoFTP then
-          begin
-           ShellExecute(Handle,nil, PChar('AtualizaVersao.exe'), 'FarmaxSped', nil, SW_SHOWNORMAL);
-              //XXXXX VERIFICAR/CRIAR PARAMETRO NO ARQUIVO VERSOES.INI DO SITE
-                    //O AtualizaVersao recebe parametro e executa um processo próprio para o sistema que está sendo atualizado
-           Application.Terminate;
-          end;
+    nNumeroVersaoFTP  := ObterNumeroVersaoFTP;
+    nNumeroVersaoLocal:= ObterNumeroVersaoLocal;
 
-     end;
+    if nNumeroVersaoLocal < nNumeroVersaoFTP then
+       begin
+         ShellExecute(Handle,nil, PChar('AtualizaVersao.exe'), 'FarmaxSped', nil, SW_SHOWNORMAL);
+            //XXXXX VERIFICAR/CRIAR PARAMETRO NO ARQUIVO VERSOES.INI DO SITE
+                  //O AtualizaVersao recebe parametro e executa um processo próprio para o sistema que está sendo atualizado
+       //  Application.Terminate;
+       halt;
+       end;
+
 
 end;
 

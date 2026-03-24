@@ -108,7 +108,6 @@ object dmPrincipal: TdmPrincipal
       'Port=3050'
       'Database=C:\FarmaxWin\IGOR.FDB'
       'DriverID=FB')
-    Connected = True
     LoginPrompt = False
     Left = 208
     Top = 8
@@ -124,7 +123,6 @@ object dmPrincipal: TdmPrincipal
         'Database=C:\Development\FarmaxSped\GeradorSpedXe\bin\Base\SPED.F' +
         'DB'
       'DriverID=FB')
-    Connected = True
     LoginPrompt = False
     Left = 128
     Top = 8
@@ -1385,19 +1383,19 @@ object dmPrincipal: TdmPrincipal
       ' SUM(VL_BASE_CALCULO) AS VL_BASE_CALCULO'
       'FROM'
       ' TEMP_SPEDC_M210')
-    Left = 1086
+    Left = 1110
     Top = 284
   end
   object DataSetProvider1: TDataSetProvider
     DataSet = FDQuery1
-    Left = 1086
+    Left = 1110
     Top = 324
   end
   object ClientDataSet1: TClientDataSet
     Aggregates = <>
     Params = <>
     ProviderName = 'dspSPEDM200'
-    Left = 1086
+    Left = 1110
     Top = 364
     object FMTBCDField2: TFMTBCDField
       FieldName = 'VL_REC_BRT'
@@ -1847,9 +1845,13 @@ object dmPrincipal: TdmPrincipal
       '      PRODUTOS.DESCRICAO,'
       '      PRODUTOS.CODIGO_BARRAS_1,'
       '      PRODUTOS_FISCO.NCM,'
-      '      POSICAOESTOQUEDATA.CUSTO AS VL_UNIT_ITEM,'
-      '      POSICAOESTOQUEDATA.QUANTIDADE,'
-      '      POSICAOESTOQUEDATA.VENDA AS VL_ITEM'
+      
+        '      CAST(POSICAOESTOQUEDATA.CUSTO AS NUMERIC (15,2)) AS  VL_UN' +
+        'IT_ITEM,'
+      '      SUM(POSICAOESTOQUEDATA.QUANTIDADE) AS QUANTIDADE,'
+      
+        '      SUM(POSICAOESTOQUEDATA.QUANTIDADE * CAST(POSICAOESTOQUEDAT' +
+        'A.CUSTO AS NUMERIC (15,2)))  AS VL_ITEM'
       'FROM  POSICAOESTOQUEDATA'
       
         'INNER JOIN PRODUTOS ON POSICAOESTOQUEDATA.ID_PRODUTO = PRODUTOS.' +
@@ -1858,7 +1860,9 @@ object dmPrincipal: TdmPrincipal
         'INNER JOIN PRODUTOS_FISCO ON POSICAOESTOQUEDATA.ID_PRODUTO= PROD' +
         'UTOS_FISCO.ID_PRODUTO'
       'WHERE QUANTIDADE >0'
-      'AND DATA =:DATA')
+      'AND DATA =:DATA'
+      'GROUP BY'
+      '1,2,3,4,5')
     Left = 939
     Top = 271
     ParamData = <
@@ -1867,6 +1871,7 @@ object dmPrincipal: TdmPrincipal
         Name = 'DATA'
         DataType = ftDate
         ParamType = ptInput
+        Value = Null
       end>
   end
   object dspConsInventario: TDataSetProvider
@@ -1923,7 +1928,7 @@ object dmPrincipal: TdmPrincipal
     Connection = FDConnSped
     SQL.Strings = (
       'SELECT * FROM BLOCO_H')
-    Left = 1004
+    Left = 1028
     Top = 270
     ParamData = <
       item
@@ -1935,7 +1940,7 @@ object dmPrincipal: TdmPrincipal
   end
   object dspConsBlocoH: TDataSetProvider
     DataSet = FDConBlocoH
-    Left = 1004
+    Left = 1028
     Top = 317
   end
   object cdsConsBlocoH: TClientDataSet
@@ -1947,7 +1952,7 @@ object dmPrincipal: TdmPrincipal
         ParamType = ptInput
       end>
     ProviderName = 'dspConsBlocoH'
-    Left = 1004
+    Left = 1028
     Top = 366
     object cdsConsBlocoHID_PRODUTO: TStringField
       FieldName = 'ID_PRODUTO'
