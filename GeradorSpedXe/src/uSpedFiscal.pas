@@ -5114,7 +5114,7 @@ begin
    dmPrincipal.FDQuery.Close;
    dmPrincipal.FDQuery.SQL.Clear;
    dmPrincipal.FDQuery.sql.Text:='SELECT DISTINCT(DATA)FROM POSICAOESTOQUEDATA WHERE DATA =:Data';   //mes 12 do dia anterior
-   dmPrincipal.FDQuery.ParamByName('DATA').AsString := '02.01.2026';//StringReplace(data,'/','.',[rfReplaceAll, rfIgnoreCase]);   mexer
+   dmPrincipal.FDQuery.ParamByName('DATA').AsString := StringReplace(data,'/','.',[rfReplaceAll, rfIgnoreCase]);
    dmPrincipal.FDQuery.Open();
    if dmPrincipal.FDQuery.RecordCount > 0 then
       begin

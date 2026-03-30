@@ -1,0 +1,4 @@
+[SERVIDOR]
+Servidor=localhost
+Database=C:\Development\FarmaxSped\GeradorSpedXe\bin\Base\SPED.FDB
+portafb=3050

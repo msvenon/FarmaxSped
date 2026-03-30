@@ -1,0 +1,95 @@
+object frmUnificador: TfrmUnificador
+  Left = 384
+  Height = 298
+  Top = 162
+  Width = 517
+  BorderIcons = [biSystemMenu]
+  Caption = 'Unificador de SPED Contribuições'
+  ClientHeight = 298
+  ClientWidth = 517
+  Position = poScreenCenter
+  LCLVersion = '1.1'
+  object Panel1: TPanel
+    Left = 0
+    Height = 50
+    Top = 248
+    Width = 517
+    Align = alBottom
+    BevelInner = bvRaised
+    BevelOuter = bvLowered
+    ClientHeight = 50
+    ClientWidth = 517
+    TabOrder = 0
+    object btnSped: TButton
+      Left = 352
+      Height = 25
+      Top = 11
+      Width = 123
+      Caption = 'Gerar e Salvar Arquivo'
+      OnClick = btnSpedClick
+      TabOrder = 0
+    end
+  end
+  object GroupBox1: TGroupBox
+    Left = 6
+    Height = 78
+    Top = 9
+    Width = 505
+    Caption = ' Matriz '
+    ClientHeight = 60
+    ClientWidth = 501
+    TabOrder = 1
+    object edtArquivo: TEdit
+      Left = 19
+      Height = 21
+      Top = 15
+      Width = 448
+      ReadOnly = True
+      TabOrder = 0
+    end
+    object Button1: TButton
+      Left = 467
+      Height = 21
+      Top = 15
+      Width = 28
+      Caption = '...'
+      OnClick = Button1Click
+      TabOrder = 1
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 6
+    Height = 132
+    Top = 104
+    Width = 505
+    Caption = ' Filiais '
+    ClientHeight = 114
+    ClientWidth = 501
+    TabOrder = 2
+    object Button2: TButton
+      Left = 467
+      Height = 21
+      Top = 9
+      Width = 28
+      Caption = '...'
+      OnClick = Button2Click
+      TabOrder = 0
+    end
+    object memoFiliais: TMemo
+      Left = 19
+      Height = 90
+      Top = 9
+      Width = 448
+      ReadOnly = True
+      ScrollBars = ssAutoBoth
+      TabOrder = 1
+    end
+  end
+  object dialogSped: TOpenDialog
+    Title = 'Abrir Arquivo'
+    DefaultExt = '.*'
+    Filter = '*.*'
+    left = 144
+    top = 2
+  end
+end

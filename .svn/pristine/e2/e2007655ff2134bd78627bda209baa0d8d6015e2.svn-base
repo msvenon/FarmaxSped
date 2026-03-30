@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2016/08/05 14:44:20.012.pas,C:\Users\Rain\Documents\RAD Studio\Projects\Unit1.pas=C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\uMenuPrincipal.pas</Transaction>
+    <Transaction>2016/08/05 14:44:20.012.dfm,C:\Users\Rain\Documents\RAD Studio\Projects\Unit1.dfm=C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\uMenuPrincipal.dfm</Transaction>
+    <Transaction>2016/08/05 14:44:33.154.dproj,C:\Users\Rain\Documents\RAD Studio\Projects\Project1.dproj=C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\GeradorSped.dproj</Transaction>
+    <Transaction>2016/08/05 15:55:03.040.dfm,C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\Unit1.dfm=C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\src\uFrmSobre.dfm</Transaction>
+    <Transaction>2016/08/05 15:55:03.040.pas,C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\Unit1.pas=C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\src\uFrmSobre.pas</Transaction>
+    <Transaction>2016/08/05 17:33:45.663.dfm,C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\Unit1.dfm=C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\src\uFrmLogin.dfm</Transaction>
+    <Transaction>2016/08/05 17:33:45.663.pas,C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\Unit1.pas=C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\src\uFrmLogin.pas</Transaction>
+    <Transaction>2016/08/08 16:55:33.316.pas,C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\Unit1.pas=C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\src\udmPrincipal.pas</Transaction>
+    <Transaction>2016/08/08 16:55:33.316.dfm,C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\Unit1.dfm=C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\src\udmPrincipal.dfm</Transaction>
+    <Transaction>2016/08/11 22:14:00.309.pas,D:\Desenvolvimento\LabSofti\TradeSys_001\Funcoes.pas=</Transaction>
+    <Transaction>2016/08/11 22:43:52.842.dfm,D:\Desenvolvimento\LabSofti\TradeSys_001\CAb_Caix.dfm=</Transaction>
+    <Transaction>2016/08/11 22:43:52.842.pas,D:\Desenvolvimento\LabSofti\TradeSys_001\CAb_Caix.pas=</Transaction>
+    <Transaction>2016/08/17 10:54:34.029.pas,C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\Unit1.pas=C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\src\uConstsGerais.pas</Transaction>
+    <Transaction>2016/08/18 15:38:39.659.dfm,C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\Unit1.dfm=C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\src\uFrmGerarSpedFiscal.dfm</Transaction>
+    <Transaction>2016/08/18 15:38:39.659.pas,C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\Unit1.pas=C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\src\uFrmGerarSpedFiscal.pas</Transaction>
+    <Transaction>2016/10/11 17:00:41.724.pas,C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\Unit1.pas=C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\src\uFrmConfigurarECF.pas</Transaction>
+    <Transaction>2016/10/11 17:00:41.724.dfm,C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\Unit1.dfm=C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\src\uFrmConfigurarECF.dfm</Transaction>
+    <Transaction>2016/11/01 09:51:37.749.pas,C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\Unit1.pas=C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\src\uSpedPisCofins.pas</Transaction>
+    <Transaction>2016/11/01 15:29:25.010.pas,C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\Unit1.pas=C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\src\uFrmGerarSpedPisCofins.pas</Transaction>
+    <Transaction>2016/11/01 15:29:25.010.dfm,C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\Unit1.dfm=C:\Developer\SpedArquivos\GeradorSpedFiscalPisCofins\src\uFrmGerarSpedPisCofins.dfm</Transaction>
+    <Transaction>2023/08/08 16:50:49.000.720,=D:\_Sistemas\GeradorSpedFiscalPisCofins_DBX\Unit1.pas</Transaction>
+    <Transaction>2023/08/08 16:51:50.000.245,D:\_Sistemas\GeradorSpedFiscalPisCofins_DBX\Unit1.dfm=D:\_Sistemas\GeradorSpedFiscalPisCofins_DBX\UCadFiliais.dfm</Transaction>
+    <Transaction>2023/08/08 16:51:50.000.245,D:\_Sistemas\GeradorSpedFiscalPisCofins_DBX\Unit1.pas=D:\_Sistemas\GeradorSpedFiscalPisCofins_DBX\UCadFiliais.pas</Transaction>
+    <Transaction>2023/08/15 15:47:34.000.519,D:\_Sistemas\GeradorSpedFiscalPisCofins_DBX\UCadFiliais.pas=</Transaction>
+    <Transaction>2023/09/29 16:13:25.000.654,=D:\_Sistemas\GeradorSpedFiscalPisCofins_DBX\src\ConfigServer.pas</Transaction>
+    <Transaction>2024/04/19 09:34:25.000.977,=C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedFiscalPisCofins_DBX\src\UCadFiliais.pas</Transaction>
+    <Transaction>2024/05/28 15:10:28.000.063,=C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedXe\Unit1.pas</Transaction>
+    <Transaction>2024/05/29 17:43:04.000.569,C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedXe\src\ConfigServer.pas=</Transaction>
+    <Transaction>2024/06/03 09:29:20.000.181,=C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedXe\src\ConfigServer.pas</Transaction>
+    <Transaction>2024/06/18 13:39:54.000.972,=C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedXe\UEnvioCompras.pas</Transaction>
+    <Transaction>2024/06/18 13:39:55.000.045,=C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedXe\UEnvioVenda.pas</Transaction>
+    <Transaction>2024/06/18 13:39:55.000.009,=C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedXe\UEnvioNFeDanfe.pas</Transaction>
+    <Transaction>2024/06/18 13:40:11.000.800,C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedXe\UEnvioCompras.pas=</Transaction>
+    <Transaction>2024/06/18 13:40:11.000.843,C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedXe\UEnvioVenda.pas=</Transaction>
+    <Transaction>2024/06/18 13:40:11.000.827,C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedXe\UEnvioNFeDanfe.pas=</Transaction>
+    <Transaction>2024/06/18 13:40:39.000.514,=C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedXe\Controle\UEnvioNFeDanfe.pas</Transaction>
+    <Transaction>2024/06/18 13:40:39.000.498,=C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedXe\Controle\UEnvioCompras.pas</Transaction>
+    <Transaction>2024/06/18 13:40:39.000.529,=C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedXe\Controle\UEnvioVenda.pas</Transaction>
+    <Transaction>2024/06/18 15:25:40.000.679,=C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedXe\Unit1.pas</Transaction>
+    <Transaction>2024/06/18 15:28:21.000.341,C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedXe\UGerarArquivosFarmax.dfm=C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedXe\Unit1.dfm</Transaction>
+    <Transaction>2024/06/18 15:28:21.000.341,C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedXe\UGerarArquivosFarmax.pas=C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedXe\Unit1.pas</Transaction>
+    <Transaction>2024/06/19 16:15:45.000.764,C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedXe\FarmaxSped.dproj=C:\&amp;FarmaxSistema\FarmaxSped\GeradorSpedXe\GeradorSped.dproj</Transaction>
+    <Transaction>2024/08/05 10:26:52.000.796,C:\Development\FarmaxSped\GeradorSpedXe\Controle\UEnvioCompras.pas=C:\Development\FarmaxSped\GeradorSpedXe\Controle\UXmlCompras.pas</Transaction>
+    <Transaction>2024/08/05 10:27:06.000.936,C:\Development\FarmaxSped\GeradorSpedXe\Controle\UEnvioNFeDanfe.pas=C:\Development\FarmaxSped\GeradorSpedXe\Controle\UXmlNFeDanfe.pas</Transaction>
+    <Transaction>2024/08/05 10:27:18.000.657,C:\Development\FarmaxSped\GeradorSpedXe\Controle\UEnvioVenda.pas=C:\Development\FarmaxSped\GeradorSpedXe\Controle\UXmlVenda.pas</Transaction>
+    <Transaction>2024/09/12 11:46:24.000.621,=C:\Development\FarmaxSped\GeradorSpedXe\Unit1.pas</Transaction>
+    <Transaction>2024/09/12 11:49:51.000.671,C:\Development\FarmaxSped\GeradorSpedXe\UFrmConsistencia.dfm=C:\Development\FarmaxSped\GeradorSpedXe\Unit1.dfm</Transaction>
+    <Transaction>2024/09/12 11:49:51.000.671,C:\Development\FarmaxSped\GeradorSpedXe\UFrmConsistencia.pas=C:\Development\FarmaxSped\GeradorSpedXe\Unit1.pas</Transaction>
+    <Transaction>2024/09/23 17:31:56.000.824,=C:\Development\FarmaxSped\GeradorSpedXe\UMensagem.pas</Transaction>
+    <Transaction>2024/10/23 12:30:40.000.517,C:\Development\FarmaxSped\GeradorSpedXe\UMensagem.pas=</Transaction>
+    <Transaction>2025/04/07 12:07:28.000.984,=C:\Development\FarmaxSped\GeradorSpedXe\Unificador\unit_unificador.pas</Transaction>
+    <Transaction>2025/04/07 12:16:37.000.601,C:\Development\FarmaxSped\GeradorSpedXe\Unificador\unit_unificador.pas=</Transaction>
+    <Transaction>2025/05/30 10:26:20.000.769,=C:\Development\FarmaxSped\GeradorSpedXe\UMensagem.pas</Transaction>
+  </Transactions>
+	<ProjectSortOrder AutoSort="0" SortType="0">
+    <File Path="Controle"/>
+    <File Path="Controle\UXmlCompras.pas"/>
+    <File Path="Controle\UXmlNFeDanfe.pas"/>
+    <File Path="Controle\UXmlVenda.pas"/>
+    <File Path="src"/>
+    <File Path="src\ConfigServer.pas"/>
+    <File Path="src\ConfigServer.dfm"/>
+    <File Path="src\UCadFiliais.pas"/>
+    <File Path="src\UCadFiliais.dfm"/>
+    <File Path="src\uConstsGerais.pas"/>
+    <File Path="src\udmPrincipal.pas"/>
+    <File Path="src\udmPrincipal.dfm"/>
+    <File Path="src\uFrmConfigurarECF.pas"/>
+    <File Path="src\uFrmConfigurarECF.dfm"/>
+    <File Path="src\uFrmGerarSpedFiscal.pas"/>
+    <File Path="src\uFrmGerarSpedFiscal.dfm"/>
+    <File Path="src\uFrmGerarSpedPisCofins.pas"/>
+    <File Path="src\uFrmGerarSpedPisCofins.dfm"/>
+    <File Path="src\uFrmLogin.pas"/>
+    <File Path="src\uFrmLogin.dfm"/>
+    <File Path="src\uFrmSobre.pas"/>
+    <File Path="src\uFrmSobre.dfm"/>
+    <File Path="src\uFuncoesBasicas.pas"/>
+    <File Path="src\uMenuPrincipal.pas"/>
+    <File Path="src\uMenuPrincipal.dfm"/>
+    <File Path="src\uSpedPisCofins.pas"/>
+    <File Path="src\uSpedFiscal.pas"/>
+    <File Path="UGerarArquivosFarmax.pas"/>
+    <File Path="UGerarArquivosFarmax.dfm"/>
+    <File Path="UFrmConsistencia.pas"/>
+    <File Path="UFrmConsistencia.dfm"/>
+    <File Path="UMensagem.pas"/>
+    <File Path="UMensagem.dfm"/>
+  </ProjectSortOrder>
+	<BT_BuildType>Debug</BT_BuildType>
+</BorlandProject>
